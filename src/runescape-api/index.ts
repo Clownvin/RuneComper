@@ -1,7 +1,7 @@
 import * as superagent from 'superagent';
 import {URLBuilder} from '../util/url';
 
-enum Skills {
+export enum Skills {
   ATTACK = 'attack',
   DEFENCE = 'defence',
   STRENGTH = 'strength',
@@ -30,10 +30,11 @@ enum Skills {
   DIVINATION = 'divination',
   INVENTION = 'invention',
   ARCHAEOLOGY = 'archaeology',
+  COMBAT = 'combat',
 }
 
 //Ordered by RuneScape ID
-const skillNames: Skills[] = [
+export const skillNames: Skills[] = [
   Skills.ATTACK,
   Skills.DEFENCE,
   Skills.STRENGTH,
@@ -62,6 +63,7 @@ const skillNames: Skills[] = [
   Skills.DIVINATION,
   Skills.INVENTION,
   Skills.ARCHAEOLOGY,
+  Skills.COMBAT,
 ];
 const skillIdToNameMap = new Map<number, Skills>();
 skillNames.forEach((name, id) => skillIdToNameMap.set(id, name));
@@ -109,28 +111,40 @@ interface RunemetricsQuest {
 
 const rmUrl = new URLBuilder('https://apps.runescape.com/runemetrics/');
 
-async function getProfile(user: string) {
+async function getProfile(
+  user: string
+): Promise<{
+  name: string;
+  totallevel: number;
+  totalxp: number;
+  loggedIn: boolean;
+  skills: {[x in Skills]: {level: number; xp: number}};
+}> {
   const {body} = await superagent.get(rmUrl.build('profile/profile', {user}));
   if (!body || !body.skillvalues) {
     throw new Error(`No profile found for user: ${user}. Is it private?`);
   }
   const userProfile = body as RunemetricsProfile;
   //change them to be indexed by name, and remove unecessary fields
-  const skills = userProfile.skillvalues.reduce((skills, skill) => {
-    const name = skillIdToNameMap.get(skill.id);
-    if (name === undefined) {
+  const skills = userProfile.skillvalues.reduce(
+    (skills, skill) => {
+      const name = skillIdToNameMap.get(skill.id);
+      if (name === undefined) {
+        return skills;
+      }
+      skills[name] = {
+        level: skill.level,
+        xp: skill.xp,
+      };
       return skills;
+    },
+    {combat: {level: userProfile.combatlevel, xp: 200000000}} as {
+      [key in Skills]: {level: number; xp: number};
     }
-    skills[name] = {
-      level: skill.level,
-      xp: skill.xp,
-    };
-    return skills;
-  }, {} as {[key in Skills]: {level: number; xp: number}});
+  );
   //return only the info we're interested in
   return {
     name: userProfile.name,
-    combatlevel: userProfile.combatlevel,
     totallevel: userProfile.totalskill,
     totalxp: userProfile.totalxp,
     loggedIn: userProfile.loggedIn === 'true',
@@ -146,15 +160,27 @@ async function getQuests(user: string) {
   const quests = body.quests as RunemetricsQuest[];
   //change them to be indexed by title, and remove unecessary fields
   return quests.reduce((quests, quest) => {
+    if (quest.title === 'Tears of Guthix') {
+      quest.title = 'Tears of Guthix (quest)';
+    }
     quests[quest.title] = {
-      status: quest.status,
+      completed: quest.status === 'COMPLETED',
       userEligible: quest.userEligible,
     };
     return quests;
-  }, {} as {[key in QuestName]: {status: QuestStatus; userEligible: boolean}});
+  }, {} as {[key in QuestName]: {completed: boolean; userEligible: boolean}});
 }
 
-async function getProfileWithQuests(user: string) {
+export interface ProfileWithQuests {
+  name: string;
+  totallevel: number;
+  totalxp: number;
+  loggedIn: boolean;
+  skills: {[x in Skills]: {level: number; xp: number}};
+  quests: {[x: string]: {completed: boolean; userEligible: boolean}};
+}
+
+async function getProfileWithQuests(user: string): Promise<ProfileWithQuests> {
   return {
     ...(await getProfile(user)),
     quests: await getQuests(user),
@@ -395,6 +421,7 @@ type QuestName =
   | 'Tales of Nomad (miniquest)'
   | 'Tales of the God Wars (miniquest)'
   | 'Tears of Guthix'
+  | 'Tears of Guthix (quest)'
   | 'Temple of Ikov'
   | 'The Branches of Darkmeyer'
   | 'The Brink of Extinction'
