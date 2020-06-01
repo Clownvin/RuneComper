@@ -30,7 +30,6 @@ export enum Skills {
   DIVINATION = 'divination',
   INVENTION = 'invention',
   ARCHAEOLOGY = 'archaeology',
-  COMBAT = 'combat',
 }
 
 //Ordered by RuneScape ID
@@ -63,7 +62,6 @@ export const skillNames: Skills[] = [
   Skills.DIVINATION,
   Skills.INVENTION,
   Skills.ARCHAEOLOGY,
-  Skills.COMBAT,
 ];
 const skillIdToNameMap = new Map<number, Skills>();
 skillNames.forEach((name, id) => skillIdToNameMap.set(id, name));
@@ -138,7 +136,7 @@ async function getProfile(
       };
       return skills;
     },
-    {combat: {level: userProfile.combatlevel, xp: 200000000}} as {
+    {} as {
       [key in Skills]: {level: number; xp: number};
     }
   );

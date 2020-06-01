@@ -1,14 +1,13 @@
 import * as express from 'express';
 import * as morgan from 'morgan';
-import {getRequirementPath} from './requirements-graph';
-import * as fs from 'fs';
+import {getCompletionistCapeSteps} from './requirements-graph';
 
 const app = express();
 
 app.use(morgan('common'));
 
 app.get('/:username', async (req, res) => {
-  const response = await getRequirementPath(req.params.username);
+  const response = await getCompletionistCapeSteps(req.params.username);
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
   } else {
@@ -18,7 +17,4 @@ app.get('/:username', async (req, res) => {
 
 app.listen(2898, () => {
   console.log('Welcome to RuneScape.');
-  getRequirementPath('Clownvin').then(reqs => {
-    fs.writeFileSync('reqs.json', JSON.stringify(reqs, null, 2));
-  });
 });
