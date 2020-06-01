@@ -138,10 +138,18 @@ export async function createRequirementGraph() {
 }
 
 let graph: Map<string, Requirement>;
+let buildingGraph = false;
 
 export async function getRequirementPath(user: string) {
   if (!graph) {
-    graph = await createRequirementGraph();
+    if (!buildingGraph) {
+      buildingGraph = true;
+      graph = await createRequirementGraph();
+    } else {
+      while (!graph) {
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
   }
   const profile = await api.getProfileWithQuests(user);
   const start = graph.get('Completionist');
