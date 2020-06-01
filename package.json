@@ -1,7 +1,7 @@
 {
-  "name": "runecompletion",
+  "name": "runecomper",
   "version": "1.0.0",
-  "description": "Creates a path from level 3 to trimmed completionist",
+  "description": "Creates a path to follow from level 3 to completionist.",
   "main": "app.js",
   "scripts": {
     "start": "npm run prepare && node build/index.js",
