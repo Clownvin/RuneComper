@@ -121,15 +121,20 @@ let calculating = false;
 export async function getCompletionistCapeSteps(user: string) {
   await createCompletionistCapeStepsIfNeeded();
   const profile = await api.getProfileWithQuests(user);
-  return steps.filter(step => {
-    if (step.level && profile.skills[step.name as Skills].level >= step.level) {
-      return false;
-    }
-    if (profile.quests[step.name] && profile.quests[step.name].completed) {
-      return false;
-    }
-    return true;
-  });
+  return steps
+    .filter(step => {
+      if (
+        step.level &&
+        profile.skills[step.name as Skills].level >= step.level
+      ) {
+        return false;
+      }
+      if (profile.quests[step.name] && profile.quests[step.name].completed) {
+        return false;
+      }
+      return true;
+    })
+    .map(({name, page}) => ({name, page: page && rsWikiUrl.build(page)}));
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
