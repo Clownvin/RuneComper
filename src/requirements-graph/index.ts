@@ -194,7 +194,8 @@ async function getRequirementLayers(
       graph,
       profile,
       depths,
-      depth
+      depth,
+      seen
     );
     if (newDepth > maxDepth) {
       maxDepth = newDepth;
@@ -221,7 +222,8 @@ async function getRequirementLayers(
       graph,
       profile,
       depths,
-      depth
+      depth,
+      seen
     );
     if (newDepth > maxDepth) {
       maxDepth = newDepth;
@@ -253,7 +255,8 @@ async function getRequirementLayers(
       graph,
       profile,
       depths,
-      depth
+      depth,
+      seen
     );
     if (newDepth > maxDepth) {
       maxDepth = newDepth;
