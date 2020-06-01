@@ -191,7 +191,7 @@ async function createCompletionistCapeSteps(): Promise<Requirement[]> {
       steps.push({
         name: `${skill}`,
         level: level,
-        page: page, //TODO replace with skill link
+        page: page,
         quests: [],
         achievements: [],
         skills: [{name: skill, page: page, level: level - 1}],
@@ -562,10 +562,12 @@ async function getAchievementWithNormalRequirements(
       }
       if (questNames.has(title)) {
         requirements.quests.push({name: title, page});
-      } else if (requirements.achievements) {
+      } else if (requirements.achievements && !nonAchievs.has(title)) {
         requirements.achievements.push({name: title, page});
       }
     }
   });
   return requirements;
 }
+
+const nonAchievs = new Set(['Lunar Spellbook']);
