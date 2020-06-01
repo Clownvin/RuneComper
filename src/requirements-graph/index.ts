@@ -227,9 +227,6 @@ async function createCompletionistCapeSteps(): Promise<Requirement[]> {
     }
   }
 
-  console.log('Left over reqs:');
-  console.log(JSON.stringify(requirements, null, 2));
-
   return steps;
 }
 
@@ -336,7 +333,6 @@ async function getQuestsWithRequirements(
               const text = $(a).text();
               const page = $(a).attr('href');
               if (!page || !questNames.has(text)) {
-                //console.log(text, 'is not a quest.', page);
                 return;
               }
               if (
@@ -535,16 +531,13 @@ async function getAchievementWithNormalRequirements(
   element.find('li').each((_, e) => {
     const ele = $(e);
     const html = ele.text() || '';
-    console.log(html);
     if (/^\d+\s+\w+/.test(html)) {
       const [level, skill] = html.toLowerCase().split(/\s+\[?/);
       if (!skill || skill.includes(']')) {
-        console.log('Nope');
         return;
       }
       const page = ele.find('a').attr('href');
       if (!page) {
-        console.error('Page is null:' + html);
         return;
       }
       requirements.skills.push({
@@ -553,11 +546,9 @@ async function getAchievementWithNormalRequirements(
         level: parseInt(level) || 1,
       });
     } else {
-      //console.log('Not skill');
       const title = ele.find('a').attr('title');
       const page = ele.find('a').attr('href') || '';
       if (!title) {
-        //console.log('Bad element:', html);
         return;
       }
       if (questNames.has(title)) {
