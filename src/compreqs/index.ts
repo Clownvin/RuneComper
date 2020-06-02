@@ -142,15 +142,19 @@ export async function getCompletionistCapeSteps(user: string) {
       page: page && rsWikiUrl.build(page),
     }));
   const {name, totallevel, totalxp, skills, loggedIn} = profile;
-  return {
-    name,
-    totallevel,
-    totalxp,
-    skills,
-    loggedIn,
-    goalPercent: 1 - (filtered.length / steps.length) * 100,
-    steps: filtered,
-  };
+  return JSON.stringify(
+    {
+      name,
+      totallevel,
+      totalxp,
+      loggedIn,
+      goalPercent: `${(steps.length - filtered.length / steps.length) * 100}`,
+      steps: filtered,
+      skills,
+    },
+    null,
+    2
+  );
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
