@@ -22,6 +22,6 @@ app.get('/:username', async (req, res) => {
   }
 });
 
-app.listen(2898, () => {
+app.listen(process.env.PORT || 2898, () => {
   console.log('Welcome to RuneScape.');
 });
