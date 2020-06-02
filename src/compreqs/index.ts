@@ -5,10 +5,10 @@ import api, {skillNames, Skills} from '../rsapi';
 import {MongoClient} from 'mongodb';
 import * as moment from 'moment';
 
-const MONGO_DB_URI = process.env.MONGO_DB_URI || 'mongodb://localhost:27017';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const DB_NAME = 'compsteps';
 
-const client = new MongoClient(MONGO_DB_URI, {
+const client = new MongoClient(MONGODB_URI, {
   useUnifiedTopology: true,
 })
   .connect()
