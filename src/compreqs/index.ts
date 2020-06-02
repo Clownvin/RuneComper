@@ -137,7 +137,7 @@ let calculating = false;
 
 export async function getCompletionistCapeSteps(user: string) {
   if (await createCompletionistCapeStepsIfNeeded()) {
-    return 'Nothing interesting happens... yet...';
+    return 'Loading requirement data...';
   }
   const profile = await api.getProfileWithQuests(user);
   const filtered = steps
