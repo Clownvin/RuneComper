@@ -4,7 +4,8 @@
   "description": "Creates a path to follow from level 3 to completionist.",
   "main": "app.js",
   "scripts": {
-    "start": "npm run prepare && node build/index.js",
+    "start": "node build/index.js",
+    "build": "npm run prepare",
     "test": "jest --coverage",
     "check": "gts check",
     "clean": "gts clean",
