@@ -6,7 +6,7 @@ import {MongoClient} from 'mongodb';
 import * as moment from 'moment';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const DB_NAME = 'compsteps';
+const DB_NAME = process.env.MONGODB_DBNAME || 'compreqs';
 
 const client = new MongoClient(MONGODB_URI, {
   useUnifiedTopology: true,
