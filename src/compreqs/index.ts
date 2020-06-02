@@ -2,6 +2,17 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
 import api, {skillNames, Skills} from '../rsapi';
+import {MongoClient} from 'mongodb';
+import * as moment from 'moment';
+
+const MONGO_DB_URI = process.env.MONGO_DB_URI || 'mongodb://localhost:27017';
+const DB_NAME = 'compsteps';
+
+const client = MongoClient.connect(MONGO_DB_URI).then(client =>
+  client
+    .db(DB_NAME)
+    .collection<{time: string; steps: Requirement[]}>('completionist')
+);
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
@@ -110,12 +121,14 @@ interface Requirement {
   name: string;
   level?: number;
   page?: string;
+  order?: number;
   achievements?: {name: string; page: string}[];
   quests: {name: string; page: string}[];
   skills: {name: string; page: string; level: number}[];
 }
 
 let steps: Requirement[];
+let lastUpdated = moment(0);
 let calculating = false;
 
 export async function getCompletionistCapeSteps(user: string) {
@@ -142,34 +155,48 @@ export async function getCompletionistCapeSteps(user: string) {
       page: page && rsWikiUrl.build(page),
     }));
   const {name, totallevel, totalxp, skills, loggedIn} = profile;
-  return JSON.stringify(
-    {
-      name,
-      totallevel,
-      totalxp,
-      loggedIn,
-      goalPercent: `${(steps.length - filtered.length / steps.length) * 100}`,
-      steps: filtered,
-      skills,
-    },
-    null,
-    2
-  );
+  return {
+    name,
+    totallevel,
+    totalxp,
+    loggedIn,
+    goalPercent: `${(steps.length - filtered.length / steps.length) * 100}`,
+    steps: filtered,
+    skills,
+  };
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
-  if (!steps) {
-    (async () => {
-      if (calculating) {
-        return;
+  (async () => {
+    if (calculating || (steps && moment().diff(lastUpdated, 'hours') < 4)) {
+      return;
+    }
+    if (!steps) {
+      const doc = await (await client).findOne({});
+      if (doc) {
+        steps = doc.steps.sort((a, b) => (a.order || 0) - (b.order || 0));
+        lastUpdated = moment(doc.time);
       }
-      calculating = true;
-      console.log('Calculating steps...');
-      steps = await createCompletionistCapeSteps();
-      console.log('Finished');
-      calculating = false;
-    })();
-  }
+    }
+
+    if (lastUpdated && moment().diff(lastUpdated, 'hours') < 4) {
+      return;
+    }
+
+    calculating = true;
+    console.log('Calculating steps...');
+    lastUpdated = moment();
+    steps = await createCompletionistCapeSteps();
+    await (await client).updateOne(
+      {},
+      {
+        time: lastUpdated.format(),
+        steps: steps,
+      }
+    );
+    console.log('Finished');
+    calculating = false;
+  })();
   return !steps;
 }
 
@@ -205,6 +232,7 @@ async function createCompletionistCapeSteps(): Promise<Requirement[]> {
   const requirementMetSet = new Set<string>();
 
   const steps = [] as Requirement[];
+  let order = 0;
 
   for (let level = 2; level <= 120; level++) {
     for (const skill of skillNames) {
@@ -220,6 +248,7 @@ async function createCompletionistCapeSteps(): Promise<Requirement[]> {
         quests: [],
         achievements: [],
         skills: [{name: skill, page: page, level: level - 1}],
+        order: order++,
       });
       let index: number;
       while (
@@ -246,6 +275,7 @@ async function createCompletionistCapeSteps(): Promise<Requirement[]> {
         })) !== -1
       ) {
         const [req] = requirements.splice(index, 1);
+        req.order = order++;
         steps.push(req);
         requirementMetSet.add(req.name);
       }
