@@ -119,7 +119,9 @@ let steps: Requirement[];
 let calculating = false;
 
 export async function getCompletionistCapeSteps(user: string) {
-  await createCompletionistCapeStepsIfNeeded();
+  if (await createCompletionistCapeStepsIfNeeded()) {
+    return 'Nothing interesting happens... yet...';
+  }
   const profile = await api.getProfileWithQuests(user);
   const filtered = steps
     .filter(step => {
@@ -153,16 +155,18 @@ export async function getCompletionistCapeSteps(user: string) {
 
 async function createCompletionistCapeStepsIfNeeded() {
   if (!steps) {
-    if (calculating) {
-      throw new Error('Not ready yet. Calculating steps...');
-    } else {
+    (async () => {
+      if (calculating) {
+        return;
+      }
       calculating = true;
       console.log('Calculating steps...');
       steps = await createCompletionistCapeSteps();
       console.log('Finished');
       calculating = false;
-    }
+    })();
   }
+  return !steps;
 }
 
 async function createCompletionistCapeSteps(): Promise<Requirement[]> {
