@@ -164,10 +164,9 @@ export async function getCompletionistCapeSteps(user: string) {
     totallevel,
     totalxp,
     loggedIn,
-    goalPercent: (
-      ((steps.length - filtered.length) / steps.length) *
-      100
-    ).toFixed(2),
+    goalPercent: parseFloat(
+      (((steps.length - filtered.length) / steps.length) * 100).toFixed(2)
+    ),
     steps: filtered,
     skills,
   };
