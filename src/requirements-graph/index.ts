@@ -134,7 +134,11 @@ export async function getCompletionistCapeSteps(user: string) {
       }
       return true;
     })
-    .map(({name, page}) => ({name, page: page && rsWikiUrl.build(page)}));
+    .map(({name, level, page}) => ({
+      name,
+      level,
+      page: page && rsWikiUrl.build(page),
+    }));
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
