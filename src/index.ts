@@ -1,13 +1,15 @@
 import * as express from 'express';
 import * as morgan from 'morgan';
-import {getCompletionistCapeSteps} from './requirements-graph';
+import {getCompletionistCapeSteps} from './compreqs';
 
 const app = express();
 
 app.use(morgan('common'));
 
 app.get('/:username', async (req, res) => {
-  const response = await getCompletionistCapeSteps(req.params.username);
+  const response = await getCompletionistCapeSteps(req.params.username).catch(
+    console.error
+  );
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
   } else {

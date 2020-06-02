@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
-import api, {skillNames, Skills} from '../runescape-api';
+import api, {skillNames, Skills} from '../rsapi';
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
