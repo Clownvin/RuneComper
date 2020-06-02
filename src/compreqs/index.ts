@@ -8,11 +8,15 @@ import * as moment from 'moment';
 const MONGO_DB_URI = process.env.MONGO_DB_URI || 'mongodb://localhost:27017';
 const DB_NAME = 'compsteps';
 
-const client = MongoClient.connect(MONGO_DB_URI).then(client =>
-  client
-    .db(DB_NAME)
-    .collection<{time: string; steps: Requirement[]}>('completionist')
-);
+const client = new MongoClient(MONGO_DB_URI, {
+  useUnifiedTopology: true,
+})
+  .connect()
+  .then(client =>
+    client
+      .db(DB_NAME)
+      .collection<{time: string; steps: Requirement[]}>('completionist')
+  );
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
@@ -190,9 +194,9 @@ async function createCompletionistCapeStepsIfNeeded() {
     await (await client).updateOne(
       {},
       {
-        time: lastUpdated.format(),
-        steps: steps,
-      }
+        $set: {time: lastUpdated.format(), steps: steps},
+      },
+      {upsert: true}
     );
     console.log('Finished');
     calculating = false;
