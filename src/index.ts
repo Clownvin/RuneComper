@@ -8,7 +8,12 @@ app.use(morgan('common'));
 
 app.get('/:username', async (req, res) => {
   const response = await getCompletionistCapeSteps(req.params.username).catch(
-    console.error
+    err => {
+      if (err.message === 'Not ready yet. Calculating steps...') {
+        return err.message;
+      }
+      return null;
+    }
   );
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
