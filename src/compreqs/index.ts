@@ -121,7 +121,7 @@ let calculating = false;
 export async function getCompletionistCapeSteps(user: string) {
   await createCompletionistCapeStepsIfNeeded();
   const profile = await api.getProfileWithQuests(user);
-  return steps
+  const filtered = steps
     .filter(step => {
       if (
         step.level &&
@@ -139,14 +139,22 @@ export async function getCompletionistCapeSteps(user: string) {
       level,
       page: page && rsWikiUrl.build(page),
     }));
+  const {name, totallevel, totalxp, skills, loggedIn} = profile;
+  return {
+    name,
+    totallevel,
+    totalxp,
+    skills,
+    loggedIn,
+    goalPercent: 1 - (filtered.length / steps.length) * 100,
+    steps: filtered,
+  };
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
   if (!steps) {
     if (calculating) {
-      do {
-        await new Promise(r => setTimeout(r, 5000));
-      } while (!steps);
+      throw new Error('Not ready yet. Calculating steps...');
     } else {
       calculating = true;
       console.log('Calculating steps...');
