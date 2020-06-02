@@ -4,6 +4,8 @@ import {URLBuilder} from '../util/url';
 import api, {skillNames, Skills} from '../rsapi';
 import {MongoClient} from 'mongodb';
 import * as moment from 'moment';
+import {stringify} from 'querystring';
+import {format} from 'url';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const DB_NAME = process.env.MONGODB_DBNAME || 'compreqs';
@@ -164,7 +166,10 @@ export async function getCompletionistCapeSteps(user: string) {
     totallevel,
     totalxp,
     loggedIn,
-    goalPercent: ((steps.length - filtered.length) / steps.length) * 100,
+    goalPercent: (
+      ((steps.length - filtered.length) / steps.length) *
+      100
+    ).toFixed(2),
     steps: filtered,
     skills,
   };
