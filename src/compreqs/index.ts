@@ -205,7 +205,7 @@ async function createCompletionistCapeStepsIfNeeded() {
               (a.priority || (a.priority = 0)) ||
             (a.level || 0) - (b.level || 0)
         );
-        //lastUpdated = moment(doc.time);
+        lastUpdated = moment(doc.time);
       }
     }
 
