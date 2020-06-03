@@ -186,8 +186,4 @@ async function getProfileWithQuests(user: string): Promise<ProfileWithQuests> {
   };
 }
 
-export default {
-  getProfile,
-  getQuests,
-  getProfileWithQuests,
-};
+export {getProfile, getQuests, getProfileWithQuests};

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
-import api, {skillNames, skillNameSet, Skill} from '../rsapi';
+import {skillNames, skillNameSet, Skill} from '../rsapi';
 import {MongoClient} from 'mongodb';
 import * as moment from 'moment';
 
@@ -149,45 +149,13 @@ let steps: MappedRequirement[];
 let lastUpdated = moment(0);
 let calculating = false;
 
-export async function getCompletionistCapeSteps(user: string) {
+export async function getCompletionistCapeSteps() {
   if (await createCompletionistCapeStepsIfNeeded()) {
     while (calculating) {
       await new Promise(r => setTimeout(r, 15000));
     }
   }
-  const profile = await api.getProfileWithQuests(user);
-  const filtered = steps
-    .filter(step => {
-      if (
-        step.level &&
-        profile.skills[step.name as Skill].level >= step.level
-      ) {
-        return false;
-      }
-      if (profile.quests[step.name] && profile.quests[step.name].completed) {
-        return false;
-      }
-      return true;
-    })
-    .map(({name, level, page, priority, type}) => ({
-      name,
-      type,
-      level,
-      priority,
-      page: page && rsWikiUrl.build(page),
-    }));
-  const {name, totallevel, totalxp, skills, loggedIn} = profile;
-  return {
-    name,
-    totallevel,
-    totalxp,
-    loggedIn,
-    goalPercent: parseFloat(
-      (((steps.length - filtered.length) / steps.length) * 100).toFixed(2)
-    ),
-    steps: filtered,
-    skills,
-  };
+  return steps;
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
@@ -322,15 +290,11 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
 function mapReqOrder(
   req: MappedRequirement,
   reqs: Map<string, MappedRequirement>,
-  levelReqs: Map<string, Map<number, MappedRequirement>>,
-  order = 0
+  levelReqs: Map<string, Map<number, MappedRequirement>>
 ) {
-  console.log(`Mapping order, at ${req.name}, order: ${order}`);
-  if (!req.priority || order > req.priority) {
-    req.priority = order;
-  }
-  mapPrereqOrder(req.quests, reqs, levelReqs, order);
-  mapPrereqOrder(req.achievements || [], reqs, levelReqs, order);
+  console.log(`Mapping order, at ${req.name}`);
+  mapPrereqOrder(req.quests, reqs, levelReqs);
+  mapPrereqOrder(req.achievements || [], reqs, levelReqs);
   for (const skill of req.skills) {
     const {name} = skill;
     const skillReqMap = levelReqs.get(name);
@@ -343,10 +307,7 @@ function mapReqOrder(
         console.error(`No skill requirement for ${name} ${level}`);
         continue;
       }
-      if (skill.priority && skill.priority > order) {
-        break;
-      }
-      skill.priority = order + 1;
+      skill.priority = (skill.priority || 0) + 1;
     }
   }
   if (typeof req.maximumLevelRequirement !== 'number') {
@@ -366,21 +327,20 @@ function mapReqOrder(
     }
     req.maximumLevelRequirement = maximumLevelRequirement;
   }
-  req.priority = order;
+  req.priority = (req.priority || 0) + 1;
 }
 
 function mapPrereqOrder(
   prereqs: {name: string}[],
   reqs: Map<string, MappedRequirement>,
-  levelReqs: Map<string, Map<number, MappedRequirement>>,
-  order: number
+  levelReqs: Map<string, Map<number, MappedRequirement>>
 ) {
   for (const {name} of prereqs) {
     const prereq = reqs.get(name);
     if (!prereq) {
       throw new Error('Could not find prereq: ' + name);
     }
-    mapReqOrder(prereq, reqs, levelReqs, order + 1);
+    mapReqOrder(prereq, reqs, levelReqs);
   }
 }
 
