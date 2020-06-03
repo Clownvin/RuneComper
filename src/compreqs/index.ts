@@ -230,24 +230,6 @@ async function createCompletionistCapeStepsIfNeeded() {
   return !steps;
 }
 
-const inventionRequirements = [
-  {
-    name: 'crafting',
-    level: 80,
-    page: '',
-  },
-  {
-    name: 'smithing',
-    level: 80,
-    page: '',
-  },
-  {
-    name: 'divination',
-    level: 80,
-    page: '',
-  },
-];
-
 function getSkillRequirements(): SkillRequirement[] {
   const reqs = [] as SkillRequirement[];
   for (const skill of skillNames) {
@@ -270,8 +252,8 @@ function getSkillRequirements(): SkillRequirement[] {
           },
         ],
       } as SkillRequirement;
-      if (skill === 'invention') {
-        req.skills.push(...inventionRequirements);
+      if (skill === 'invention' && req.maximumLevelRequirement < 80) {
+        req.maximumLevelRequirement = 80;
       }
       reqs.push(req);
     }
