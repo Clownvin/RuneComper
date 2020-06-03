@@ -1,7 +1,7 @@
 import * as superagent from 'superagent';
 import {URLBuilder} from '../util/url';
 
-export enum Skills {
+export enum Skill {
   ATTACK = 'attack',
   DEFENCE = 'defence',
   STRENGTH = 'strength',
@@ -33,38 +33,39 @@ export enum Skills {
 }
 
 //Ordered by RuneScape ID
-export const skillNames: Skills[] = [
-  Skills.ATTACK,
-  Skills.DEFENCE,
-  Skills.STRENGTH,
-  Skills.CONSTITUTION,
-  Skills.RANGED,
-  Skills.PRAYER,
-  Skills.MAGIC,
-  Skills.COOKING,
-  Skills.WOODCUTTING,
-  Skills.FLETCHING,
-  Skills.FISHING,
-  Skills.FIREMAKING,
-  Skills.CRAFTING,
-  Skills.SMITHING,
-  Skills.MINING,
-  Skills.HERBLORE,
-  Skills.AGILITY,
-  Skills.THIEVING,
-  Skills.SLAYER,
-  Skills.FARMING,
-  Skills.RUNECRAFTING,
-  Skills.HUNTER,
-  Skills.CONSTRUCTION,
-  Skills.SUMMONING,
-  Skills.DUNGEONEERING,
-  Skills.DIVINATION,
-  Skills.INVENTION,
-  Skills.ARCHAEOLOGY,
+export const skillNames: Skill[] = [
+  Skill.ATTACK,
+  Skill.DEFENCE,
+  Skill.STRENGTH,
+  Skill.CONSTITUTION,
+  Skill.RANGED,
+  Skill.PRAYER,
+  Skill.MAGIC,
+  Skill.COOKING,
+  Skill.WOODCUTTING,
+  Skill.FLETCHING,
+  Skill.FISHING,
+  Skill.FIREMAKING,
+  Skill.CRAFTING,
+  Skill.SMITHING,
+  Skill.MINING,
+  Skill.HERBLORE,
+  Skill.AGILITY,
+  Skill.THIEVING,
+  Skill.SLAYER,
+  Skill.FARMING,
+  Skill.RUNECRAFTING,
+  Skill.HUNTER,
+  Skill.CONSTRUCTION,
+  Skill.SUMMONING,
+  Skill.DUNGEONEERING,
+  Skill.DIVINATION,
+  Skill.INVENTION,
+  Skill.ARCHAEOLOGY,
 ];
-const skillIdToNameMap = new Map<number, Skills>();
+const skillIdToNameMap = new Map<number, Skill>();
 skillNames.forEach((name, id) => skillIdToNameMap.set(id, name));
+export const skillNameSet = new Set(skillNames);
 
 interface ProfileActivity {
   date: string;
@@ -116,7 +117,7 @@ async function getProfile(
   totallevel: number;
   totalxp: number;
   loggedIn: boolean;
-  skills: {[x in Skills]: {level: number; xp: number}};
+  skills: {[x in Skill]: {level: number; xp: number}};
 }> {
   const {body} = await superagent.get(rmUrl.build('profile/profile', {user}));
   if (!body || !body.skillvalues) {
@@ -137,7 +138,7 @@ async function getProfile(
       return skills;
     },
     {} as {
-      [key in Skills]: {level: number; xp: number};
+      [key in Skill]: {level: number; xp: number};
     }
   );
   //return only the info we're interested in
@@ -174,7 +175,7 @@ export interface ProfileWithQuests {
   totallevel: number;
   totalxp: number;
   loggedIn: boolean;
-  skills: {[x in Skills]: {level: number; xp: number}};
+  skills: {[x in Skill]: {level: number; xp: number}};
   quests: {[x: string]: {completed: boolean; userEligible: boolean}};
 }
 

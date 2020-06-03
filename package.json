@@ -10,6 +10,7 @@
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc",
+    "devstart": "npm run prepare && npm run start",
     "fix": "gts fix",
     "prepare": "npm run fix && npm run compile",
     "pretest": "npm run compile",
