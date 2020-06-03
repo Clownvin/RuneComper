@@ -136,6 +136,10 @@ type MappedRequirement = (Requirement & Partial<SkillRequirement>) & {
   maximumLevelRequirement: number;
 };
 
+interface QuestRequirement extends Requirement {
+  miniquest: boolean;
+}
+
 interface SkillRequirement extends Requirement {
   level: number;
   maximumLevelRequirement: number;
@@ -165,9 +169,11 @@ export async function getCompletionistCapeSteps(user: string) {
       }
       return true;
     })
-    .map(({name, level, page}) => ({
+    .map(({name, level, page, priority, type}) => ({
       name,
+      type,
       level,
+      priority,
       page: page && rsWikiUrl.build(page),
     }));
   const {name, totallevel, totalxp, skills, loggedIn} = profile;
@@ -192,7 +198,13 @@ async function createCompletionistCapeStepsIfNeeded() {
     if (!steps) {
       const doc = await (await client).findOne({});
       if (doc) {
-        steps = doc.steps.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+        steps = doc.steps.sort(
+          (a, b) =>
+            a.maximumLevelRequirement - b.maximumLevelRequirement ||
+            (b.priority || (b.priority = 0)) -
+              (a.priority || (a.priority = 0)) ||
+            (a.level || 0) - (b.level || 0)
+        );
         //lastUpdated = moment(doc.time);
       }
     }
@@ -218,13 +230,31 @@ async function createCompletionistCapeStepsIfNeeded() {
   return !steps;
 }
 
+const inventionRequirements = [
+  {
+    name: 'crafting',
+    level: 80,
+    page: '',
+  },
+  {
+    name: 'smithing',
+    level: 80,
+    page: '',
+  },
+  {
+    name: 'divination',
+    level: 80,
+    page: '',
+  },
+];
+
 function getSkillRequirements(): SkillRequirement[] {
   const reqs = [] as SkillRequirement[];
   for (const skill of skillNames) {
     const page = `/w/${skill[0].toUpperCase()}${skill.substring(1)}`;
     const max = skill120s.has(skill) ? 120 : 99;
     for (let level = 2; level < max; level++) {
-      reqs.push({
+      const req = {
         type: 'skill',
         name: skill,
         maximumLevelRequirement: level - 1,
@@ -239,7 +269,11 @@ function getSkillRequirements(): SkillRequirement[] {
             page,
           },
         ],
-      });
+      } as SkillRequirement;
+      if (skill === 'invention') {
+        req.skills.push(...inventionRequirements);
+      }
+      reqs.push(req);
     }
   }
   return reqs;
@@ -247,7 +281,7 @@ function getSkillRequirements(): SkillRequirement[] {
 
 async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   console.log('Gathering data...');
-  const rawQuests = await getQuests();
+  const rawQuests = [...(await getQuests()), ...(await getMiniquests())];
   const questNames = new Set(rawQuests.map(q => q.name));
   const quests = await getQuestsWithRequirements(rawQuests, questNames);
   const achievements = await getCompletionistCapeAchievementsWithRequirements(
@@ -272,7 +306,11 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   // addImplicitRequirements(endReq, requirementMap);
 
   const skills = getSkillRequirements();
-  requirements = [...skills, ...quests, ...achievements];
+  requirements = [
+    ...skills,
+    ...quests.filter(q => !q.miniquest),
+    ...achievements,
+  ];
 
   const skillReqMap = new Map<string, Map<number, MappedRequirement>>();
   skillNames.forEach(name => {
@@ -424,7 +462,7 @@ async function getQuests() {
   const questRows = $(
     'html body div#bodyContent.mw-body-content table[width="100%"] tbody'
   );
-  const quests: {name: string; page: string}[] = [];
+  const quests: {name: string; page: string; miniquest: false}[] = [];
   questRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
     const name = a.attr('title');
@@ -435,6 +473,34 @@ async function getQuests() {
     quests.push({
       name: name,
       page: link,
+      miniquest: false,
+    });
+  });
+  quests.sort((a, b) => a.name.localeCompare(b.name));
+  return quests;
+}
+
+async function getMiniquests() {
+  //https://runescape.wiki/w/Miniquests
+  const url = rsWikiUrl.build('/w/Miniquests');
+  console.log('Scraping miniquest list...');
+  const result = await axios.get(url);
+  const $ = cheerio.load(result.data);
+  const questRows = $(
+    'html body div#bodyContent.mw-body-content table[width="100%"] tbody'
+  );
+  const quests: {name: string; page: string; miniquest: true}[] = [];
+  questRows.find('tr').each((_, e) => {
+    const a = $(e).find('td a');
+    const name = a.attr('title');
+    const link = a.attr('href');
+    if (!name || !link) {
+      return;
+    }
+    quests.push({
+      name: name,
+      page: link,
+      miniquest: true,
     });
   });
   quests.sort((a, b) => a.name.localeCompare(b.name));
@@ -442,10 +508,10 @@ async function getQuests() {
 }
 
 async function getQuestsWithRequirements(
-  quests: {name: string; page: string}[],
+  quests: {name: string; page: string; miniquest: boolean}[],
   questNames: Set<string>
 ) {
-  const questsWithReqs: Requirement[] = [];
+  const questsWithReqs: QuestRequirement[] = [];
   for (const quest of quests) {
     const url = rsWikiUrl.build(quest.page);
     console.log(`Scraping ${url}...`);
@@ -462,7 +528,7 @@ async function getQuestsWithRequirements(
       quests: [],
       achievements: [],
       skills: [],
-    } as Requirement;
+    } as QuestRequirement;
     $('table.questdetails tbody')
       .find('tr')
       .each((_, e) => {
@@ -491,7 +557,6 @@ async function getQuestsWithRequirements(
               const text = $(a).text();
               const page = $(a).attr('href');
               if (!page || !questNames.has(text)) {
-                console.log('Quest names does not include ' + text);
                 return;
               }
               if (
@@ -517,6 +582,7 @@ async function getCompletionistCapeAchievementsWithRequirements(
   quests: {
     name: string;
     page: string;
+    miniquest: boolean;
   }[],
   questNames: Set<string>
 ) {
@@ -611,6 +677,7 @@ async function getAchievementWithRequirements(
   quests: {
     name: string;
     page: string;
+    miniquest: boolean;
   }[],
   questNames: Set<string>
 ): Promise<Requirement> {
@@ -629,7 +696,7 @@ async function getAchievementWithRequirements(
         ...achievement,
         achievements: [],
         skills: [],
-        quests: quests,
+        quests: quests.filter(q => !q.miniquest),
         type: 'achievement',
       };
     //Achievements marked as no requirements
