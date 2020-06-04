@@ -213,7 +213,7 @@ function getSkillRequirements(): SkillRequirement[] {
   for (const skill of skillNames) {
     const page = `/w/${skill[0].toUpperCase()}${skill.substring(1)}`;
     const max = skill120s.has(skill) ? 120 : 99;
-    for (let level = 2; level < max; level++) {
+    for (let level = 2; level <= max; level++) {
       const req = {
         type: 'skill',
         name: skill,
