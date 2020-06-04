@@ -268,7 +268,7 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   const skills = getSkillRequirements();
   requirements = [
     ...skills,
-    ...quests.filter(q => !q.miniquest),
+    ...quests, //.filter(q => !q.miniquest),
     ...achievements,
   ];
 
