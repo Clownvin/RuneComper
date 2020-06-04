@@ -290,7 +290,7 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   console.log('Sorting...');
   mappedRequirements.sort(
     (a, b) =>
-      a.maximumLevelRequirement - b.maximumLevelRequirement ||
+      (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
       (a.level || 0) - (b.level || 0)
   );
