@@ -2,21 +2,31 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
 import {skillNames, skillNameSet, Skill} from '../rsapi';
-import {MongoClient} from 'mongodb';
+import {MongoClient, Collection} from 'mongodb';
 import * as moment from 'moment';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const DB_NAME = process.env.MONGODB_DBNAME || 'compreqs';
 
-const client = new MongoClient(MONGODB_URI, {
-  useUnifiedTopology: true,
-})
-  .connect()
-  .then(client =>
-    client
-      .db(DB_NAME)
-      .collection<{time: string; steps: MappedRequirement[]}>('completionist')
-  );
+const client = connectMongo();
+
+async function connectMongo(): Promise<
+  Collection<{
+    time: string;
+    steps: MappedRequirement[];
+  }>
+> {
+  return new MongoClient(MONGODB_URI, {
+    useUnifiedTopology: true,
+  })
+    .connect()
+    .then(client =>
+      client
+        .db(DB_NAME)
+        .collection<{time: string; steps: MappedRequirement[]}>('completionist')
+    )
+    .catch(connectMongo); //Infinite recursive retry :)
+}
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
