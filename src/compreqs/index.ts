@@ -144,6 +144,7 @@ interface Requirement {
 type MappedRequirement = (Requirement & Partial<SkillRequirement>) & {
   priority: number;
   maximumLevelRequirement: number;
+  order: number;
 };
 
 interface QuestRequirement extends Requirement {
@@ -169,20 +170,15 @@ export async function getCompletionistCapeSteps() {
 }
 
 async function createCompletionistCapeStepsIfNeeded() {
+  if (calculating || (steps && moment().diff(lastUpdated, 'hours') < 4)) {
+    return !steps;
+  }
+  calculating = true;
   (async () => {
-    if (calculating || (steps && moment().diff(lastUpdated, 'hours') < 4)) {
-      return;
-    }
     if (!steps) {
       const doc = await (await client).findOne({});
       if (doc) {
-        steps = doc.steps.sort(
-          (a, b) =>
-            a.maximumLevelRequirement - b.maximumLevelRequirement ||
-            (b.priority || (b.priority = 0)) -
-              (a.priority || (a.priority = 0)) ||
-            (a.level || 0) - (b.level || 0)
-        );
+        steps = doc.steps.sort((a, b) => a.order - b.order);
         lastUpdated = moment(doc.time);
       }
     }
@@ -191,7 +187,6 @@ async function createCompletionistCapeStepsIfNeeded() {
       return;
     }
 
-    calculating = true;
     console.log('Calculating steps...');
     lastUpdated = moment();
     steps = await createCompletionistCapeSteps();
@@ -294,6 +289,7 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
       (a.level || 0) - (b.level || 0)
   );
+  mappedRequirements.forEach((r, index) => (r.order = index));
   return mappedRequirements;
 }
 
