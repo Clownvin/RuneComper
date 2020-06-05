@@ -162,7 +162,7 @@ let calculating = false;
 
 export async function getCompletionistCapeSteps() {
   if (await createCompletionistCapeStepsIfNeeded()) {
-    while (calculating) {
+    while (calculating && !steps) {
       await new Promise(r => setTimeout(r, 15000));
     }
   }
@@ -179,12 +179,7 @@ async function createCompletionistCapeStepsIfNeeded() {
       const doc = await (await client).findOne({});
       if (doc) {
         steps = doc.steps.sort((a, b) => a.order - b.order);
-        lastUpdated = moment(doc.time);
       }
-    }
-
-    if (lastUpdated && moment().diff(lastUpdated, 'hours') < 4) {
-      return;
     }
 
     console.log('Calculating steps...');
@@ -200,7 +195,7 @@ async function createCompletionistCapeStepsIfNeeded() {
     console.log('Finished');
     calculating = false;
   })();
-  return !steps;
+  return false;
 }
 
 function getSkillRequirements(): SkillRequirement[] {
