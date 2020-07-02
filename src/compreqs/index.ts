@@ -174,7 +174,7 @@ async function createCompletionistCapeStepsIfNeeded() {
     return !steps;
   }
   calculating = true;
-  await (async () => {
+  (async () => {
     if (!steps) {
       const doc = await (await client).findOne({});
       if (doc) {
