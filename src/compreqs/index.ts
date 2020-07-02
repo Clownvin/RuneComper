@@ -174,7 +174,7 @@ async function createCompletionistCapeStepsIfNeeded() {
     return !steps;
   }
   calculating = true;
-  (async () => {
+  await (async () => {
     if (!steps) {
       const doc = await (await client).findOne({});
       if (doc) {
@@ -194,7 +194,7 @@ async function createCompletionistCapeStepsIfNeeded() {
     );
     console.log('Finished');
     calculating = false;
-  })();
+  })().catch(console.error);
   return false;
 }
 
