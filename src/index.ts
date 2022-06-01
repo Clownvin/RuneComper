@@ -13,6 +13,7 @@ app.get('/:user', async (req, res) => {
   const response = await getProfileWithQuests(req.params.user).catch(
     console.error
   );
+  console.log('Got thing');
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
   } else {
@@ -28,6 +29,8 @@ app.get('/', async (_, res) => {
     res.send(response);
   }
 });
+
+getProfileWithQuests('Clownvin').then(stuff => console.log(stuff));
 
 app.listen(process.env.PORT || 2898, () => {
   console.log('Welcome to RuneScape.');

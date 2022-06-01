@@ -2,31 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
 import {skillNames, skillNameSet, Skill} from '../rsapi';
-import {MongoClient, Collection} from 'mongodb';
 import * as moment from 'moment';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const DB_NAME = process.env.MONGODB_DBNAME || 'compreqs';
-
-const client = connectMongo();
-
-async function connectMongo(): Promise<
-  Collection<{
-    time: string;
-    steps: MappedRequirement[];
-  }>
-> {
-  return new MongoClient(MONGODB_URI, {
-    useUnifiedTopology: true,
-  })
-    .connect()
-    .then(client =>
-      client
-        .db(DB_NAME)
-        .collection<{time: string; steps: MappedRequirement[]}>('completionist')
-    )
-    .catch(connectMongo); //Infinite recursive retry :)
-}
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
@@ -137,13 +113,14 @@ interface Requirement {
   name: string;
   page: string;
   achievements: {name: string; page: string}[];
-  quests: {name: string; page: string}[];
+  quests: {name: string; page: string, required: boolean}[];
   skills: {name: string; page?: string; level: number}[];
 }
 
 type MappedRequirement = (Requirement & Partial<SkillRequirement>) & {
   priority: number;
   maximumLevelRequirement: number;
+  maximumLevelRecommended: number;
   order: number;
 };
 
@@ -175,23 +152,23 @@ async function createCompletionistCapeStepsIfNeeded() {
   }
   calculating = true;
   (async () => {
-    if (!steps) {
-      const doc = await (await client).findOne({});
-      if (doc) {
-        steps = doc.steps.sort((a, b) => a.order - b.order);
-      }
-    }
+    // if (!steps) {
+    //   const doc = await (await client).findOne({});
+    //   if (doc) {
+    //     steps = doc.steps.sort((a, b) => a.order - b.order);
+    //   }
+    // }
 
     console.log('Calculating steps...');
     lastUpdated = moment();
     steps = await createCompletionistCapeSteps();
-    await (await client).updateOne(
-      {},
-      {
-        $set: {time: lastUpdated.format(), steps: steps},
-      },
-      {upsert: true}
-    );
+    // await (await client).updateOne(
+    //   {},
+    //   {
+    //     $set: {time: lastUpdated.format(), steps: steps},
+    //   },
+    //   {upsert: true}
+    // );
     console.log('Finished');
     calculating = false;
   })().catch(console.error);
@@ -246,7 +223,16 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   if (!endReq) {
     throw new Error('Ending requirement not found!');
   }
-  let requirements = [...quests, ...achievements];
+  const mqc: Requirement = {
+    type: 'achievement',
+    name: 'Master quest cape',
+    page: 'Master_quest_cape',
+    achievements: [],
+    skills: [],
+    quests: quests.map(q => ({...q, required: true})),
+  };
+  endReq.achievements.push(mqc);
+  let requirements = [...quests, ...achievements, mqc];
   const requirementMap = requirements.reduce((map, requirement) => {
     map.set(requirement.name, requirement as MappedRequirement);
     return map;
@@ -256,10 +242,12 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   // addImplicitRequirements(endReq, requirementMap);
 
   const skills = getSkillRequirements();
+  console.log(quests.map(q => q.name).join(', '));
   requirements = [
     ...skills,
     ...quests, //.filter(q => !q.miniquest),
     ...achievements,
+    mqc,
   ];
 
   const skillReqMap = new Map<string, Map<number, MappedRequirement>>();
@@ -274,13 +262,16 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
 
   console.log('Mapping...');
   mapReqOrder(endReq, requirementMap, skillReqMap);
+  addMaxLevel(endReq, requirementMap);
 
   const mappedRequirements = requirements as MappedRequirement[];
 
   console.log('Sorting...');
   mappedRequirements.sort(
     (a, b) =>
+      (requirementDistance(a, b, requirementMap) - requirementDistance(b, a, requirementMap)) ||
       (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
+      (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
       (a.level || 0) - (b.level || 0)
   );
@@ -288,61 +279,224 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   return mappedRequirements;
 }
 
+function requirementDistance(a: MappedRequirement, b: MappedRequirement, reqMap: Map<string, MappedRequirement>, depth = 1, seen = new Set<string>()): number {
+  const reqs = [...a.quests, ...a.achievements];
+  if (reqs.find(q => q.name === b.name)) {
+    return depth;
+  }
+  seen.add(a.name);
+  for (const r of reqs.filter(r => !seen.has(r.name))) {
+    const dist = requirementDistance(reqMap.get(r.name) as MappedRequirement, b, reqMap, depth + 1, seen);
+    if (dist) {
+      return dist;
+    }
+  }
+  return 0;
+}
+
+function addMaxLevel(
+  req: MappedRequirement,
+  requirementMap: Map<string, MappedRequirement>,
+  seen = new Set<string>()
+) {
+  seen.add(req.name);
+  req.maximumLevelRequirement = Math.max(
+    ...[
+      ...Object.values(req.skills).map(s => s.level),
+      ...[...req.quests.filter(q => q.required), ...req.achievements]
+        .filter(r => !seen.has(r.name))
+        .map(r => {
+          const re = requirementMap.get(r.name);
+          if (!re) {
+            throw new Error('No requirment found for name: ' + r.name);
+          }
+          if (re.maximumLevelRequirement === undefined) {
+            addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
+          }
+          // if (req.name === 'Nature Spirit') {
+          //   console.log(r.name, re.maximumLevelRequirement);
+          // }
+          return re.maximumLevelRequirement;
+        }),
+    ]
+  );
+  req.maximumLevelRecommended = Math.max(
+    ...[
+      ...Object.values(req.skills).map(s => s.level),
+      ...[...req.quests, ...req.achievements]
+        .filter(r => !seen.has(r.name))
+        .map(r => {
+          const re = requirementMap.get(r.name);
+          if (!re) {
+            throw new Error('No requirment found for name: ' + r.name);
+          }
+          if (re.maximumLevelRecommended === undefined) {
+            addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
+          }
+          // if (req.name === 'Nature Spirit') {
+          //   console.log(r.name, re.maximumLevelRequirement);
+          // }
+          return re.maximumLevelRecommended;
+        }),
+    ]
+  );
+}
+
+type Shortcut = {
+  quests: {[name: string]: number};
+  achievements: {[name: string]: number};
+  skills: {[name: string]: {[level: number]: number}};
+};
+
 function mapReqOrder(
   req: MappedRequirement,
   reqs: Map<string, MappedRequirement>,
   levelReqs: Map<string, Map<number, MappedRequirement>>
 ) {
-  console.log(`Mapping order, at ${req.name}`);
-  mapPrereqOrder(req.quests, reqs, levelReqs);
-  mapPrereqOrder(req.achievements || [], reqs, levelReqs);
-  for (const skill of req.skills) {
-    const {name} = skill;
+  const {quests, achievements, skills} = mapShortcut(req, reqs, levelReqs);
+  console.log(quests, achievements, skills);
+  for (const [name, priority] of [
+    ...Object.entries(quests),
+    ...Object.entries(achievements),
+  ]) {
+    const req = reqs.get(name);
+    if (!req) {
+      throw new Error('No requirement found for ' + name);
+    }
+    req.priority = (req.priority || 0) + priority;
+  }
+  for (const [name, levels] of Object.entries(skills)) {
     const skillReqMap = levelReqs.get(name);
     if (!skillReqMap) {
       throw new Error('No skill found for ' + name);
     }
-    for (let level = skill.level; level >= 2; level--) {
-      const skill = skillReqMap.get(level);
-      if (!skill) {
-        console.error(`No skill requirement for ${name} ${level}`);
-        continue;
+    for (const [level, count] of Object.entries(levels)) {
+      for (let i = Number(level); i >= 2; i--) {
+        const skill = skillReqMap.get(i);
+        if (!skill) {
+          console.error('No skill req for', name, i);
+          continue;
+        }
+        skill.priority = (skill.priority || 0) + count;
       }
-      skill.priority = (skill.priority || 0) + 1;
     }
   }
-  if (typeof req.maximumLevelRequirement !== 'number') {
-    let maximumLevelRequirement = 0;
-    for (const skill of req.skills) {
-      maximumLevelRequirement = Math.max(maximumLevelRequirement, skill.level);
-    }
-    for (const {name} of [...req.quests, ...req.achievements]) {
-      const req = reqs.get(name);
-      if (!req) {
-        throw new Error('Failed to find requirement for: ' + name);
-      }
-      maximumLevelRequirement = Math.max(
-        maximumLevelRequirement,
-        req.maximumLevelRequirement
-      );
-    }
-    req.maximumLevelRequirement = maximumLevelRequirement;
-  }
-  req.priority = (req.priority || 0) + 1;
+  // // console.log(`Mapping order, at ${req.name}`);
 }
 
-function mapPrereqOrder(
+function mergeShortcuts(
+  {quests: qA, achievements: aA, skills: sA}: Shortcut,
+  {quests: qB, achievements: aB, skills: sB}: Shortcut
+) {
+  const quests: Shortcut['quests'] = {};
+  for (const [name, a] of Object.entries(qA)) {
+    quests[name] = a;
+  }
+  for (const [name, b] of Object.entries(qB)) {
+    quests[name] = (quests[name] || 0) + b;
+  }
+  const achievements: Shortcut['achievements'] = {};
+  for (const [name, a] of Object.entries(aA)) {
+    achievements[name] = a;
+  }
+  for (const [name, b] of Object.entries(aB)) {
+    achievements[name] = (achievements[name] || 0) + b;
+  }
+  const skills: Shortcut['skills'] = {};
+  for (const [name, levels] of Object.entries(sA)) {
+    skills[name] = {};
+    const skill = skills[name];
+    for (const [level, count] of Object.entries(levels)) {
+      skill[Number(level)] = count;
+    }
+  }
+  for (const [name, levels] of Object.entries(sB)) {
+    skills[name] = skills[name] || {};
+    const skill = skills[name];
+    for (const [level, count] of Object.entries(levels)) {
+      skill[Number(level)] = (skill[Number(level)] || 0) + count;
+    }
+  }
+  return {quests, achievements, skills};
+}
+
+function mapPrereqShortcuts(
   prereqs: {name: string}[],
   reqs: Map<string, MappedRequirement>,
-  levelReqs: Map<string, Map<number, MappedRequirement>>
-) {
+  levelReqs: Map<string, Map<number, MappedRequirement>>,
+  stack: string[],
+  shortcuts: Map<string, Shortcut>
+): Shortcut {
+  let shortcut: Shortcut = {quests: {}, achievements: {}, skills: {}};
   for (const {name} of prereqs) {
     const prereq = reqs.get(name);
     if (!prereq) {
       throw new Error('Could not find prereq: ' + name);
     }
-    mapReqOrder(prereq, reqs, levelReqs);
+    if (stack.includes(name)) {
+      // console.log('Skipping mapping of', name);
+      continue;
+    }
+    // console.log('Mapping', name);
+    shortcut = mergeShortcuts(
+      shortcut,
+      mapShortcut(prereq, reqs, levelReqs, Array.from(stack), shortcuts)
+    );
   }
+  return shortcut;
+}
+
+function mapShortcut(
+  req: MappedRequirement,
+  reqs: Map<string, MappedRequirement>,
+  levelReqs: Map<string, Map<number, MappedRequirement>>,
+  stack: string[] = [],
+  shortcuts = new Map<string, Shortcut>()
+): Shortcut {
+  if (shortcuts.has(req.name)) {
+    return shortcuts.get(req.name) as Shortcut;
+  }
+  stack.push(req.name);
+  const shortcut: Shortcut = mergeShortcuts(
+    mapPrereqShortcuts(req.quests, reqs, levelReqs, stack, shortcuts),
+    mapPrereqShortcuts(
+      req.achievements || [],
+      reqs,
+      levelReqs,
+      stack,
+      shortcuts
+    )
+  );
+  for (const skill of req.skills) {
+    const {name, level} = skill;
+    shortcut.skills[name] = shortcut.skills[name] || {};
+    shortcut.skills[name][level] = (shortcut.skills[name][level] || 0) + 1;
+  }
+  // if (typeof req.maximumLevelRequirement !== 'number') {
+  //   let maximumLevelRequirement = 0;
+  //   for (const skill of req.skills) {
+  //     maximumLevelRequirement = Math.max(maximumLevelRequirement, skill.level);
+  //   }
+  //   for (const {name} of [...req.quests, ...req.achievements]) {
+  //     const req = reqs.get(name);
+  //     if (!req) {
+  //       throw new Error('Failed to find requirement for: ' + name);
+  //     }
+  //     maximumLevelRequirement = Math.max(
+  //       maximumLevelRequirement,
+  //       req.maximumLevelRequirement
+  //     );
+  //   }
+  //   req.maximumLevelRequirement = maximumLevelRequirement;
+  // }
+  if (req.type === 'quest') {
+    shortcut.quests[req.name] = (shortcut.quests[req.name] || 0) + 1;
+  } else {
+    shortcut.achievements[req.name] =
+      (shortcut.achievements[req.name] || 0) + 1;
+  }
+  shortcuts.set(req.name, shortcut);
+  return shortcut;
 }
 
 function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
@@ -350,7 +504,7 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     if (req.quests.find(q => q.name === quest.name)) {
       continue;
     }
-    req.quests.push(prereq);
+    req.quests.push({...prereq, required: true});
   }
   for (const achiev of prereq.achievements || []) {
     if (
@@ -402,9 +556,7 @@ async function getQuests() {
   console.log('Scraping quest list...');
   const result = await axios.get(url);
   const $ = cheerio.load(result.data);
-  const questRows = $(
-    'html body div#bodyContent.mw-body-content table[width="100%"] tbody'
-  );
+  const questRows = $('html body div#bodyContent table[width="100%"] tbody');
   const quests: {name: string; page: string; miniquest: false}[] = [];
   questRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
@@ -420,6 +572,7 @@ async function getQuests() {
     });
   });
   quests.sort((a, b) => a.name.localeCompare(b.name));
+  console.log('Found', quests.length, 'quests');
   return quests;
 }
 
@@ -429,9 +582,7 @@ async function getMiniquests() {
   console.log('Scraping miniquest list...');
   const result = await axios.get(url);
   const $ = cheerio.load(result.data);
-  const questRows = $(
-    'html body div#bodyContent.mw-body-content table[width="100%"] tbody'
-  );
+  const questRows = $('html body div#bodyContent table[width="100%"] tbody');
   const quests: {name: string; page: string; miniquest: true}[] = [];
   questRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
@@ -476,9 +627,11 @@ async function getQuestsWithRequirements(
       .find('tr')
       .each((_, e) => {
         const row = $(e);
-        if (row.find('th.questdetails-header').text() !== 'Requirements') {
+        const header = row.find('th.questdetails-header').text();
+        if (header !== 'Requirements' && header !== 'Recommended') {
           return;
         }
+        const required = header === 'Requirements';
         row.find('ul li').each((_, e) => {
           const ele = $(e);
           let text = ele.text();
@@ -508,9 +661,11 @@ async function getQuestsWithRequirements(
               ) {
                 return;
               }
+              console.log('Adding quest requirement', text);
               requirement.quests.push({
                 name: text,
                 page,
+                required,
               });
             });
           }
@@ -586,7 +741,7 @@ async function getCompletionistCapeAchievements() {
   const result = await axios.get(url);
   const $ = cheerio.load(result.data);
   const achievementRows = $(
-    'html body div#bodyContent.mw-body-content table[width="100%"] tbody'
+    'html body div#bodyContent table[width="100%"] tbody'
   );
   let achievements: {name: string; page: string}[] = [];
   achievementRows.find('tr').each((_, e) => {
@@ -639,7 +794,7 @@ async function getAchievementWithRequirements(
         ...achievement,
         achievements: [],
         skills: [],
-        quests: quests.filter(q => !q.miniquest),
+        quests: quests.filter(q => !q.miniquest).map(q => ({...q, required: true})),
         type: 'achievement',
       };
     //Achievements marked as no requirements
@@ -727,7 +882,7 @@ async function getAchievementWithNormalRequirements(
         return;
       }
       if (questNames.has(title)) {
-        requirements.quests.push({name: title, page});
+        requirements.quests.push({name: title, page, required: true});
       } else if (requirements.achievements && !nonAchievs.has(title)) {
         requirements.achievements.push({name: title, page});
       }
