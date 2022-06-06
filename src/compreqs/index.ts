@@ -112,9 +112,9 @@ interface Requirement {
   type: RequirementType;
   name: string;
   page: string;
-  achievements: {name: string; page: string}[];
-  quests: {name: string; page: string, required: boolean}[];
-  skills: {name: string; page?: string; level: number}[];
+  achievements: {name: string; page: string; type: 'achievement'}[];
+  quests: {name: string; page: string; required: boolean; type: 'quest'}[];
+  skills: {name: string; page?: string; level: number; type: 'skill'}[];
 }
 
 type MappedRequirement = (Requirement & Partial<SkillRequirement>) & {
@@ -193,6 +193,7 @@ function getSkillRequirements(): SkillRequirement[] {
           {
             name: skill,
             level: level - 1,
+            type: 'skill',
             page,
           },
         ],
@@ -223,14 +224,14 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   if (!endReq) {
     throw new Error('Ending requirement not found!');
   }
-  const mqc: Requirement = {
+  const mqc = {
     type: 'achievement',
     name: 'Master quest cape',
     page: 'Master_quest_cape',
     achievements: [],
     skills: [],
-    quests: quests.map(q => ({...q, required: true})),
-  };
+    quests: quests.map(q => ({...q, required: true, type: 'quest'})),
+  } as const;
   endReq.achievements.push(mqc);
   let requirements = [...quests, ...achievements, mqc];
   const requirementMap = requirements.reduce((map, requirement) => {
@@ -269,7 +270,15 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   console.log('Sorting...');
   mappedRequirements.sort(
     (a, b) =>
-      (requirementDistance(a, b, requirementMap) - requirementDistance(b, a, requirementMap)) ||
+      // (a.type === 'quest' && b.type === 'quest'
+      //   ?
+      requirementDistance(a, b, requirementMap, skillReqMap) -
+        requirementDistance(b, a, requirementMap, skillReqMap) ||
+      // : a.type === 'quest'
+      // ? 1
+      // : b.type === 'quest'
+      // ? -1
+      // : 0) ||
       (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
       (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
@@ -279,14 +288,32 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   return mappedRequirements;
 }
 
-function requirementDistance(a: MappedRequirement, b: MappedRequirement, reqMap: Map<string, MappedRequirement>, depth = 1, seen = new Set<string>()): number {
-  const reqs = [...a.quests, ...a.achievements];
+function requirementDistance(
+  a: MappedRequirement,
+  b: MappedRequirement,
+  reqMap: Map<string, MappedRequirement>,
+  skillReqMap: Map<string, Map<number, MappedRequirement>>,
+  depth = 1,
+  seen = new Set<string>()
+): number {
+  const reqs = [...a.quests, ...a.achievements, ...a.skills];
   if (reqs.find(q => q.name === b.name)) {
     return depth;
   }
   seen.add(a.name);
   for (const r of reqs.filter(r => !seen.has(r.name))) {
-    const dist = requirementDistance(reqMap.get(r.name) as MappedRequirement, b, reqMap, depth + 1, seen);
+    const dist = requirementDistance(
+      r.type !== 'skill'
+        ? (reqMap.get(r.name) as MappedRequirement)
+        : ((skillReqMap.get(r.name) as Map<number, MappedRequirement>).get(
+            r.level
+          ) as MappedRequirement),
+      b,
+      reqMap,
+      skillReqMap,
+      depth + 1,
+      seen
+    );
     if (dist) {
       return dist;
     }
@@ -504,7 +531,7 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     if (req.quests.find(q => q.name === quest.name)) {
       continue;
     }
-    req.quests.push({...prereq, required: true});
+    req.quests.push({...prereq, required: true, type: 'quest'});
   }
   for (const achiev of prereq.achievements || []) {
     if (
@@ -513,7 +540,10 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     ) {
       continue;
     }
-    (req.achievements || (req.achievements = [])).push(prereq);
+    (req.achievements || (req.achievements = [])).push({
+      ...prereq,
+      type: 'achievement',
+    });
   }
   for (const skill of prereq.skills) {
     const reqSkill = req.skills.find(s => s.name === skill.name);
@@ -647,6 +677,7 @@ async function getQuestsWithRequirements(
             requirement.skills.push({
               name: skill,
               level: parseInt(level) || 0,
+              type: 'skill',
             });
           } else {
             ele.find('>a').each((_, a) => {
@@ -666,6 +697,7 @@ async function getQuestsWithRequirements(
                 name: text,
                 page,
                 required,
+                type: 'quest',
               });
             });
           }
@@ -727,7 +759,7 @@ async function getCompletionistCapeAchievementsWithRequirements(
     ...completionist,
     achievements: achievementsWithRequirements
       .slice()
-      .map(({name, page}) => ({name, page})),
+      .map(({name, page}) => ({name, page, type: 'achievement'})),
     skills: [],
     quests: [],
     type: 'achievement',
@@ -784,7 +816,10 @@ async function getAchievementWithRequirements(
     case 'Task Master':
       return {
         ...achievement,
-        achievements: taskMasterAchievements,
+        achievements: taskMasterAchievements.map(a => ({
+          ...a,
+          type: 'achievement',
+        })),
         skills: [],
         quests: [],
         type: 'achievement',
@@ -794,7 +829,9 @@ async function getAchievementWithRequirements(
         ...achievement,
         achievements: [],
         skills: [],
-        quests: quests.filter(q => !q.miniquest).map(q => ({...q, required: true})),
+        quests: quests
+          .filter(q => !q.miniquest)
+          .map(q => ({...q, required: true, type: 'quest'})),
         type: 'achievement',
       };
     //Achievements marked as no requirements
@@ -874,6 +911,7 @@ async function getAchievementWithNormalRequirements(
       requirements.skills.push({
         name: skill,
         level: parseInt(level) || 1,
+        type: 'skill',
       });
     } else {
       const title = ele.find('a').attr('title');
@@ -882,9 +920,18 @@ async function getAchievementWithNormalRequirements(
         return;
       }
       if (questNames.has(title)) {
-        requirements.quests.push({name: title, page, required: true});
+        requirements.quests.push({
+          name: title,
+          page,
+          required: true,
+          type: 'quest',
+        });
       } else if (requirements.achievements && !nonAchievs.has(title)) {
-        requirements.achievements.push({name: title, page});
+        requirements.achievements.push({
+          name: title,
+          page,
+          type: 'achievement',
+        });
       }
     }
   });
