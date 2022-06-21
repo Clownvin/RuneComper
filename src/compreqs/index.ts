@@ -271,16 +271,16 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   mappedRequirements.sort(
     (a, b) =>
       // (a.type === 'quest' && b.type === 'quest'
-      //   ?
-      requirementDistance(a, b, requirementMap, skillReqMap) -
-        requirementDistance(b, a, requirementMap, skillReqMap) ||
+      // //   ?
+      // requirementDistance(a, b, requirementMap, skillReqMap) -
+      //   requirementDistance(b, a, requirementMap, skillReqMap) ||
       // : a.type === 'quest'
       // ? 1
       // : b.type === 'quest'
       // ? -1
-      // : 0) ||
-      (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
-      (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
+      // // : 0) ||
+      // (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
+      // (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
       (a.level || 0) - (b.level || 0)
   );
@@ -288,38 +288,38 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   return mappedRequirements;
 }
 
-function requirementDistance(
-  a: MappedRequirement,
-  b: MappedRequirement,
-  reqMap: Map<string, MappedRequirement>,
-  skillReqMap: Map<string, Map<number, MappedRequirement>>,
-  depth = 1,
-  seen = new Set<string>()
-): number {
-  const reqs = [...a.quests, ...a.achievements, ...a.skills];
-  if (reqs.find(q => q.name === b.name)) {
-    return depth;
-  }
-  seen.add(a.name);
-  for (const r of reqs.filter(r => !seen.has(r.name))) {
-    const dist = requirementDistance(
-      r.type !== 'skill'
-        ? (reqMap.get(r.name) as MappedRequirement)
-        : ((skillReqMap.get(r.name) as Map<number, MappedRequirement>).get(
-            r.level
-          ) as MappedRequirement),
-      b,
-      reqMap,
-      skillReqMap,
-      depth + 1,
-      seen
-    );
-    if (dist) {
-      return dist;
-    }
-  }
-  return 0;
-}
+// function requirementDistance(
+//   a: MappedRequirement,
+//   b: MappedRequirement,
+//   reqMap: Map<string, MappedRequirement>,
+//   skillReqMap: Map<string, Map<number, MappedRequirement>>,
+//   depth = 1,
+//   seen = new Set<string>()
+// ): number {
+//   const reqs = [...a.quests, ...a.achievements, ...a.skills];
+//   if (reqs.find(q => q.name === b.name)) {
+//     return depth;
+//   }
+//   seen.add(a.name);
+//   for (const r of reqs.filter(r => !seen.has(r.name))) {
+//     const dist = requirementDistance(
+//       r.type !== 'skill'
+//         ? (reqMap.get(r.name) as MappedRequirement)
+//         : ((skillReqMap.get(r.name) as Map<number, MappedRequirement>).get(
+//             r.level
+//           ) as MappedRequirement),
+//       b,
+//       reqMap,
+//       skillReqMap,
+//       depth + 1,
+//       seen
+//     );
+//     if (dist) {
+//       return dist;
+//     }
+//   }
+//   return 0;
+// }
 
 function addMaxLevel(
   req: MappedRequirement,
@@ -485,7 +485,13 @@ function mapShortcut(
   }
   stack.push(req.name);
   const shortcut: Shortcut = mergeShortcuts(
-    mapPrereqShortcuts(req.quests, reqs, levelReqs, stack, shortcuts),
+    mapPrereqShortcuts(
+      req.quests.filter(q => q.required),
+      reqs,
+      levelReqs,
+      stack,
+      shortcuts
+    ),
     mapPrereqShortcuts(
       req.achievements || [],
       reqs,
