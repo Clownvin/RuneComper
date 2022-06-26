@@ -1,8 +1,9 @@
 import axios from 'axios';
-import * as cheerio from 'cheerio';
+import cheerio from 'cheerio';
 import {URLBuilder} from '../util/url';
 import {skillNames, skillNameSet, Skill} from '../rsapi';
-import * as moment from 'moment';
+import moment from 'moment';
+import {concat} from 'lodash';
 
 const rsWikiUrl = new URLBuilder('https://runescape.wiki');
 
@@ -14,97 +15,6 @@ const skill120s = new Set([
   'invention',
   'slayer',
 ]);
-
-const taskMasterAchievements = [
-  {name: 'Ardougne Set Tasks - Easy', page: '/w/Ardougne_Set_Tasks_-_Easy'},
-  {name: 'Ardougne Set Tasks - Medium', page: '/w/Ardougne_Set_Tasks_-_Medium'},
-  {name: 'Ardougne Set Tasks - Hard', page: '/w/Ardougne_Set_Tasks_-_Hard'},
-  {name: 'Ardougne Set Tasks - Elite', page: '/w/Ardougne_Set_Tasks_-_Elite'},
-  {name: 'Desert Set Tasks - Easy', page: '/w/Desert_Set_Tasks_-_Easy'},
-  {name: 'Desert Set Tasks - Medium', page: '/w/Desert_Set_Tasks_-_Medium'},
-  {name: 'Desert Set Tasks - Hard', page: '/w/Desert_Set_Tasks_-_Hard'},
-  {name: 'Desert Set Tasks - Elite', page: '/w/Desert_Set_Tasks_-_Elite'},
-  {name: 'Daemonheim Set Tasks - Easy', page: '/w/Daemonheim_Set_Tasks_-_Easy'},
-  {
-    name: 'Daemonheim Set Tasks - Medium',
-    page: '/w/Daemonheim_Set_Tasks_-_Medium',
-  },
-  {name: 'Daemonheim Set Tasks - Hard', page: '/w/Daemonheim_Set_Tasks_-_Hard'},
-  {
-    name: 'Daemonheim Set Tasks - Elite',
-    page: '/w/Daemonheim_Set_Tasks_-_Elite',
-  },
-  {name: 'Falador Set Tasks - Easy', page: '/w/Falador_Set_Tasks_-_Easy'},
-  {name: 'Falador Set Tasks - Medium', page: '/w/Falador_Set_Tasks_-_Medium'},
-  {name: 'Falador Set Tasks - Hard', page: '/w/Falador_Set_Tasks_-_Hard'},
-  {name: 'Falador Set Tasks - Elite', page: '/w/Falador_Set_Tasks_-_Elite'},
-  {name: 'Fremennik Set Tasks - Easy', page: '/w/Fremennik_Set_Tasks_-_Easy'},
-  {
-    name: 'Fremennik Set Tasks - Medium',
-    page: '/w/Fremennik_Set_Tasks_-_Medium',
-  },
-  {name: 'Fremennik Set Tasks - Hard', page: '/w/Fremennik_Set_Tasks_-_Hard'},
-  {name: 'Fremennik Set Tasks - Elite', page: '/w/Fremennik_Set_Tasks_-_Elite'},
-  {name: 'Karamja Set Tasks - Easy', page: '/w/Karamja_Set_Tasks_-_Easy'},
-  {name: 'Karamja Set Tasks - Medium', page: '/w/Karamja_Set_Tasks_-_Medium'},
-  {name: 'Karamja Set Tasks - Hard', page: '/w/Karamja_Set_Tasks_-_Hard'},
-  {name: 'Karamja Set Tasks - Elite', page: '/w/Karamja_Set_Tasks_-_Elite'},
-  {
-    name: 'Lumbridge Set Tasks - Beginner',
-    page: '/w/Lumbridge_Set_Tasks_-_Beginner',
-  },
-  {
-    name: 'Lumbridge Set Tasks - Medium',
-    page: '/w/Lumbridge_Set_Tasks_-_Medium',
-  },
-  {name: 'Lumbridge Set Tasks - Hard', page: '/w/Lumbridge_Set_Tasks_-_Hard'},
-  {name: 'Lumbridge Set Tasks - Easy', page: '/w/Lumbridge_Set_Tasks_-_Easy'},
-  {name: 'Menaphos Pyramid Scheme', page: '/w/Menaphos_Pyramid_Scheme'},
-  {name: 'Morytania Set Tasks - Easy', page: '/w/Morytania_Set_Tasks_-_Easy'},
-  {
-    name: 'Morytania Set Tasks - Medium',
-    page: '/w/Morytania_Set_Tasks_-_Medium',
-  },
-  {name: 'Morytania Set Tasks - Hard', page: '/w/Morytania_Set_Tasks_-_Hard'},
-  {name: 'Morytania Set Tasks - Elite', page: '/w/Morytania_Set_Tasks_-_Elite'},
-  {
-    name: "Seers' Village Set Tasks - Easy",
-    page: "/w/Seers'_Village_Set_Tasks_-_Easy",
-  },
-  {
-    name: "Seers' Village Set Tasks - Medium",
-    page: "/w/Seers'_Village_Set_Tasks_-_Medium",
-  },
-  {
-    name: "Seers' Village Set Tasks - Hard",
-    page: "/w/Seers'_Village_Set_Tasks_-_Hard",
-  },
-  {
-    name: "Seers' Village Set Tasks - Elite",
-    page: "/w/Seers'_Village_Set_Tasks_-_Elite",
-  },
-  {name: 'Tirannwn Set Tasks - Easy', page: '/w/Tirannwn_Set_Tasks_-_Easy'},
-  {name: 'Tirannwn Set Tasks - Medium', page: '/w/Tirannwn_Set_Tasks_-_Medium'},
-  {name: 'Tirannwn Set Tasks - Hard', page: '/w/Tirannwn_Set_Tasks_-_Hard'},
-  {name: 'Tirannwn Set Tasks - Elite', page: '/w/Tirannwn_Set_Tasks_-_Elite'},
-  {
-    name: 'Varrock Set Tasks - Elite',
-    page: '/w/Varrock_Set_Tasks_-_Elite',
-  },
-  {name: 'Varrock Set Tasks - Medium', page: '/w/Varrock_Set_Tasks_-_Medium'},
-  {name: 'Varrock Set Tasks - Hard', page: '/w/Varrock_Set_Tasks_-_Hard'},
-  {name: 'Varrock Set Tasks - Easy', page: '/w/Varrock_Set_Tasks_-_Easy'},
-  {name: 'Wilderness Set Tasks - Easy', page: '/w/Wilderness_Set_Tasks_-_Easy'},
-  {
-    name: 'Wilderness Set Tasks - Medium',
-    page: '/w/Wilderness_Set_Tasks_-_Medium',
-  },
-  {name: 'Wilderness Set Tasks - Hard', page: '/w/Wilderness_Set_Tasks_-_Hard'},
-  {
-    name: 'Wilderness Set Tasks - Elite',
-    page: '/w/Wilderness_Set_Tasks_-_Elite',
-  },
-];
 
 type RequirementType = 'quest' | 'skill' | 'achievement';
 
@@ -172,7 +82,7 @@ async function createCompletionistCapeStepsIfNeeded() {
     console.log('Finished');
     calculating = false;
   })().catch(console.error);
-  return false;
+  return calculating;
 }
 
 function getSkillRequirements(): SkillRequirement[] {
@@ -213,34 +123,21 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   const questNames = new Set(rawQuests.map(q => q.name));
   const quests = await getQuestsWithRequirements(rawQuests, questNames);
   const achievements = await getCompletionistCapeAchievementsWithRequirements(
-    rawQuests,
     questNames
   );
 
   //Do this now while it's easier/quicker
   const endReq = achievements.find(
-    a => a.name === 'Completionist'
+    a => a.name === 'Trimmed Completionist'
   ) as MappedRequirement;
   if (!endReq) {
     throw new Error('Ending requirement not found!');
   }
-  const mqc = {
-    type: 'achievement',
-    name: 'Master quest cape',
-    page: 'Master_quest_cape',
-    achievements: [],
-    skills: [],
-    quests: quests.map(q => ({...q, required: true, type: 'quest'})),
-  } as const;
-  endReq.achievements.push(mqc);
-  let requirements = [...quests, ...achievements, mqc];
+  let requirements = [...quests, ...achievements];
   const requirementMap = requirements.reduce((map, requirement) => {
     map.set(requirement.name, requirement as MappedRequirement);
     return map;
   }, new Map<string, MappedRequirement>());
-
-  // console.log('Finding implicit requirements...');
-  // addImplicitRequirements(endReq, requirementMap);
 
   const skills = getSkillRequirements();
   console.log(quests.map(q => q.name).join(', '));
@@ -248,7 +145,6 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
     ...skills,
     ...quests, //.filter(q => !q.miniquest),
     ...achievements,
-    mqc,
   ];
 
   const skillReqMap = new Map<string, Map<number, MappedRequirement>>();
@@ -270,17 +166,8 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   console.log('Sorting...');
   mappedRequirements.sort(
     (a, b) =>
-      // (a.type === 'quest' && b.type === 'quest'
-      // //   ?
-      // requirementDistance(a, b, requirementMap, skillReqMap) -
-      //   requirementDistance(b, a, requirementMap, skillReqMap) ||
-      // : a.type === 'quest'
-      // ? 1
-      // : b.type === 'quest'
-      // ? -1
-      // // : 0) ||
-      // (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
-      // (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
+      (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
+      (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
       (a.level || 0) - (b.level || 0)
   );
@@ -288,85 +175,50 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   return mappedRequirements;
 }
 
-// function requirementDistance(
-//   a: MappedRequirement,
-//   b: MappedRequirement,
-//   reqMap: Map<string, MappedRequirement>,
-//   skillReqMap: Map<string, Map<number, MappedRequirement>>,
-//   depth = 1,
-//   seen = new Set<string>()
-// ): number {
-//   const reqs = [...a.quests, ...a.achievements, ...a.skills];
-//   if (reqs.find(q => q.name === b.name)) {
-//     return depth;
-//   }
-//   seen.add(a.name);
-//   for (const r of reqs.filter(r => !seen.has(r.name))) {
-//     const dist = requirementDistance(
-//       r.type !== 'skill'
-//         ? (reqMap.get(r.name) as MappedRequirement)
-//         : ((skillReqMap.get(r.name) as Map<number, MappedRequirement>).get(
-//             r.level
-//           ) as MappedRequirement),
-//       b,
-//       reqMap,
-//       skillReqMap,
-//       depth + 1,
-//       seen
-//     );
-//     if (dist) {
-//       return dist;
-//     }
-//   }
-//   return 0;
-// }
-
 function addMaxLevel(
   req: MappedRequirement,
   requirementMap: Map<string, MappedRequirement>,
   seen = new Set<string>()
 ) {
   seen.add(req.name);
-  req.maximumLevelRequirement = Math.max(
-    ...[
-      ...Object.values(req.skills).map(s => s.level),
-      ...[...req.quests.filter(q => q.required), ...req.achievements]
-        .filter(r => !seen.has(r.name))
-        .map(r => {
-          const re = requirementMap.get(r.name);
-          if (!re) {
-            throw new Error('No requirment found for name: ' + r.name);
-          }
-          if (re.maximumLevelRequirement === undefined) {
-            addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
-          }
-          // if (req.name === 'Nature Spirit') {
-          //   console.log(r.name, re.maximumLevelRequirement);
-          // }
-          return re.maximumLevelRequirement;
-        }),
-    ]
+  const requiredLevels = concat(
+    Object.values(req.skills).map(s => s.level),
+    concat<{name: string}>(
+      req.quests.filter(q => q.required),
+      req.achievements
+    )
+      .filter(r => !seen.has(r.name))
+      .map(r => {
+        const re = requirementMap.get(r.name);
+        if (!re) {
+          throw new Error('No requirment found for name: ' + r.name);
+        }
+        if (re.maximumLevelRequirement === undefined) {
+          addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
+        }
+        // if (req.name === 'Nature Spirit') {
+        //   console.log(r.name, re.maximumLevelRequirement);
+        // }
+        return re.maximumLevelRequirement;
+      })
   );
-  req.maximumLevelRecommended = Math.max(
-    ...[
-      ...Object.values(req.skills).map(s => s.level),
-      ...[...req.quests, ...req.achievements]
-        .filter(r => !seen.has(r.name))
-        .map(r => {
-          const re = requirementMap.get(r.name);
-          if (!re) {
-            throw new Error('No requirment found for name: ' + r.name);
-          }
-          if (re.maximumLevelRecommended === undefined) {
-            addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
-          }
-          // if (req.name === 'Nature Spirit') {
-          //   console.log(r.name, re.maximumLevelRequirement);
-          // }
-          return re.maximumLevelRecommended;
-        }),
-    ]
+  req.maximumLevelRequirement = Math.max(...requiredLevels);
+  const recommendedLevels = concat(
+    Object.values(req.skills).map(s => s.level),
+    concat<{name: string}>(req.quests, req.achievements)
+      .filter(({name}) => !seen.has(name))
+      .map(({name}) => {
+        const requirement = requirementMap.get(name);
+        if (!requirement) {
+          throw new Error('No requirment found for name: ' + name);
+        }
+        if (requirement.maximumLevelRecommended === undefined) {
+          addMaxLevel(requirement, requirementMap, new Set(Array.from(seen)));
+        }
+        return requirement.maximumLevelRecommended;
+      })
   );
+  req.maximumLevelRecommended = Math.max(...recommendedLevels);
 }
 
 type Shortcut = {
@@ -398,17 +250,20 @@ function mapReqOrder(
       throw new Error('No skill found for ' + name);
     }
     for (const [level, count] of Object.entries(levels)) {
-      for (let i = Number(level); i >= 2; i--) {
-        const skill = skillReqMap.get(i);
-        if (!skill) {
-          console.error('No skill req for', name, i);
+      for (
+        let requiredLevel = Number(level);
+        requiredLevel >= 2;
+        requiredLevel--
+      ) {
+        const skillRequirement = skillReqMap.get(requiredLevel);
+        if (!skillRequirement) {
+          console.error('No skill req for', name, requiredLevel);
           continue;
         }
-        skill.priority = (skill.priority || 0) + count;
+        skillRequirement.priority = (skillRequirement.priority || 0) + count;
       }
     }
   }
-  // // console.log(`Mapping order, at ${req.name}`);
 }
 
 function mergeShortcuts(
@@ -461,10 +316,8 @@ function mapPrereqShortcuts(
       throw new Error('Could not find prereq: ' + name);
     }
     if (stack.includes(name)) {
-      // console.log('Skipping mapping of', name);
       continue;
     }
-    // console.log('Mapping', name);
     shortcut = mergeShortcuts(
       shortcut,
       mapShortcut(prereq, reqs, levelReqs, Array.from(stack), shortcuts)
@@ -505,23 +358,6 @@ function mapShortcut(
     shortcut.skills[name] = shortcut.skills[name] || {};
     shortcut.skills[name][level] = (shortcut.skills[name][level] || 0) + 1;
   }
-  // if (typeof req.maximumLevelRequirement !== 'number') {
-  //   let maximumLevelRequirement = 0;
-  //   for (const skill of req.skills) {
-  //     maximumLevelRequirement = Math.max(maximumLevelRequirement, skill.level);
-  //   }
-  //   for (const {name} of [...req.quests, ...req.achievements]) {
-  //     const req = reqs.get(name);
-  //     if (!req) {
-  //       throw new Error('Failed to find requirement for: ' + name);
-  //     }
-  //     maximumLevelRequirement = Math.max(
-  //       maximumLevelRequirement,
-  //       req.maximumLevelRequirement
-  //     );
-  //   }
-  //   req.maximumLevelRequirement = maximumLevelRequirement;
-  // }
   if (req.type === 'quest') {
     shortcut.quests[req.name] = (shortcut.quests[req.name] || 0) + 1;
   } else {
@@ -641,92 +477,93 @@ async function getQuestsWithRequirements(
   quests: {name: string; page: string; miniquest: boolean}[],
   questNames: Set<string>
 ) {
-  const questsWithReqs: QuestRequirement[] = [];
-  for (const quest of quests) {
-    const url = rsWikiUrl.build(quest.page);
-    console.log(`Scraping ${url}...`);
-    const response = await axios.get(url).catch(() => {
-      console.error('FAILED TO LOAD QUEST', quest.name, quest.page);
-    });
-    if (!response) {
-      return questsWithReqs;
-    }
-    const $ = cheerio.load(response.data);
-    const requirement = {
-      ...quest,
-      type: 'quest',
-      quests: [],
-      achievements: [],
-      skills: [],
-    } as QuestRequirement;
-    $('table.questdetails tbody')
-      .find('tr')
-      .each((_, e) => {
-        const row = $(e);
-        const header = row.find('th.questdetails-header').text();
-        if (header !== 'Requirements' && header !== 'Recommended') {
+  return await Promise.all(
+    quests.map(quest => getQuestWithRequirements(quest, questNames))
+  );
+}
+
+async function getQuestWithRequirements(
+  quest: {name: string; page: string; miniquest: boolean},
+  questNames: Set<string>
+): Promise<QuestRequirement> {
+  const url = rsWikiUrl.build(quest.page);
+  console.log(`Scraping ${url}...`);
+  const response = await axios.get(url);
+  const $ = cheerio.load(response.data);
+  const requirement = {
+    ...quest,
+    type: 'quest',
+    quests: [],
+    achievements: [],
+    skills: [],
+  } as QuestRequirement;
+  $('table.questdetails tbody')
+    .find('tr')
+    .each((_, e) => {
+      const row = $(e);
+      const header = row.find('th.questdetails-header').text();
+      if (header !== 'Requirements' && header !== 'Recommended') {
+        return;
+      }
+      const required = header === 'Requirements';
+      row.find('ul li').each((_, e) => {
+        const ele = $(e);
+        let text = ele.text();
+        if (text === null) {
           return;
         }
-        const required = header === 'Requirements';
-        row.find('ul li').each((_, e) => {
-          const ele = $(e);
-          let text = ele.text();
-          if (text === null) {
+        text = text.toLowerCase();
+        if (/^\d\d?\s+\w/.test(text) && !text.includes('quest point')) {
+          const [level, skill] = text.split(/\s+\[?/);
+          if (!skill || !skillNameSet.has(skill as Skill)) {
             return;
           }
-          text = text.toLowerCase();
-          if (/^\d\d?\s+\w/.test(text) && !text.includes('quest point')) {
-            const [level, skill] = text.split(/\s+\[?/);
-            if (!skill || !skillNameSet.has(skill as Skill)) {
+          requirement.skills.push({
+            name: skill,
+            level: parseInt(level) || 0,
+            type: 'skill',
+          });
+        } else {
+          ele.find('>a').each((_, a) => {
+            const text = $(a).text();
+            const page = $(a).attr('href');
+            if (!page || !questNames.has(text)) {
               return;
             }
-            requirement.skills.push({
-              name: skill,
-              level: parseInt(level) || 0,
-              type: 'skill',
+            if (
+              text === quest.name ||
+              requirement.quests.find(quest => quest.name === text)
+            ) {
+              return;
+            }
+            console.log('Adding quest requirement', text);
+            requirement.quests.push({
+              name: text,
+              page,
+              required,
+              type: 'quest',
             });
-          } else {
-            ele.find('>a').each((_, a) => {
-              const text = $(a).text();
-              const page = $(a).attr('href');
-              if (!page || !questNames.has(text)) {
-                return;
-              }
-              if (
-                text === quest.name ||
-                requirement.quests.find(quest => quest.name === text)
-              ) {
-                return;
-              }
-              console.log('Adding quest requirement', text);
-              requirement.quests.push({
-                name: text,
-                page,
-                required,
-                type: 'quest',
-              });
-            });
-          }
-        });
+          });
+        }
       });
-    questsWithReqs.push(requirement);
-  }
-  return questsWithReqs;
+    });
+  return requirement;
 }
 
 async function getCompletionistCapeAchievementsWithRequirements(
-  quests: {
-    name: string;
-    page: string;
-    miniquest: boolean;
-  }[],
+  // quests: {
+  //   name: string;
+  //   page: string;
+  //   miniquest: boolean;
+  // }[],
   questNames: Set<string>
 ) {
   let achievements = await getCompletionistCapeAchievements();
-  achievements.push(...taskMasterAchievements);
+  //TODO: Add Task Master stuff back
+  // achievements.push(...taskMasterAchievements);
   const achievementsWithRequirements = [] as Requirement[];
   const index = achievements.findIndex(
-    achievement => achievement.name === 'Completionist'
+    achievement => achievement.name === 'Trimmed Completionist'
   );
   if (index === -1) {
     throw new Error('No completionist achievement');
@@ -735,11 +572,11 @@ async function getCompletionistCapeAchievementsWithRequirements(
   do {
     const newAchievements = [] as Requirement[];
     for (const achievement of achievements) {
-      if (achievement.name === 'Completionist') {
+      if (achievement.name === 'Trimmed Completionist') {
         continue;
       }
       newAchievements.push(
-        await getAchievementWithRequirements(achievement, quests, questNames)
+        await getAchievementWithRequirements(achievement, questNames)
       );
     }
     achievementsWithRequirements.push(...newAchievements);
@@ -748,16 +585,21 @@ async function getCompletionistCapeAchievementsWithRequirements(
       if (!achievement.achievements) {
         return;
       }
-      achievement.achievements.forEach(achievement => {
+      achievement.achievements.forEach(a => {
         if (
           achievementsWithRequirements.find(
-            existing => existing.page === achievement.page
+            existing => existing.page === a.page
           ) ||
-          achievements.find(existing => existing.page === achievement.page)
+          achievements.find(existing => existing.page === a.page)
         ) {
           return;
         }
-        achievements.push(achievement);
+        if (a.page.endsWith('#Achievements')) {
+          throw new Error(
+            'Founds on ' + achievement.name + ' ' + achievement.page
+          );
+        }
+        achievements.push(a);
       });
     });
   } while (achievements.length > 0);
@@ -774,18 +616,17 @@ async function getCompletionistCapeAchievementsWithRequirements(
 }
 
 async function getCompletionistCapeAchievements() {
-  const url = rsWikiUrl.build('/w/Completionist_cape');
+  const url = rsWikiUrl.build('/w/Trimmed_Completionist_Cape_(achievement)');
   console.log('Scraping completionist achievements...');
   const result = await axios.get(url);
   const $ = cheerio.load(result.data);
-  const achievementRows = $(
-    'html body div#bodyContent table[width="100%"] tbody'
-  );
-  let achievements: {name: string; page: string}[] = [];
+  const achievementRows = $('html body div#bodyContent table.wikitable tbody');
+  const achievements: {name: string; page: string}[] = [];
   achievementRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
     const name = a.attr('title');
     const link = a.attr('href');
+    console.log($(e).text());
     if (!name || !link) {
       return;
     }
@@ -794,13 +635,12 @@ async function getCompletionistCapeAchievements() {
       page: link,
     });
   });
+  console.log('Achievements:', achievements);
   achievements.sort((a, b) => a.name.localeCompare(b.name));
-  //Filter out Master Quester, since we're requiring all quests anyway
-  //Stacks on stacks because it's kinda an odd ball
-  achievements = achievements.filter(a => a.name !== 'Stacks on Stacks');
+
   achievements.push({
-    name: 'Completionist',
-    page: '/w/Completionist_cape',
+    name: 'Trimmed Completionist',
+    page: '/w/Trimmed_Completionist_Cape_(achievement)',
   });
   return achievements;
 }
@@ -810,54 +650,27 @@ async function getAchievementWithRequirements(
     name: string;
     page: string;
   },
-  quests: {
-    name: string;
-    page: string;
-    miniquest: boolean;
-  }[],
   questNames: Set<string>
 ): Promise<Requirement> {
   switch (achievement.name) {
-    //Ignored because we added its composite achievements
-    case 'Task Master':
-      return {
-        ...achievement,
-        achievements: taskMasterAchievements.map(a => ({
-          ...a,
-          type: 'achievement',
-        })),
-        skills: [],
-        quests: [],
-        type: 'achievement',
-      };
-    case 'Master Quester':
-      return {
-        ...achievement,
-        achievements: [],
-        skills: [],
-        quests: quests
-          .filter(q => !q.miniquest)
-          .map(q => ({...q, required: true, type: 'quest'})),
-        type: 'achievement',
-      };
     //Achievements marked as no requirements
-    case 'Big Chinchompa':
-    case 'Stay Safe':
-    case 'Stay Secure':
-    case 'Father and Son (achievement)':
-    case 'Da Vinci who?':
-    case 'Bag of Herbs':
-    case 'Music Maestro':
-    case 'Top Town Hall':
-    case 'Kudos to You':
-    case 'Big Chinchompa (achievement)':
-      return {
-        ...achievement,
-        achievements: [],
-        skills: [],
-        quests: [],
-        type: 'achievement',
-      };
+    // case 'Big Chinchompa':
+    // case 'Stay Safe':
+    // case 'Stay Secure':
+    // case 'Father and Son (achievement)':
+    // case 'Da Vinci who?':
+    // case 'Bag of Herbs':
+    // case 'Music Maestro':
+    // case 'Top Town Hall':
+    // case 'Kudos to You':
+    // case 'Big Chinchompa (achievement)':
+    //   return {
+    //     ...achievement,
+    //     achievements: [],
+    //     skills: [],
+    //     quests: [],
+    //     type: 'achievement',
+    //   };
     default:
       return getAchievementWithNormalRequirements(achievement, questNames);
   }
@@ -876,36 +689,78 @@ async function getAchievementWithNormalRequirements(
   const $ = cheerio.load(result.data);
   const element = $('#infobox-achievement td.qc-active');
   const html = element.html();
-  if (html === null) {
-    return {
-      ...achievement,
-      achievements: [],
-      skills: [],
-      quests: [],
-      type: 'achievement',
-    };
-  }
-  if (html.includes('See article')) {
-    console.log(
-      'Achievement has additional info',
-      achievement.name,
-      achievement.page
-    );
-    return {
-      ...achievement,
-      achievements: [],
-      skills: [],
-      quests: [],
-      type: 'achievement',
-    };
-  }
-  const requirements = {
+
+  const requirement = {
     ...achievement,
     achievements: [],
     quests: [],
     skills: [],
     type: 'achievement',
   } as Requirement;
+
+  if (html === null) {
+    return requirement;
+  }
+
+  const seeAchievements =
+    /See\s(<.*>)?\s?((achievements)|(article)|(requirements))/;
+  if (seeAchievements.test(html) || html.includes('See article')) {
+    console.log(
+      'Achievement has additional achievements',
+      achievement.name,
+      rsWikiUrl.build(achievement.page)
+    );
+    const achievementRows = $(
+      'html body div#bodyContent table.wikitable tbody'
+    );
+    achievementRows.find('tr').each((_, e) => {
+      $(e)
+        .find('td')
+        .each((i, e) => {
+          //If task master, only do last column
+          if (requirement.name === 'Task Master') {
+            if (i !== 2) {
+              return;
+            }
+          }
+          //If set tasks only do second column
+          else if (requirement.name.includes('Set Tasks - ')) {
+            console.log('DOING SET TASKS', requirement.name);
+            if (i !== 1) {
+              return;
+            }
+          } else if (i > 0) {
+            return;
+          }
+          $(e)
+            .find('a')
+            .each((_, e) => {
+              const a = $(e);
+              const name = a.attr('title') as string;
+              const page = (a.attr('href') || '').split('#')[0];
+
+              if (questNames.has(name as string)) {
+                requirement.quests.push({
+                  name,
+                  page,
+                  type: 'quest',
+                  required: true,
+                });
+              } else {
+                requirement.achievements.push({
+                  name,
+                  page,
+                  type: 'achievement',
+                });
+              }
+              // console.log($(e).text());
+              console.log(name, rsWikiUrl.build(page));
+            });
+        });
+    });
+  } else if (/See\s(<.*>)?\s?\w+/.test(html)) {
+    console.log('HTML includes a "See":', html);
+  }
   element.find('li').each((_, e) => {
     const ele = $(e);
     const html = ele.text() || '';
@@ -914,26 +769,29 @@ async function getAchievementWithNormalRequirements(
       if (!skill || !skillNameSet.has(skill as Skill)) {
         return;
       }
-      requirements.skills.push({
+      requirement.skills.push({
         name: skill,
         level: parseInt(level) || 1,
         type: 'skill',
       });
     } else {
       const title = ele.find('a').attr('title');
-      const page = ele.find('a').attr('href') || '';
+      const page = (ele.find('a').attr('href') || '').split('#')[0];
       if (!title) {
         return;
       }
       if (questNames.has(title)) {
-        requirements.quests.push({
+        requirement.quests.push({
           name: title,
           page,
           required: true,
           type: 'quest',
         });
-      } else if (requirements.achievements && !nonAchievs.has(title)) {
-        requirements.achievements.push({
+      } else if (requirement.achievements && !nonAchievs.has(title)) {
+        // if (title.startsWith('Completionist')) {
+        //   console.log(ele.text());
+        // }
+        requirement.achievements.push({
           name: title,
           page,
           type: 'achievement',
@@ -941,7 +799,9 @@ async function getAchievementWithNormalRequirements(
       }
     }
   });
-  return requirements;
+  return requirement;
 }
+
+createCompletionistCapeStepsIfNeeded();
 
 const nonAchievs = new Set(['Lunar Spellbook']);
