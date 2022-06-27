@@ -130,9 +130,11 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   const endReq = achievements.find(
     a => a.name === 'Trimmed Completionist'
   ) as MappedRequirement;
-  if (!endReq) {
+  const questCape = achievements.find(a => a.name === 'Quest Cape');
+  if (!endReq || !questCape) {
     throw new Error('Ending requirement not found!');
   }
+  questCape.quests = quests.map(q => ({...q, required: true, type: 'quest'}));
   let requirements = [...quests, ...achievements];
   const requirementMap = requirements.reduce((map, requirement) => {
     map.set(requirement.name, requirement as MappedRequirement);
@@ -202,7 +204,10 @@ function addMaxLevel(
         return re.maximumLevelRequirement;
       })
   );
-  req.maximumLevelRequirement = Math.max(...requiredLevels);
+  // console.log('Required levels for', req.name);
+  // console.log(requiredLevels);
+  req.maximumLevelRequirement = Math.max(...requiredLevels, 0);
+  // console.log(req.maximumLevelRequirement);
   const recommendedLevels = concat(
     Object.values(req.skills).map(s => s.level),
     concat<{name: string}>(req.quests, req.achievements)
@@ -218,7 +223,7 @@ function addMaxLevel(
         return requirement.maximumLevelRecommended;
       })
   );
-  req.maximumLevelRecommended = Math.max(...recommendedLevels);
+  req.maximumLevelRecommended = Math.max(...recommendedLevels, 0);
 }
 
 type Shortcut = {
