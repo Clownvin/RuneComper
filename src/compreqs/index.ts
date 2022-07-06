@@ -482,9 +482,11 @@ async function getQuestsWithRequirements(
   quests: {name: string; page: string; miniquest: boolean}[],
   questNames: Set<string>
 ) {
-  return await Promise.all(
-    quests.map(quest => getQuestWithRequirements(quest, questNames))
-  );
+  const withRequirements: QuestRequirement[] = [];
+  for (const quest of quests) {
+    withRequirements.push(await getQuestWithRequirements(quest, questNames));
+  }
+  return withRequirements;
 }
 
 async function getQuestWithRequirements(
