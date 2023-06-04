@@ -11,11 +11,9 @@ app.use(morgan('common'));
 // ``;
 
 app.get('/:user', async (req, res) => {
-  console.log('Going...');
   const response = await getProfileWithQuests(req.params.user).catch(
     console.error
   );
-  console.log('Got thing');
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
   } else {
@@ -24,7 +22,6 @@ app.get('/:user', async (req, res) => {
 });
 
 app.get('/', async (_, res) => {
-  console.log('Comping...');
   const response = await getCompletionistCapeSteps().catch(console.error);
   if (!response) {
     res.status(400).send('Nothing interesting happens.');

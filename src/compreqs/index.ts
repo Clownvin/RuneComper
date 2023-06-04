@@ -88,7 +88,6 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   }, new Map<string, MappedRequirement>());
 
   const skills = await getSkillRequirements();
-  console.log(quests.map(q => q.name).join(', '));
   requirements = [
     ...skills,
     ...quests, //.filter(q => !q.miniquest),
@@ -185,7 +184,6 @@ function mapReqOrder(
   levelReqs: Map<string, Map<number, MappedRequirement>>
 ) {
   const {quests, achievements, skills} = mapShortcut(req, reqs, levelReqs);
-  console.log(quests, achievements, skills);
   for (const [name, priority] of [
     ...Object.entries(quests),
     ...Object.entries(achievements),

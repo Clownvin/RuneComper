@@ -18,7 +18,6 @@ export async function getQuestsAndQuestNames() {
 const LIST_OF_QUESTS_PAGE = '/w/List_of_quests';
 
 async function getQuests() {
-  console.log('Scraping quest list...');
   const $ = await loadWikiPage(LIST_OF_QUESTS_PAGE);
 
   const questRows = $('html body div#bodyContent table tbody');
@@ -45,7 +44,6 @@ const MINIQUESTS_PAGE = '/w/Miniquests';
 
 export async function getMiniquests() {
   //https://runescape.wiki/w/Miniquests
-  console.log('Scraping miniquest list...');
   const $ = await loadWikiPage(MINIQUESTS_PAGE);
 
   const quests: {name: string; page: string; miniquest: true}[] = [];
@@ -85,7 +83,6 @@ async function getQuestWithRequirements(
   quest: {name: string; page: string; miniquest: boolean},
   questNames: Set<string>
 ): Promise<QuestRequirement> {
-  console.log(`Scraping ${quest.page}...`);
   const $ = await loadWikiPage(quest.page);
 
   const requirement: QuestRequirement = {

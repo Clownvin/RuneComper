@@ -1,11 +1,10 @@
 import {SKILL_SET, Skill} from '../model/runescape';
-import {WIKI_URL_BUILDER, loadWikiPage} from '../rswiki';
+import {loadWikiPage} from '../rswiki';
 import {Requirement} from './requirement';
 
 const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
 
 async function getCompletionistCapeAchievements() {
-  console.log('Scraping completionist achievements...');
   const $ = await loadWikiPage(TRIMMED_PAGE);
   const achievementRows = $('html body div#bodyContent table.wikitable tbody');
   const achievements: {name: string; page: string}[] = [];
@@ -13,7 +12,6 @@ async function getCompletionistCapeAchievements() {
     const a = $(e).find('td a');
     const name = a.attr('title');
     const link = a.attr('href');
-    console.log($(e).text());
     if (!name || !link) {
       return;
     }
@@ -22,7 +20,6 @@ async function getCompletionistCapeAchievements() {
       page: link,
     });
   });
-  console.log('Achievements:', achievements);
   achievements.sort((a, b) => a.name.localeCompare(b.name));
 
   achievements.push({
@@ -135,7 +132,6 @@ async function getAchievementWithNormalRequirements(
   },
   questNames: Set<string>
 ): Promise<Requirement> {
-  console.log(`Scraping ${achievement.page}...`);
   const $ = await loadWikiPage(achievement.page);
   const element = $('#infobox-achievement td.qc-active');
   const html = element.html();
@@ -155,11 +151,6 @@ async function getAchievementWithNormalRequirements(
   const seeAchievements =
     /See\s(<.*>)?\s?((achievements)|(article)|(requirements))/;
   if (seeAchievements.test(html) || html.includes('See article')) {
-    console.log(
-      'Achievement has additional achievements',
-      achievement.name,
-      WIKI_URL_BUILDER.build(achievement.page)
-    );
     const achievementRows = $(
       'html body div#bodyContent table.wikitable tbody'
     );
@@ -175,7 +166,6 @@ async function getAchievementWithNormalRequirements(
           }
           //If set tasks only do second column
           else if (requirement.name.includes('Set Tasks - ')) {
-            console.log('DOING SET TASKS', requirement.name);
             if (i !== 1) {
               return;
             }
@@ -203,8 +193,6 @@ async function getAchievementWithNormalRequirements(
                   type: 'achievement',
                 });
               }
-              // console.log($(e).text());
-              console.log(name, WIKI_URL_BUILDER.build(page));
             });
         });
     });
@@ -238,9 +226,6 @@ async function getAchievementWithNormalRequirements(
           type: 'quest',
         });
       } else if (requirement.achievements && !nonAchievs.has(title)) {
-        // if (title.startsWith('Completionist')) {
-        //   console.log(ele.text());
-        // }
         requirement.achievements.push({
           name: title,
           page,
