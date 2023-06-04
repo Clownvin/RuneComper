@@ -1,3 +1,6 @@
+import {isNullish} from './helpers';
+import {upperFirst} from './string';
+
 export function formatQuery<T extends object>(query: T) {
   const pairs: string[] = [];
   for (const key in query) {
@@ -18,10 +21,8 @@ export class URLBuilder {
 
   build(query?: object): string;
   build(page: string, query?: object): string;
-
   build(queryOrPage?: object | string, query?: object): string {
-    // eslint-disable-next-line eqeqeq
-    if (queryOrPage == null) {
+    if (isNullish(queryOrPage)) {
       return this.page;
     }
     if (typeof queryOrPage === 'string') {
