@@ -1,9 +1,19 @@
 import {loadWikiPage} from '../rswiki';
 import {Requirement} from './requirement';
-import {SKILL_SET, Skill} from '../model/runescape';
+import {getSkillPage, isSkill} from '../model/runescape';
 
-interface QuestRequirement extends Requirement {
-  miniquest: boolean;
+class QuestRequirement extends Requirement {
+  readonly miniquest: boolean;
+
+  constructor({
+    miniquest,
+    ...rest
+  }: Omit<ConstructorParameters<typeof Requirement>[0], 'type'> & {
+    miniquest: boolean;
+  }) {
+    super({...rest, type: 'quest'});
+    this.miniquest = miniquest;
+  }
 }
 
 export async function getQuestsAndQuestNames() {
@@ -83,16 +93,9 @@ async function getQuestWithRequirements(
   quest: {name: string; page: string; miniquest: boolean},
   questNames: Set<string>
 ): Promise<QuestRequirement> {
+  const requirement = new QuestRequirement(quest);
+
   const $ = await loadWikiPage(quest.page);
-
-  const requirement: QuestRequirement = {
-    ...quest,
-    type: 'quest',
-    quests: [],
-    achievements: [],
-    skills: [],
-  };
-
   $('table.questdetails tbody')
     .find('tr')
     .each((_, e) => {
@@ -111,13 +114,14 @@ async function getQuestWithRequirements(
         text = text.toLowerCase();
         if (/^\d\d?\s+\w/.test(text) && !text.includes('quest point')) {
           const [level, skill] = text.split(/\s+\[?/);
-          if (!skill || !SKILL_SET.has(skill as Skill)) {
+          if (!isSkill(skill)) {
             return;
           }
-          requirement.skills.push({
-            name: skill,
-            level: parseInt(level) || 0,
+          requirement.add({
             type: 'skill',
+            name: skill,
+            page: getSkillPage(skill),
+            level: parseInt(level) || 0,
           });
         } else {
           ele.find('>a').each((_, a) => {
@@ -133,7 +137,7 @@ async function getQuestWithRequirements(
               return;
             }
             console.log('Adding quest requirement', text);
-            requirement.quests.push({
+            requirement.add({
               name: text,
               page,
               required,
