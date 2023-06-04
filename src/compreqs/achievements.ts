@@ -1,6 +1,14 @@
-import {SKILL_SET, Skill} from '../model/runescape';
+import {getSkillPage, isSkill} from '../model/runescape';
 import {loadWikiPage} from '../rswiki';
 import {Requirement} from './requirement';
+
+class AchievementRequirement extends Requirement {
+  constructor(
+    params: Omit<ConstructorParameters<typeof Requirement>[0], 'type'>
+  ) {
+    super({...params, type: 'achievement'});
+  }
+}
 
 const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
 
@@ -40,14 +48,18 @@ export async function getCompletionistCapeAchievementsWithRequirements(
   let achievements = await getCompletionistCapeAchievements();
   //TODO: Add Task Master stuff back
   // achievements.push(...taskMasterAchievements);
+
   const achievementsWithRequirements = [] as Requirement[];
   const index = achievements.findIndex(
     achievement => achievement.name === 'Trimmed Completionist'
   );
+
   if (index === -1) {
     throw new Error('No completionist achievement');
   }
+
   const [completionist] = achievements.splice(index, 1);
+
   do {
     const newAchievements = [] as Requirement[];
     for (const achievement of achievements) {
@@ -82,15 +94,19 @@ export async function getCompletionistCapeAchievementsWithRequirements(
       });
     });
   } while (achievements.length > 0);
-  achievementsWithRequirements.push({
-    ...completionist,
-    achievements: achievementsWithRequirements
-      .slice()
-      .map(({name, page}) => ({name, page, type: 'achievement'})),
-    skills: [],
-    quests: [],
-    type: 'achievement',
-  });
+
+  achievementsWithRequirements.push(
+    new AchievementRequirement({
+      name: completionist.name,
+      page: completionist.page,
+      achievements: achievementsWithRequirements.map(({name, page}) => ({
+        name,
+        page,
+        type: 'achievement',
+      })),
+    })
+  );
+
   return achievementsWithRequirements;
 }
 
@@ -126,23 +142,20 @@ async function getAchievementWithRequirements(
 }
 
 async function getAchievementWithNormalRequirements(
-  achievement: {
+  {
+    name,
+    page,
+  }: {
     name: string;
     page: string;
   },
   questNames: Set<string>
 ): Promise<Requirement> {
-  const $ = await loadWikiPage(achievement.page);
+  const $ = await loadWikiPage(page);
   const element = $('#infobox-achievement td.qc-active');
   const html = element.html();
 
-  const requirement = {
-    ...achievement,
-    achievements: [],
-    quests: [],
-    skills: [],
-    type: 'achievement',
-  } as Requirement;
+  const requirement = new AchievementRequirement({name, page});
 
   if (html === null) {
     return requirement;
@@ -180,14 +193,14 @@ async function getAchievementWithNormalRequirements(
               const page = (a.attr('href') || '').split('#')[0];
 
               if (questNames.has(name as string)) {
-                requirement.quests.push({
+                requirement.add({
                   name,
                   page,
                   type: 'quest',
                   required: true,
                 });
               } else {
-                requirement.achievements.push({
+                requirement.add({
                   name,
                   page,
                   type: 'achievement',
@@ -204,13 +217,14 @@ async function getAchievementWithNormalRequirements(
     const html = ele.text() || '';
     if (/^\d+\s+\w+/.test(html)) {
       const [level, skill] = html.toLowerCase().split(/\s+\[?/);
-      if (!skill || !SKILL_SET.has(skill as Skill)) {
+      if (!isSkill(skill)) {
         return;
       }
-      requirement.skills.push({
+      requirement.add({
         name: skill,
         level: parseInt(level) || 1,
         type: 'skill',
+        page: getSkillPage(skill),
       });
     } else {
       const title = ele.find('a').attr('title');
@@ -219,14 +233,14 @@ async function getAchievementWithNormalRequirements(
         return;
       }
       if (questNames.has(title)) {
-        requirement.quests.push({
+        requirement.add({
           name: title,
           page,
           required: true,
           type: 'quest',
         });
       } else if (requirement.achievements && !nonAchievs.has(title)) {
-        requirement.achievements.push({
+        requirement.add({
           name: title,
           page,
           type: 'achievement',
