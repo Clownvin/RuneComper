@@ -29,9 +29,9 @@ function getCachePath(page: string) {
 function formatPagePath(page: string) {
   return (
     page
-      .split('/')
+      .split('/w/')
       .pop()!
-      // .replace(/_/g, ' ')
+      .replace(/\//g, '_-_')
       // .replace(/[,.{}()'"[\]]+/g, '')
       .toLocaleLowerCase()
   );
@@ -48,6 +48,7 @@ const readAsync = promisify(readFile);
 
 async function getHtmlCached(path: string) {
   const buff = await readAsync(path);
+  console.log('Getting HTML cached from:', path);
   return buff.toString();
 }
 
