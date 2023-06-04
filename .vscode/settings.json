@@ -1,0 +1,13 @@
+{
+  "cSpell.words": [
+    "completionist",
+    "dungeoneering",
+    "herblore",
+    "infobox",
+    "rswiki",
+    "runescape",
+    "wikitable"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}
