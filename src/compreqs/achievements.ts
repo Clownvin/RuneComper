@@ -10,39 +10,7 @@ class AchievementRequirement extends Requirement {
   }
 }
 
-const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
-
-async function getCompletionistCapeAchievements() {
-  const $ = await loadWikiPage(TRIMMED_PAGE);
-  const achievementRows = $('html body div#bodyContent table.wikitable tbody');
-  const achievements: {name: string; page: string}[] = [];
-  achievementRows.find('tr').each((_, e) => {
-    const a = $(e).find('td a');
-    const name = a.attr('title');
-    const link = a.attr('href');
-    if (!name || !link) {
-      return;
-    }
-    achievements.push({
-      name: name,
-      page: link,
-    });
-  });
-  achievements.sort((a, b) => a.name.localeCompare(b.name));
-
-  achievements.push({
-    name: 'Trimmed Completionist',
-    page: '/w/Trimmed_Completionist_Cape_(achievement)',
-  });
-  return achievements;
-}
-
 export async function getCompletionistCapeAchievementsWithRequirements(
-  // quests: {
-  //   name: string;
-  //   page: string;
-  //   miniquest: boolean;
-  // }[],
   questNames: Set<string>
 ) {
   let achievements = await getCompletionistCapeAchievements();
@@ -110,6 +78,33 @@ export async function getCompletionistCapeAchievementsWithRequirements(
   return achievementsWithRequirements;
 }
 
+const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
+
+async function getCompletionistCapeAchievements() {
+  const $ = await loadWikiPage(TRIMMED_PAGE);
+  const achievementRows = $('html body div#bodyContent table.wikitable tbody');
+  const achievements: {name: string; page: string}[] = [];
+  achievementRows.find('tr').each((_, e) => {
+    const a = $(e).find('td a');
+    const name = a.attr('title');
+    const link = a.attr('href');
+    if (!name || !link) {
+      return;
+    }
+    achievements.push({
+      name: name,
+      page: link,
+    });
+  });
+  achievements.sort((a, b) => a.name.localeCompare(b.name));
+
+  achievements.push({
+    name: 'Trimmed Completionist',
+    page: '/w/Trimmed_Completionist_Cape_(achievement)',
+  });
+  return achievements;
+}
+
 async function getAchievementWithRequirements(
   achievement: {
     name: string;
@@ -140,6 +135,8 @@ async function getAchievementWithRequirements(
       return getAchievementWithNormalRequirements(achievement, questNames);
   }
 }
+
+const nonAchievs = new Set(['Lunar Spellbook']);
 
 async function getAchievementWithNormalRequirements(
   {
@@ -250,5 +247,3 @@ async function getAchievementWithNormalRequirements(
   });
   return requirement;
 }
-
-const nonAchievs = new Set(['Lunar Spellbook']);
