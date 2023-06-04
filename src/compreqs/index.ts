@@ -139,7 +139,7 @@ function addMaxLevel(
       .map(r => {
         const re = requirementMap.get(r.name);
         if (!re) {
-          throw new Error('No requirment found for name: ' + r.name);
+          throw new Error('No requirement found for name: ' + r.name);
         }
         if (re.maximumLevelRequirement === undefined) {
           addMaxLevel(re, requirementMap, new Set(Array.from(seen)));
@@ -161,7 +161,7 @@ function addMaxLevel(
       .map(({name}) => {
         const requirement = requirementMap.get(name);
         if (!requirement) {
-          throw new Error('No requirment found for name: ' + name);
+          throw new Error('No requirement found for name: ' + name);
         }
         if (requirement.maximumLevelRecommended === undefined) {
           addMaxLevel(requirement, requirementMap, new Set(Array.from(seen)));
@@ -323,16 +323,16 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     if (req.quests.find(q => q.name === quest.name)) {
       continue;
     }
-    req.quests.push({...prereq, required: true, type: 'quest'});
+    req.add({...prereq, required: true, type: 'quest'});
   }
-  for (const achiev of prereq.achievements || []) {
+  for (const achieve of prereq.achievements || []) {
     if (
       req.achievements &&
-      req.achievements.find(a => a.name === achiev.name)
+      req.achievements.find(a => a.name === achieve.name)
     ) {
       continue;
     }
-    (req.achievements || (req.achievements = [])).push({
+    req.add({
       ...prereq,
       type: 'achievement',
     });
@@ -340,7 +340,7 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
   for (const skill of prereq.skills) {
     const reqSkill = req.skills.find(s => s.name === skill.name);
     if (!reqSkill) {
-      req.skills.push(skill);
+      req.add(skill);
       continue;
     }
     if (reqSkill.level >= skill.level) {

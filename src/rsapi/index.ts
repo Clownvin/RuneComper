@@ -57,7 +57,7 @@ async function getProfile(user: string): Promise<{
     throw new Error(`No profile found for user: ${user}. Is it private?`);
   }
   const userProfile = body as RunemetricsProfile;
-  //change them to be indexed by name, and remove unecessary fields
+  //change them to be indexed by name, and remove unnecessary fields
   const skills = userProfile.skillvalues.reduce(
     (skills, skill) => {
       const name = SKILLS_BY_ID.get(skill.id);
@@ -90,7 +90,7 @@ async function getQuests(user: string) {
     throw new Error(`No quests found for user: ${user}. Is it private?`);
   }
   const quests = body.quests as RunemetricsQuest[];
-  //change them to be indexed by title, and remove unecessary fields
+  //change them to be indexed by title, and remove unnecessary fields
   return quests.reduce((quests, quest) => {
     if (quest.title === 'Tears of Guthix') {
       quest.title = 'Tears of Guthix (quest)';
