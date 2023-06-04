@@ -1,5 +1,4 @@
 import {isNullish} from './helpers';
-import {upperFirst} from './string';
 
 export function formatQuery<T extends object>(query: T) {
   const pairs: string[] = [];

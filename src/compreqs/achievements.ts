@@ -1,5 +1,5 @@
 import {SKILL_SET, Skill} from '../model/runescape';
-import {WIKI_URL, loadWikiPage} from '../rswiki';
+import {WIKI_URL_BUILDER, loadWikiPage} from '../rswiki';
 import {Requirement} from './requirement';
 
 const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
@@ -158,7 +158,7 @@ async function getAchievementWithNormalRequirements(
     console.log(
       'Achievement has additional achievements',
       achievement.name,
-      WIKI_URL.build(achievement.page)
+      WIKI_URL_BUILDER.build(achievement.page)
     );
     const achievementRows = $(
       'html body div#bodyContent table.wikitable tbody'
@@ -204,7 +204,7 @@ async function getAchievementWithNormalRequirements(
                 });
               }
               // console.log($(e).text());
-              console.log(name, WIKI_URL.build(page));
+              console.log(name, WIKI_URL_BUILDER.build(page));
             });
         });
     });

@@ -1,4 +1,5 @@
 import {SKILLS} from '../model/runescape';
+import {loadWikiPage} from '../rswiki';
 import {upperFirst} from '../util';
 import {Requirement} from './requirement';
 
@@ -16,10 +17,17 @@ const skill120s = new Set([
   'slayer',
 ]);
 
-export function getSkillRequirements(): SkillRequirement[] {
+export async function getSkillRequirements(): Promise<SkillRequirement[]> {
   const reqs = [] as SkillRequirement[];
   for (const skill of SKILLS) {
     const page = `/w/${upperFirst(skill)}` as const;
+    // const $ = await loadWikiPage(page);
+    // const skillInfo = $(
+    //   'html body div#bodyContent table#infobox-skill tbody th'
+    // );
+
+    // console.log(skillInfo.toArray().map(e => e));
+    // console.log($.html());
     const max = skill120s.has(skill) ? 120 : 99;
     for (let level = 2; level <= max; level++) {
       const req = {

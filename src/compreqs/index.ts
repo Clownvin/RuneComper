@@ -87,7 +87,7 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
     return map;
   }, new Map<string, MappedRequirement>());
 
-  const skills = getSkillRequirements();
+  const skills = await getSkillRequirements();
   console.log(quests.map(q => q.name).join(', '));
   requirements = [
     ...skills,
