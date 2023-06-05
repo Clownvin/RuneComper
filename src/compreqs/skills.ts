@@ -52,10 +52,10 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;
 
-        const reqs: Requirement['requirements'] = skills.map(name => ({
+        const reqs = skills.map(name => ({
           name,
           level,
-          type: 'skill',
+          type: 'skill' as const,
           page: getSkillPage(name),
         }));
 
