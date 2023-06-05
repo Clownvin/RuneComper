@@ -22,8 +22,12 @@ export class QuestRequirement extends Requirement<'quest'> implements IQuest {
 export async function getQuestsAndQuestNames() {
   const rawQuests = [...(await getQuests()), ...(await getMiniquests())];
   const questNames = new Set(rawQuests.map(q => q.name));
+  const miniquestNames = new Set(
+    rawQuests.filter(q => q.miniquest).map(q => q.name)
+  );
   return {
     questNames,
+    miniquestNames,
     quests: await getQuestsWithRequirements(rawQuests, questNames),
   };
 }
@@ -137,10 +141,7 @@ async function getQuestWithRequirements(
             }
             if (
               text === quest.name ||
-              requirement.requirements.find(
-                quest =>
-                  !('and' in quest || 'or' in quest) && quest.name === text
-              )
+              requirement.find(quest => quest.name === text)
             ) {
               return;
             }

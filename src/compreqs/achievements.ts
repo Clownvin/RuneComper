@@ -16,7 +16,8 @@ export class AchievementRequirement
 }
 
 export async function getCompletionistCapeAchievementsWithRequirements(
-  questNames: Set<string>
+  questNames: Set<string>,
+  miniquestNames: Set<string>
 ) {
   let achievements = await getCompletionistCapeAchievements();
   //TODO: Add Task Master stuff back
@@ -40,7 +41,11 @@ export async function getCompletionistCapeAchievementsWithRequirements(
         continue;
       }
       requirements.push(
-        await getAchievementWithRequirements(achievement, questNames)
+        await getAchievementWithRequirements(
+          achievement,
+          questNames,
+          miniquestNames
+        )
       );
     }
     achievementsWithRequirements.push(...requirements);
@@ -107,7 +112,8 @@ async function getAchievementWithRequirements(
     name: string;
     page: string;
   },
-  questNames: Set<string>
+  questNames: Set<string>,
+  miniquestNames: Set<string>
 ): Promise<Requirement> {
   switch (achievement.name) {
     //Achievements marked as no requirements
@@ -129,7 +135,11 @@ async function getAchievementWithRequirements(
     //     type: 'achievement',
     //   };
     default:
-      return getAchievementWithNormalRequirements(achievement, questNames);
+      return getAchievementWithNormalRequirements(
+        achievement,
+        questNames,
+        miniquestNames
+      );
   }
 }
 
@@ -143,7 +153,8 @@ async function getAchievementWithNormalRequirements(
     name: string;
     page: string;
   },
-  questNames: Set<string>
+  questNames: Set<string>,
+  miniquestNames: Set<string>
 ): Promise<Requirement> {
   const $ = await loadWikiPage(page);
   const element = $('#infobox-achievement td.qc-active');
@@ -192,7 +203,7 @@ async function getAchievementWithNormalRequirements(
                   page,
                   type: 'quest',
                   required: true,
-                  miniquest: false,
+                  miniquest: miniquestNames.has(name),
                 });
               } else {
                 requirement.add({
@@ -222,23 +233,22 @@ async function getAchievementWithNormalRequirements(
         page: getSkillPage(skill),
       });
     } else {
-      const title = ele.find('a').attr('title');
+      const name = ele.find('a').attr('title');
       const page = (ele.find('a').attr('href') || '').split('#')[0];
-      if (!title) {
+      if (!name) {
         return;
       }
-      if (questNames.has(title)) {
+      if (questNames.has(name)) {
         requirement.add({
-          name: title,
+          name,
           page,
           required: true,
           type: 'quest',
-          //TODO: Wrong, need to get miniquest from somewhere else maybe
-          miniquest: false,
+          miniquest: miniquestNames.has(name),
         });
-      } else if (!nonAchievs.has(title)) {
+      } else if (!nonAchievs.has(name)) {
         requirement.add({
-          name: title,
+          name,
           page,
           type: 'achievement',
         });
