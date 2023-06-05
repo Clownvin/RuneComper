@@ -1,9 +1,12 @@
 import {loadWikiPage} from '../rswiki';
-import {Requirement} from './requirement';
+import {IQuest, Requirement, getRequirementID} from './requirement';
 import {getSkillPage, isSkill} from '../model/runescape';
 
-class QuestRequirement extends Requirement {
+export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   readonly miniquest: boolean;
+  readonly required = true;
+
+  readonly id = getRequirementID(this);
 
   constructor({
     miniquest,
@@ -31,7 +34,7 @@ async function getQuests() {
   const $ = await loadWikiPage(LIST_OF_QUESTS_PAGE);
 
   const questRows = $('html body div#bodyContent table tbody');
-  const quests: {name: string; page: string; miniquest: false}[] = [];
+  const quests: IQuest[] = [];
   questRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
     const name = a.attr('title');
@@ -40,6 +43,7 @@ async function getQuests() {
       return;
     }
     quests.push({
+      type: 'quest',
       name: name,
       page: link,
       miniquest: false,
@@ -56,7 +60,7 @@ export async function getMiniquests() {
   //https://runescape.wiki/w/Miniquests
   const $ = await loadWikiPage(MINIQUESTS_PAGE);
 
-  const quests: {name: string; page: string; miniquest: true}[] = [];
+  const quests: IQuest[] = [];
 
   const questRows = $('html body div#bodyContent table[width="100%"] tbody');
   questRows.find('tr').each((_, e) => {
@@ -67,6 +71,7 @@ export async function getMiniquests() {
       return;
     }
     quests.push({
+      type: 'quest',
       name: name,
       page: link,
       miniquest: true,
@@ -79,7 +84,7 @@ export async function getMiniquests() {
 }
 
 async function getQuestsWithRequirements(
-  quests: {name: string; page: string; miniquest: boolean}[],
+  quests: IQuest[],
   questNames: Set<string>
 ) {
   const withRequirements: QuestRequirement[] = [];
@@ -90,7 +95,7 @@ async function getQuestsWithRequirements(
 }
 
 async function getQuestWithRequirements(
-  quest: {name: string; page: string; miniquest: boolean},
+  quest: IQuest,
   questNames: Set<string>
 ): Promise<QuestRequirement> {
   const requirement = new QuestRequirement(quest);
@@ -132,16 +137,20 @@ async function getQuestWithRequirements(
             }
             if (
               text === quest.name ||
-              requirement.quests.find(quest => quest.name === text)
+              requirement.requirements.find(
+                quest =>
+                  !('and' in quest || 'or' in quest) && quest.name === text
+              )
             ) {
               return;
             }
-            console.log('Adding quest requirement', text);
+            // if () {}
             requirement.add({
               name: text,
               page,
+              type: 'quest' as const,
+              miniquest: false,
               required,
-              type: 'quest',
             });
           });
         }

@@ -1,8 +1,13 @@
 import {getSkillPage, isSkill} from '../model/runescape';
 import {loadWikiPage} from '../rswiki';
-import {Requirement} from './requirement';
+import {IAchievement, Requirement, getRequirementID} from './requirement';
 
-class AchievementRequirement extends Requirement {
+export class AchievementRequirement
+  extends Requirement<'achievement'>
+  implements IAchievement
+{
+  readonly id = getRequirementID(this);
+
   constructor(
     params: Omit<ConstructorParameters<typeof Requirement>[0], 'type'>
   ) {
@@ -29,36 +34,28 @@ export async function getCompletionistCapeAchievementsWithRequirements(
   const [completionist] = achievements.splice(index, 1);
 
   do {
-    const newAchievements = [] as Requirement[];
+    const requirements = [] as Requirement[];
     for (const achievement of achievements) {
       if (achievement.name === 'Trimmed Completionist') {
         continue;
       }
-      newAchievements.push(
+      requirements.push(
         await getAchievementWithRequirements(achievement, questNames)
       );
     }
-    achievementsWithRequirements.push(...newAchievements);
+    achievementsWithRequirements.push(...requirements);
     achievements = [];
-    newAchievements.forEach(achievement => {
-      if (!achievement.achievements) {
-        return;
-      }
-      achievement.achievements.forEach(a => {
+    requirements.forEach(achievement => {
+      achievement.forEach(requirement => {
         if (
           achievementsWithRequirements.find(
-            existing => existing.page === a.page
+            existing => existing.page === requirement.page
           ) ||
-          achievements.find(existing => existing.page === a.page)
+          achievements.find(existing => existing.page === requirement.page)
         ) {
           return;
         }
-        if (a.page.endsWith('#Achievements')) {
-          throw new Error(
-            'Founds on ' + achievement.name + ' ' + achievement.page
-          );
-        }
-        achievements.push(a);
+        achievements.push(requirement);
       });
     });
   } while (achievements.length > 0);
@@ -67,7 +64,7 @@ export async function getCompletionistCapeAchievementsWithRequirements(
     new AchievementRequirement({
       name: completionist.name,
       page: completionist.page,
-      achievements: achievementsWithRequirements.map(({name, page}) => ({
+      requirements: achievementsWithRequirements.map(({name, page}) => ({
         name,
         page,
         type: 'achievement',
@@ -195,6 +192,7 @@ async function getAchievementWithNormalRequirements(
                   page,
                   type: 'quest',
                   required: true,
+                  miniquest: false,
                 });
               } else {
                 requirement.add({
@@ -235,8 +233,10 @@ async function getAchievementWithNormalRequirements(
           page,
           required: true,
           type: 'quest',
+          //TODO: Wrong, need to get miniquest from somewhere else maybe
+          miniquest: false,
         });
-      } else if (requirement.achievements && !nonAchievs.has(title)) {
+      } else if (!nonAchievs.has(title)) {
         requirement.add({
           name: title,
           page,

@@ -1,18 +1,27 @@
 import {SKILLS, Skill, SkillPage, getSkillPage} from '../model/runescape';
 import {loadWikiPage} from '../rswiki';
-import {Requirement} from './requirement';
+import {
+  ISkill,
+  Requirement,
+  RequirementID,
+  getRequirementID,
+} from './requirement';
 
 const SKILL_REQS: Partial<Record<Skill, [number, Skill, ...Skill[]]>> = {
   [Skill.INVENTION]: [80, Skill.DIVINATION, Skill.CRAFTING, Skill.SMITHING],
 };
 
-export class SkillRequirement extends Requirement {
+export class SkillRequirement extends Requirement<'skill'> implements ISkill {
   readonly level: number;
+  readonly name: Skill;
+
+  readonly id: RequirementID;
+
   constructor({
     name,
     level,
     page = getSkillPage(name),
-    skills = [
+    requirements = [
       {
         name,
         level: level - 1,
@@ -26,8 +35,10 @@ export class SkillRequirement extends Requirement {
     level: number;
     page?: string;
   }) {
-    super({...rest, type: 'skill', name, page, skills});
+    super({...rest, type: 'skill', name, page, requirements});
+    this.name = name;
     this.level = level;
+    this.id = getRequirementID(this);
   }
 }
 
@@ -41,7 +52,7 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;
 
-        const reqs: SkillRequirement['skills'] = skills.map(name => ({
+        const reqs: Requirement['requirements'] = skills.map(name => ({
           name,
           level,
           type: 'skill',

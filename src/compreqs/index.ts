@@ -3,8 +3,11 @@ import {concat} from 'lodash';
 import {existsSync, readFileSync, writeFileSync} from 'fs';
 import {Requirement} from './requirement';
 import {SkillRequirement, getSkillRequirements} from './skills';
-import {getCompletionistCapeAchievementsWithRequirements} from './achievements';
-import {getQuestsAndQuestNames} from './quests';
+import {
+  AchievementRequirement,
+  getCompletionistCapeAchievementsWithRequirements,
+} from './achievements';
+import {QuestRequirement, getQuestsAndQuestNames} from './quests';
 import {SKILLS} from '../model/runescape';
 
 /**
@@ -12,7 +15,11 @@ import {SKILLS} from '../model/runescape';
  * Barbarian training requires Tai Bwo Wanai Trio and ability to fight mithril dragon
  */
 
-type MappedRequirement = (Requirement & Partial<SkillRequirement>) & {
+type MappedRequirement = (
+  | AchievementRequirement
+  | QuestRequirement
+  | SkillRequirement
+) & {
   priority: number;
   maximumLevelRequirement: number;
   maximumLevelRecommended: number;
@@ -50,7 +57,19 @@ async function createCompletionistCapeStepsIfNeeded() {
     console.log('Calculating steps...');
     lastUpdated = moment();
     steps = await createCompletionistCapeSteps();
-    writeFileSync('./requirements.json', JSON.stringify(steps, null, 2));
+    writeFileSync(
+      './requirements.json',
+      JSON.stringify(
+        steps
+          .sort((a, b) => a.order - b.order)
+          .map(s => ({
+            ...s,
+            requirements: s.requirements,
+          })),
+        null,
+        2
+      )
+    );
     // await (await client).updateOne(
     //   {},
     //   {
@@ -80,7 +99,10 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
   if (!endReq || !questCape) {
     throw new Error('Ending requirement not found!');
   }
-  questCape.quests = quests.map(q => ({...q, required: true, type: 'quest'}));
+  questCape.remove(q => !('and' in q || 'or' in q) && q.type === 'quest');
+  questCape.add(
+    ...quests.map(q => ({...q, required: true, type: 'quest' as const}))
+  );
   let requirements = [...quests, ...achievements];
   const requirementMap = requirements.reduce((map, requirement) => {
     map.set(requirement.name, requirement as MappedRequirement);
@@ -117,12 +139,15 @@ async function createCompletionistCapeSteps(): Promise<MappedRequirement[]> {
       (a.maximumLevelRequirement || 0) - (b.maximumLevelRequirement || 0) ||
       (a.maximumLevelRecommended || 0) - (b.maximumLevelRecommended || 0) ||
       (b.priority || (b.priority = 0)) - (a.priority || (a.priority = 0)) ||
-      (a.level || 0) - (b.level || 0)
+      (a.type === 'skill' ? a.level : 0) - (b.type === 'skill' ? b.level : 0)
   );
   mappedRequirements.forEach((r, index) => (r.order = index));
+  // console.log('Quest names:', uniq(requirements.map(r => r.name)));
   return mappedRequirements;
 }
 
+//TODO: Move this (and similar) to requirements. Calculate max level for each
+//distinct logical unit of "OR"s and then pick the lowest for its max
 function addMaxLevel(
   req: MappedRequirement,
   requirementMap: Map<string, MappedRequirement>,
@@ -253,7 +278,7 @@ function mergeShortcuts(
 }
 
 function mapPrereqShortcuts(
-  prereqs: {name: string}[],
+  prereqs: readonly {name: string}[],
   reqs: Map<string, MappedRequirement>,
   levelReqs: Map<string, Map<number, MappedRequirement>>,
   stack: string[],
@@ -323,7 +348,7 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     if (req.quests.find(q => q.name === quest.name)) {
       continue;
     }
-    req.add({...prereq, required: true, type: 'quest'});
+    req.add({...prereq, required: true, type: 'quest', miniquest: false});
   }
   for (const achieve of prereq.achievements || []) {
     if (
@@ -346,13 +371,13 @@ function addUnmetPrereqRequirements(req: Requirement, prereq: Requirement) {
     if (reqSkill.level >= skill.level) {
       continue;
     }
-    reqSkill.level = skill.level;
+    // reqSkill.level = skill.level;
   }
 }
 
 function calculatePrereqRequirements(
   req: Requirement,
-  prereqs: {name: string}[],
+  prereqs: readonly {name: string}[],
   reqs: Map<string, Requirement>
 ) {
   for (const {name} of prereqs) {

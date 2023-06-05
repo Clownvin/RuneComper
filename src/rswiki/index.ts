@@ -27,19 +27,11 @@ function getCachePath(page: string) {
 }
 
 function formatPagePath(page: string) {
-  return (
-    page
-      .split('/w/')
-      .pop()!
-      .replace(/\//g, '_-_')
-      // .replace(/[,.{}()'"[\]]+/g, '')
-      .toLocaleLowerCase()
-  );
+  return page.split('/w/').pop()!.replace(/\//g, '_-_').toLocaleLowerCase();
 }
 
 export async function getHtmlFromUrl(page: string) {
   const url = WIKI_URL_BUILDER.build(page);
-  console.log('Getting HTML from:', url);
   const result = await retry(() => axios.get(url));
   return result.data as string;
 }
@@ -48,7 +40,6 @@ const readAsync = promisify(readFile);
 
 async function getHtmlCached(path: string) {
   const buff = await readAsync(path);
-  console.log('Getting HTML cached from:', path);
   return buff.toString();
 }
 
