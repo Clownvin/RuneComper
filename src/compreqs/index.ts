@@ -18,10 +18,6 @@ type MappedRequirement = Requirement & {
   maxLevel: number;
   directDependents: Set<RequirementID>;
   indirectDependents: Set<RequirementID>;
-  directRequirements: Set<RequirementID>;
-  indirectRequirements: Set<RequirementID>;
-  // directDependents: MappedRequirement[];
-  // indirectDependents: MappedRequirement[];
 };
 
 type GetRequirement = (
@@ -35,8 +31,6 @@ function convertToMapped(
     maxLevel: 0,
     directDependents: new Set(),
     indirectDependents: new Set(),
-    directRequirements: new Set(),
-    indirectRequirements: new Set(),
   }
 ): MappedRequirement {
   return Object.assign(req, options);
@@ -82,8 +76,6 @@ export async function getRequirements() {
           achievements,
           directDependents,
           indirectDependents,
-          directRequirements,
-          indirectRequirements,
           ...req
         },
       ]) => ({
