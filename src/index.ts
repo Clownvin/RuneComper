@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import {getCompletionistCapeSteps} from './compreqs';
+import {getRequirements} from './compreqs';
 import {getProfileWithQuests} from './rsapi';
 
 const app = express();
@@ -22,7 +22,7 @@ app.get('/:user', async (req, res) => {
 });
 
 app.get('/', async (_, res) => {
-  const response = await getCompletionistCapeSteps().catch(console.error);
+  const response = await getRequirements().catch(console.error);
   if (!response) {
     res.status(400).send('Nothing interesting happens.');
   } else {
