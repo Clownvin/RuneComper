@@ -6,6 +6,7 @@ import {
 } from './achievements';
 import {QuestRequirement, getQuestsAndQuestNames} from './quests';
 import {writeFileSync} from 'fs';
+import {WIKI_URL_BUILDER} from '../rswiki';
 
 /**
  * TODOs:
@@ -14,7 +15,7 @@ import {writeFileSync} from 'fs';
 type Requirement = QuestRequirement | SkillRequirement | AchievementRequirement;
 
 type MappedRequirement = Requirement & {
-  depthFromRoot: number;
+  depth: number;
   maxLevel: number;
   directDependents: Set<RequirementID>;
   indirectDependents: Set<RequirementID>;
@@ -27,7 +28,7 @@ type GetRequirement = (
 function convertToMapped(
   req: Requirement,
   options: Omit<MappedRequirement, keyof Requirement> = {
-    depthFromRoot: -Infinity,
+    depth: -Infinity,
     maxLevel: 0,
     directDependents: new Set(),
     indirectDependents: new Set(),
@@ -43,6 +44,15 @@ export async function getRequirements() {
       questNames,
       miniquestNames
     );
+  const questCape = achievements.find(a => a.name === 'Quest Cape');
+  if (!questCape) {
+    throw new Error('Failed to find Quest Cape requirement');
+  }
+
+  //TODO: Currently adding all quests to Quest Cape,
+  //should be adding to MQC and True Trim, etc
+  questCape.add(...quests.map(q => ({...q, required: true})));
+
   const trimmed = convertToMapped(t);
   const skills = await getSkillRequirements();
 
@@ -60,13 +70,19 @@ export async function getRequirements() {
     return requirement;
   };
 
+  console.time('depth');
   findMaxDepth(trimmed, getReq);
+  console.timeEnd('depth');
+  console.time('maxLevel');
   findMaxLevel(trimmed, getReq);
+  console.timeEnd('maxLevel');
+  console.time('depCount');
   findDependentCounts(trimmed, getReq);
+  console.timeEnd('depCount');
 
   reqsById.set(trimmed.id, trimmed);
 
-  return Array.from(reqsById)
+  const sorted = Array.from(reqsById)
     .map(
       ([
         ,
@@ -76,10 +92,12 @@ export async function getRequirements() {
           achievements,
           directDependents,
           indirectDependents,
+          page,
           ...req
         },
       ]) => ({
         ...req,
+        page: WIKI_URL_BUILDER.build(page),
         directDependents: directDependents.size,
         indirectDependents: indirectDependents.size,
         quests,
@@ -90,12 +108,30 @@ export async function getRequirements() {
     .sort(
       (a, b) =>
         a.maxLevel - b.maxLevel ||
+        b.depth - a.depth ||
         b.directDependents - a.directDependents ||
         b.indirectDependents - a.indirectDependents ||
-        b.depthFromRoot - a.depthFromRoot ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
+
+  const seen = new Set<RequirementID>();
+
+  for (const req of sorted) {
+    seen.add(req.id);
+    const prereqsNotSeenYet = [
+      ...req.skills,
+      ...req.achievements,
+      ...req.quests,
+    ]
+      .map(getRequirementID)
+      .filter(id => !seen.has(id));
+    if (prereqsNotSeenYet.length) {
+      console.error(`${req.id} occurs before: ${prereqsNotSeenYet.join(', ')}`);
+    }
+  }
+
+  return sorted;
 }
 
 function typePriority(type: Requirement['type']) {
@@ -117,31 +153,25 @@ function findMaxLevel(
   if (seen.has(req.id)) {
     return req.maxLevel;
   }
-  console.log('Finding max level:', req.id);
+
   seen.add(req.id);
 
-  req.maxLevel = req
-    .map(getRequirement)
-    .reduce(
-      dep => findMaxLevel(dep, getRequirement, seen),
-      {and: Math.max, or: Math.min},
-      req.type === 'skill' ? req.level : 0
-    );
+  req.maxLevel = req.map(getRequirement).reduce(
+    dep =>
+      findMaxLevel(
+        dep,
+        getRequirement,
+        //NOTE: May want to new Set(seen)
+        seen
+      ),
+    {and: Math.max, or: Math.min},
+    req.type === 'skill' ? req.level : 0
+  );
 
   return req.maxLevel;
 }
 
-/*
-a0
-|\
-b1 c1
-|
-c2
-
-c: 2(3)
-b: 1(1)
-a: 0(0)
-*/
+// TODO: Slow! Spends a lot of time adding to sets, I think
 function findDependentCounts(
   req: MappedRequirement,
   getRequirement: GetRequirement,
@@ -155,15 +185,9 @@ function findDependentCounts(
   req.map(getRequirement).forEach(dep => {
     dep.directDependents.add(req.id);
     seen.forEach(id => dep.indirectDependents.add(id));
-    findDependentCounts(dep, getRequirement, new Set(Array.from(seen)));
+    findDependentCounts(dep, getRequirement, new Set(seen));
   });
 }
-
-// function findRequirementCounts(
-//   req: MappedRequirement,
-//   getRequirement: GetRequirement,
-//   seen = new Set<RequirementID>()
-// ) {}
 
 function findMaxDepth(
   req: MappedRequirement,
@@ -173,12 +197,11 @@ function findMaxDepth(
   depth = 0,
   seen = new Set<RequirementID>()
 ): void {
-  if (seen.has(req.id) || req.depthFromRoot >= depth) {
+  if (seen.has(req.id) || req.depth >= depth) {
     return;
   }
-  console.log('Finding depth:', req.id, depth);
 
-  req.depthFromRoot = depth;
+  req.depth = depth;
   seen.add(req.id);
 
   return req
