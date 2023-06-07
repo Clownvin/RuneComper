@@ -38,9 +38,24 @@ export class AndOrMap<T> {
     this.#values.push(...values);
   }
 
-  *[Symbol.iterator]() {
-    for (const val of this.#values) {
-      yield val;
+  *[Symbol.iterator](): Generator<T, void, unknown> {
+    for (const value of this.#values) {
+      const val = handleAndOr(value, {
+        val: val => val,
+        and: values => values[Symbol.iterator](),
+        or: values => values[Symbol.iterator](),
+      });
+      if (typeof val === 'object' && isNonNullish(val) && 'next' in val) {
+        for (;;) {
+          const next = val.next();
+          if (next.done) {
+            break;
+          }
+          yield next.value;
+        }
+      } else {
+        yield val;
+      }
     }
   }
 
@@ -54,7 +69,7 @@ export class AndOrMap<T> {
         ? {val: iteratee, and: defaultAnd, or: defaultAnd}
         : iteratee;
 
-    for (const val of this) {
+    for (const val of this.#values) {
       handleAndOr(val, iteratee);
     }
   }
@@ -74,7 +89,7 @@ export class AndOrMap<T> {
         : iteratee;
 
     const map = new AndOrMap<MappedT>();
-    for (const val of this) {
+    for (const val of this.#values) {
       map.add(handleAndOr(val, iteratee));
     }
 
@@ -149,7 +164,7 @@ export class AndOrMap<T> {
           }
         : predicate;
 
-    for (const val of this) {
+    for (const val of this.#values) {
       const found = handleAndOr(val, iteratee);
       if (found) {
         return val as T;
