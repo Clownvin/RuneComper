@@ -37,5 +37,7 @@
   ],
   "cSpell.flagWords": ["defense"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": true
 }
