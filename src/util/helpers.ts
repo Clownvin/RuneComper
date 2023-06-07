@@ -4,6 +4,8 @@ export function isNullish<T>(
   return value === null || value === undefined;
 }
 
-export function isNonNullish<T>(value: T | null | undefined): value is T {
+export function isNonNullish<T>(
+  value: T | null | undefined
+): value is NonNullable<T> {
   return !isNullish(value);
 }
