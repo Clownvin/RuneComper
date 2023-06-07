@@ -1,5 +1,3 @@
-import {UpperFirst, upperFirst} from '../util';
-
 export enum Skill {
   ATTACK = 'attack',
   DEFENCE = 'defence',
@@ -73,10 +71,4 @@ export const SKILLS_BY_ID = (() => {
 
 export function isSkill(text: string): text is Skill {
   return SKILL_SET.has(text as Skill);
-}
-
-export type SkillPage<S extends Skill = Skill> = `/w/${UpperFirst<S>}`;
-
-export function getSkillPage<S extends Skill = Skill>(skill: S): SkillPage<S> {
-  return `/w/${upperFirst(skill)}` as const;
 }

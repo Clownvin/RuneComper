@@ -1,5 +1,5 @@
-import {getSkillPage, isSkill} from '../model/runescape';
-import {loadWikiPage} from '../rswiki';
+import {isSkill} from '../model/runescape';
+import {getSkillPage, loadWikiPage} from '../rswiki';
 import {IAchievement, Requirement, getRequirementID} from './requirement';
 
 export class AchievementRequirement
@@ -19,26 +19,18 @@ export async function getCompletionistCapeAchievementsWithRequirements(
   questNames: Set<string>,
   miniquestNames: Set<string>
 ) {
-  let achievements = await getCompletionistCapeAchievements();
+  const {trimmed, achievements} = await getCompletionistCapeAchievements();
   //TODO: Add Task Master stuff back
   // achievements.push(...taskMasterAchievements);
 
-  const achievementsWithRequirements = [] as Requirement[];
-  const index = achievements.findIndex(
-    achievement => achievement.name === 'Trimmed Completionist'
-  );
-
-  if (index === -1) {
-    throw new Error('No completionist achievement');
-  }
-
-  const [completionist] = achievements.splice(index, 1);
-
+  const reqsWithReqs = [] as AchievementRequirement[];
+  let reqsWithoutReqs = achievements;
   do {
-    const requirements = [] as Requirement[];
-    for (const achievement of achievements) {
+    const requirements = [] as AchievementRequirement[];
+    for (const achievement of reqsWithoutReqs) {
       if (achievement.name === 'Trimmed Completionist') {
-        continue;
+        throw new Error('Unexpected?');
+        // continue;
       }
       requirements.push(
         await getAchievementWithRequirements(
@@ -48,63 +40,67 @@ export async function getCompletionistCapeAchievementsWithRequirements(
         )
       );
     }
-    achievementsWithRequirements.push(...requirements);
-    achievements = [];
-    requirements.forEach(achievement => {
-      achievement.forEach(requirement => {
+    reqsWithReqs.push(...requirements);
+    reqsWithoutReqs = [];
+    requirements.forEach(requirement => {
+      requirement.forEach(requirement => {
         if (
-          achievementsWithRequirements.find(
-            existing => existing.page === requirement.page
-          ) ||
-          achievements.find(existing => existing.page === requirement.page)
+          reqsWithReqs.find(existing => existing.page === requirement.page) ||
+          reqsWithoutReqs.find(existing => existing.page === requirement.page)
         ) {
           return;
         }
-        achievements.push(requirement);
+        reqsWithoutReqs.push(requirement);
       });
     });
-  } while (achievements.length > 0);
+  } while (reqsWithoutReqs.length > 0);
 
-  achievementsWithRequirements.push(
-    new AchievementRequirement({
-      name: completionist.name,
-      page: completionist.page,
-      requirements: achievementsWithRequirements.map(({name, page}) => ({
+  return {
+    trimmed: new AchievementRequirement({
+      name: trimmed.name,
+      page: trimmed.page,
+      requirements: reqsWithReqs.map(({name, page}) => ({
         name,
         page,
         type: 'achievement',
       })),
-    })
-  );
-
-  return achievementsWithRequirements;
+    }),
+    achievements: reqsWithReqs,
+  };
 }
 
 const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
 
 async function getCompletionistCapeAchievements() {
   const $ = await loadWikiPage(TRIMMED_PAGE);
-  const achievementRows = $('html body div#bodyContent table.wikitable tbody');
+
   const achievements: {name: string; page: string}[] = [];
+
+  const achievementRows = $('html body div#bodyContent table.wikitable tbody');
   achievementRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
     const name = a.attr('title');
     const link = a.attr('href');
+
     if (!name || !link) {
       return;
     }
+
     achievements.push({
       name: name,
       page: link,
     });
   });
+
   achievements.sort((a, b) => a.name.localeCompare(b.name));
 
-  achievements.push({
-    name: 'Trimmed Completionist',
-    page: '/w/Trimmed_Completionist_Cape_(achievement)',
-  });
-  return achievements;
+  return {
+    trimmed: {
+      name: 'Trimmed Completionist',
+      page: '/w/Trimmed_Completionist_Cape_(achievement)',
+    },
+    achievements,
+  };
 }
 
 async function getAchievementWithRequirements(
@@ -114,7 +110,7 @@ async function getAchievementWithRequirements(
   },
   questNames: Set<string>,
   miniquestNames: Set<string>
-): Promise<Requirement> {
+): Promise<AchievementRequirement> {
   switch (achievement.name) {
     //Achievements marked as no requirements
     // case 'Big Chinchompa':
@@ -155,7 +151,7 @@ async function getAchievementWithNormalRequirements(
   },
   questNames: Set<string>,
   miniquestNames: Set<string>
-): Promise<Requirement> {
+): Promise<AchievementRequirement> {
   const $ = await loadWikiPage(page);
   const element = $('#infobox-achievement td.qc-active');
   const html = element.html();

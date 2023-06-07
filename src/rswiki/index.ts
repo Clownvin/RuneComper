@@ -1,9 +1,16 @@
 import axios from 'axios';
-import {retry} from '../util';
+import {UpperFirst, retry, upperFirst} from '../util';
 import {URLBuilder} from '../util/url';
 import cheerio from 'cheerio';
 import {mkdir, readFile, writeFile} from 'fs';
 import {promisify} from 'util';
+import {Skill} from '../model/runescape';
+
+export type SkillPage<S extends Skill = Skill> = `/w/${UpperFirst<S>}`;
+
+export function getSkillPage<S extends Skill = Skill>(skill: S): SkillPage<S> {
+  return `/w/${upperFirst(skill)}` as const;
+}
 
 const WIKI_URL = 'https://runescape.wiki' as const;
 const CACHE_DIR = './pages/' as const;

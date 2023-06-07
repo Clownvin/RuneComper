@@ -1,5 +1,5 @@
-import {SKILLS, Skill, SkillPage, getSkillPage} from '../model/runescape';
-import {loadWikiPage} from '../rswiki';
+import {SKILLS, Skill} from '../model/runescape';
+import {SkillPage, getSkillPage, loadWikiPage} from '../rswiki';
 import {
   ISkill,
   Requirement,
@@ -14,7 +14,6 @@ const SKILL_REQS: Partial<Record<Skill, [number, Skill, ...Skill[]]>> = {
 export class SkillRequirement extends Requirement<'skill'> implements ISkill {
   readonly level: number;
   readonly name: Skill;
-
   readonly id: RequirementID;
 
   constructor({
@@ -46,20 +45,22 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
   const reqs = [] as SkillRequirement[];
   for (const skill of SKILLS) {
     const {page, maxLevel} = await getSkillInfo(skill);
+    reqs.push(
+      new SkillRequirement({name: skill, level: 1, page, requirements: []})
+    );
     for (let level = 2; level <= maxLevel; level++) {
       const req = new SkillRequirement({name: skill, level, page});
 
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;
-
-        const reqs = skills.map(name => ({
-          name,
-          level,
-          type: 'skill' as const,
-          page: getSkillPage(name),
-        }));
-
-        req.add(...reqs);
+        req.add(
+          ...skills.map(name => ({
+            name,
+            level,
+            type: 'skill' as const,
+            page: getSkillPage(name),
+          }))
+        );
       }
 
       reqs.push(req);

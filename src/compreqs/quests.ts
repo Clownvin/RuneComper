@@ -1,12 +1,15 @@
-import {loadWikiPage} from '../rswiki';
-import {IQuest, Requirement, getRequirementID} from './requirement';
-import {getSkillPage, isSkill} from '../model/runescape';
+import {getSkillPage, loadWikiPage} from '../rswiki';
+import {
+  IQuest,
+  Requirement,
+  RequirementID,
+  getRequirementID,
+} from './requirement';
+import {isSkill} from '../model/runescape';
 
 export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   readonly miniquest: boolean;
-  readonly required = true;
-
-  readonly id = getRequirementID(this);
+  readonly id: RequirementID;
 
   constructor({
     miniquest,
@@ -16,6 +19,7 @@ export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   }) {
     super({...rest, type: 'quest'});
     this.miniquest = miniquest;
+    this.id = getRequirementID(this);
   }
 }
 
