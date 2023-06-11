@@ -1,11 +1,13 @@
 import {getSkillPage, loadWikiPage} from '../rswiki';
 import {
   IQuest,
+  IRequirements,
   Requirement,
   RequirementID,
   getRequirementID,
 } from './requirement';
-import {isSkill} from '../model/runescape';
+import {Skill, isSkill} from '../model/runescape';
+import {AndOrMap} from '../util/andOrMap';
 
 export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   readonly miniquest: boolean;
@@ -125,7 +127,64 @@ async function getQuestWithRequirements(
           return;
         }
         text = text.toLowerCase();
-        if (/^\d\d?\s+\w/.test(text) && !text.includes('quest point')) {
+        if (/^\d+\s+\w/.test(text) && !text.includes('quest point')) {
+          // if (quest.name === 'As a First Resort') {
+          //   console.log(text);
+          // }
+          if (
+            /\s((or)|(and))\s/g.test(text)
+            // !/((\d+)|(one)|(two)) or \d+/g.test(text)
+          ) {
+            if (text.toLocaleLowerCase().includes("warriors' guild access")) {
+              requirement.add({
+                or: new AndOrMap<IRequirements>(
+                  {
+                    name: Skill.ATTACK,
+                    type: 'skill',
+                    page: getSkillPage(Skill.ATTACK),
+                    level: 99,
+                    boostable: false,
+                  },
+                  {
+                    name: Skill.STRENGTH,
+                    type: 'skill',
+                    page: getSkillPage(Skill.ATTACK),
+                    level: 99,
+                    boostable: false,
+                  },
+                  {
+                    and: new AndOrMap<IRequirements>(
+                      {
+                        name: Skill.ATTACK,
+                        type: 'skill',
+                        page: getSkillPage(Skill.ATTACK),
+                        level: 65,
+                        boostable: false,
+                      },
+                      {
+                        name: Skill.STRENGTH,
+                        type: 'skill',
+                        page: getSkillPage(Skill.STRENGTH),
+                        level: 65,
+                        boostable: false,
+                      }
+                    ),
+                  }
+                ),
+              });
+              return;
+            }
+            if (/\d+\s+\w+\s+((and)|(or))\s+\d+\s+\w+/.test(text)) {
+              const [lvlA, skillA, diff, levelB, skillB] = text
+                .trim()
+                .replace(/\s+/g, ' ')
+                .split(' ');
+              console.log(lvlA, skillA, diff, levelB, skillB);
+            }
+            console.log(quest.page, 'HAS AND/OR');
+            console.log(text);
+            console.log();
+          }
           const [level, skill] = text.split(/\s+\[?/);
           if (!isSkill(skill)) {
             return;
@@ -135,6 +194,7 @@ async function getQuestWithRequirements(
             name: skill,
             page: getSkillPage(skill),
             level: parseInt(level) || 0,
+            boostable: text.includes('[b]'),
           });
         } else {
           ele.find('>a').each((_, a) => {

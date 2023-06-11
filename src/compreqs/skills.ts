@@ -26,6 +26,7 @@ export class SkillRequirement extends Requirement<'skill'> implements ISkill {
         level: level - 1,
         type: 'skill',
         page,
+        boostable: false,
       },
     ],
     ...rest
@@ -59,6 +60,7 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
             level,
             type: 'skill' as const,
             page: getSkillPage(name),
+            boostable: false,
           }))
         );
       }

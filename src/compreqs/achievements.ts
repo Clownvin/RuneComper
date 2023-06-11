@@ -237,6 +237,7 @@ async function getAchievementWithNormalRequirements(
         level: parseInt(level) || 1,
         type: 'skill',
         page: getSkillPage(skill),
+        boostable: html.includes('[b]'),
       });
     } else {
       const name = ele.find('a').attr('title');

@@ -28,6 +28,10 @@ export interface ISkill extends IRequirement {
   readonly level: number;
 }
 
+export interface ISKillBoostable extends ISkill {
+  readonly boostable: boolean;
+}
+
 export type RequirementID = ReturnType<typeof getRequirementID>;
 
 export function getRequirementID(req: IAchievement | IQuest | ISkill) {
@@ -39,9 +43,9 @@ export function getRequirementID(req: IAchievement | IQuest | ISkill) {
   }
 }
 
-type IRequirements = IAchievement | IQuestRequired | ISkill;
+export type IRequirements = IAchievement | IQuestRequired | ISKillBoostable;
 
-export function isSkill(req: IRequirements): req is ISkill {
+export function isSkill(req: IRequirements): req is ISKillBoostable {
   return req.type === 'skill';
 }
 
