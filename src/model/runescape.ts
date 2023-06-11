@@ -72,3 +72,9 @@ export const SKILLS_BY_ID = (() => {
 export function isSkill(text: string): text is Skill {
   return SKILL_SET.has(text as Skill);
 }
+
+export function avgLevelForCombatLvl(combatLvl: number): number {
+  // 1.4 was derived from solving the combat level equation for "lvl",
+  // substituting "lvl" in place of other variables
+  return Math.floor(combatLvl / 1.4);
+}

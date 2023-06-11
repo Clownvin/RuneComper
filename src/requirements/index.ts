@@ -6,12 +6,18 @@ import {
 } from './achievements';
 import {QuestRequirement, getQuestsAndQuestNames} from './quests';
 import {WIKI_URL_BUILDER} from '../rswiki';
+import {CombatRequirement} from './combat';
+import {avgLevelForCombatLvl} from '../model/runescape';
 
 /**
  * TODOs:
  * Barbarian training requires Tai Bwo Wanai Trio and ability to fight mithril dragon
  */
-type Requirement = QuestRequirement | SkillRequirement | AchievementRequirement;
+type Requirement =
+  | QuestRequirement
+  | SkillRequirement
+  | AchievementRequirement
+  | CombatRequirement;
 
 type MappedRequirement = Requirement & {
   depth: number;
@@ -64,6 +70,14 @@ export async function getRequirements() {
     const reqId = getRequirementID(req);
     const requirement = reqsById.get(reqId);
     if (!requirement) {
+      if (req.type === 'combat') {
+        let requirement: MappedRequirement;
+        reqsById.set(
+          reqId,
+          (requirement = convertToMapped(new CombatRequirement(req.level)))
+        );
+        return requirement;
+      }
       throw new Error(`Unknown requirement: ${reqId}`);
     }
     return requirement;
@@ -139,6 +153,8 @@ function typePriority(type: Requirement['type']) {
       return 1;
     case 'skill':
       return 2;
+    case 'combat':
+      return 3;
     case 'achievement':
       return 3;
   }
@@ -164,7 +180,11 @@ function findMaxLevel(
         seen
       ),
     {and: Math.max, or: Math.min},
-    req.type === 'skill' ? req.level : 0
+    req.type === 'skill'
+      ? req.level
+      : req.type === 'combat'
+      ? avgLevelForCombatLvl(req.level)
+      : 0
   );
 
   return req.maxLevel;

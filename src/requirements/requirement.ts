@@ -1,7 +1,7 @@
 import {Skill} from '../model/runescape';
 import {AndOrElement, AndOrMap} from '../util/andOrMap';
 
-export type Type = 'quest' | 'skill' | 'achievement';
+export type Type = 'quest' | 'skill' | 'achievement' | 'combat';
 
 export interface IRequirement {
   readonly name: string;
@@ -32,18 +32,30 @@ export interface ISKillBoostable extends ISkill {
   readonly boostable: boolean;
 }
 
+export interface ICombatLevel extends IRequirement {
+  readonly name: 'Combat';
+  readonly type: 'combat';
+  readonly level: number;
+}
+
 export type RequirementID = ReturnType<typeof getRequirementID>;
 
-export function getRequirementID(req: IAchievement | IQuest | ISkill) {
+export function getRequirementID(
+  req: IAchievement | IQuest | ISkill | ICombatLevel
+) {
   const normalId = `${req.type}:${req.page.split('/w/').pop()!}` as const;
-  if (req.type === 'skill') {
+  if (req.type === 'skill' || req.type === 'combat') {
     return `${normalId}:${req.level}` as const;
   } else {
     return normalId;
   }
 }
 
-export type IRequirements = IAchievement | IQuestRequired | ISKillBoostable;
+export type IRequirements =
+  | IAchievement
+  | IQuestRequired
+  | ISKillBoostable
+  | ICombatLevel;
 
 export function isSkill(req: IRequirements): req is ISKillBoostable {
   return req.type === 'skill';

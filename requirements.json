@@ -23866,6 +23866,57 @@
   },
   {
     "type": "quest",
+    "name": "The Dig Site",
+    "miniquest": false,
+    "id": "quest:The_Dig_Site",
+    "depth": 16,
+    "maxLevel": 25,
+    "page": "https://runescape.wiki/w/The_Dig_Site",
+    "directDependents": 11,
+    "indirectDependents": 66,
+    "quests": [
+      {
+        "name": "Enlightened Journey",
+        "page": "/w/Enlightened_Journey",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      },
+      {
+        "name": "Missing, Presumed Death",
+        "page": "/w/Missing,_Presumed_Death",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 10,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "herblore",
+        "page": "/w/Herblore",
+        "level": 10,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "thieving",
+        "page": "/w/Thieving",
+        "level": 25,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
     "name": "Ghosts Ahoy",
     "miniquest": false,
     "id": "quest:Ghosts_Ahoy",
@@ -24100,43 +24151,6 @@
         "level": 25,
         "type": "skill",
         "page": "/w/Archaeology",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Fur 'n Seek",
-    "miniquest": false,
-    "id": "quest:Fur_%27n_Seek",
-    "depth": 6,
-    "maxLevel": 25,
-    "page": "https://runescape.wiki/w/Fur_%27n_Seek",
-    "directDependents": 1,
-    "indirectDependents": 6,
-    "quests": [
-      {
-        "name": "Rag and Bone Man",
-        "page": "/w/Rag_and_Bone_Man",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Missing, Presumed Death",
-        "page": "/w/Missing,_Presumed_Death",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "slayer",
-        "page": "/w/Slayer",
-        "level": 25,
         "boostable": false
       }
     ],
@@ -28166,57 +28180,6 @@
   },
   {
     "type": "quest",
-    "name": "Dishonour among Thieves",
-    "miniquest": false,
-    "id": "quest:Dishonour_among_Thieves",
-    "depth": 8,
-    "maxLevel": 30,
-    "page": "https://runescape.wiki/w/Dishonour_among_Thieves",
-    "directDependents": 4,
-    "indirectDependents": 11,
-    "quests": [
-      {
-        "name": "Hazeel Cult",
-        "page": "/w/Hazeel_Cult",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Missing, Presumed Death",
-        "page": "/w/Missing,_Presumed_Death",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Golem",
-        "page": "/w/The_Golem",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 30,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "thieving",
-        "page": "/w/Thieving",
-        "level": 30,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
     "name": "Elemental Workshop II",
     "miniquest": false,
     "id": "quest:Elemental_Workshop_II",
@@ -30796,6 +30759,71 @@
   },
   {
     "type": "quest",
+    "name": "Another Slice of H.A.M.",
+    "miniquest": false,
+    "id": "quest:Another_Slice_of_H.A.M.",
+    "depth": 15,
+    "maxLevel": 33,
+    "page": "https://runescape.wiki/w/Another_Slice_of_H.A.M.",
+    "directDependents": 5,
+    "indirectDependents": 40,
+    "quests": [
+      {
+        "name": "Death to the Dorgeshuun",
+        "page": "/w/Death_to_the_Dorgeshuun",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Lost Tribe",
+        "page": "/w/The_Lost_Tribe",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Goblin Diplomacy",
+        "page": "/w/Goblin_Diplomacy",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Dig Site",
+        "page": "/w/The_Dig_Site",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Giant Dwarf",
+        "page": "/w/The_Giant_Dwarf",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "attack",
+        "page": "/w/Attack",
+        "level": 15,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "prayer",
+        "page": "/w/Prayer",
+        "level": 25,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
     "name": "Carnillean Rising",
     "miniquest": false,
     "id": "quest:Carnillean_Rising",
@@ -32449,6 +32477,20 @@
     "achievements": []
   },
   {
+    "type": "combat",
+    "name": "Combat",
+    "level": 50,
+    "id": "combat:Combat_level:50",
+    "depth": 17,
+    "maxLevel": 35,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 2,
+    "indirectDependents": 105,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
     "type": "quest",
     "name": "Missing My Mummy",
     "miniquest": false,
@@ -32528,6 +32570,57 @@
         "type": "skill",
         "name": "prayer",
         "page": "/w/Prayer",
+        "level": 35,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Haunted Mine",
+    "miniquest": false,
+    "id": "quest:Haunted_Mine",
+    "depth": 12,
+    "maxLevel": 35,
+    "page": "https://runescape.wiki/w/Haunted_Mine",
+    "directDependents": 4,
+    "indirectDependents": 62,
+    "quests": [
+      {
+        "name": "Priest in Peril",
+        "page": "/w/Priest_in_Peril",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Branches of Darkmeyer",
+        "page": "/w/The_Branches_of_Darkmeyer",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      },
+      {
+        "name": "The Darkness of Hallowvale",
+        "page": "/w/The_Darkness_of_Hallowvale",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 15,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "crafting",
+        "page": "/w/Crafting",
         "level": 35,
         "boostable": false
       }
@@ -32621,6 +32714,43 @@
     "achievements": []
   },
   {
+    "type": "quest",
+    "name": "Fur 'n Seek",
+    "miniquest": false,
+    "id": "quest:Fur_%27n_Seek",
+    "depth": 6,
+    "maxLevel": 35,
+    "page": "https://runescape.wiki/w/Fur_%27n_Seek",
+    "directDependents": 1,
+    "indirectDependents": 6,
+    "quests": [
+      {
+        "name": "Rag and Bone Man",
+        "page": "/w/Rag_and_Bone_Man",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Missing, Presumed Death",
+        "page": "/w/Missing,_Presumed_Death",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "slayer",
+        "page": "/w/Slayer",
+        "level": 25,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
     "type": "achievement",
     "name": "An Teak",
     "id": "achievement:An_Teak",
@@ -32686,6 +32816,35 @@
         "level": 35,
         "type": "skill",
         "page": "/w/Smithing",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Polterheist",
+    "id": "achievement:Polterheist",
+    "depth": 4,
+    "maxLevel": 35,
+    "page": "https://runescape.wiki/w/Polterheist",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Haunted Mine",
+        "page": "/w/Haunted_Mine",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "mining",
+        "level": 30,
+        "type": "skill",
+        "page": "/w/Mining",
         "boostable": false
       }
     ],
@@ -33451,122 +33610,6 @@
         "name": "firemaking",
         "page": "/w/Firemaking",
         "level": 20,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "The Dig Site",
-    "miniquest": false,
-    "id": "quest:The_Dig_Site",
-    "depth": 16,
-    "maxLevel": 36,
-    "page": "https://runescape.wiki/w/The_Dig_Site",
-    "directDependents": 11,
-    "indirectDependents": 66,
-    "quests": [
-      {
-        "name": "Enlightened Journey",
-        "page": "/w/Enlightened_Journey",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      },
-      {
-        "name": "Missing, Presumed Death",
-        "page": "/w/Missing,_Presumed_Death",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 10,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "herblore",
-        "page": "/w/Herblore",
-        "level": 10,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "thieving",
-        "page": "/w/Thieving",
-        "level": 25,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Another Slice of H.A.M.",
-    "miniquest": false,
-    "id": "quest:Another_Slice_of_H.A.M.",
-    "depth": 15,
-    "maxLevel": 36,
-    "page": "https://runescape.wiki/w/Another_Slice_of_H.A.M.",
-    "directDependents": 5,
-    "indirectDependents": 40,
-    "quests": [
-      {
-        "name": "Death to the Dorgeshuun",
-        "page": "/w/Death_to_the_Dorgeshuun",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Lost Tribe",
-        "page": "/w/The_Lost_Tribe",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Goblin Diplomacy",
-        "page": "/w/Goblin_Diplomacy",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Dig Site",
-        "page": "/w/The_Dig_Site",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Giant Dwarf",
-        "page": "/w/The_Giant_Dwarf",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "attack",
-        "page": "/w/Attack",
-        "level": 15,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "prayer",
-        "page": "/w/Prayer",
-        "level": 25,
         "boostable": false
       }
     ],
@@ -36758,6 +36801,35 @@
   },
   {
     "type": "achievement",
+    "name": "Detarnation",
+    "id": "achievement:Detarnation",
+    "depth": 4,
+    "maxLevel": 40,
+    "page": "https://runescape.wiki/w/Detarnation",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Haunted Mine",
+        "page": "/w/Haunted_Mine",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "slayer",
+        "level": 40,
+        "type": "skill",
+        "page": "/w/Slayer",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
     "name": "Don't Stop Me If I Start To Ramble",
     "id": "achievement:Don%27t_Stop_Me_If_I_Start_To_Ramble",
     "depth": 4,
@@ -38564,6 +38636,20 @@
     "achievements": []
   },
   {
+    "type": "combat",
+    "name": "Combat",
+    "level": 60,
+    "id": "combat:Combat_level:60",
+    "depth": 10,
+    "maxLevel": 42,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 1,
+    "indirectDependents": 24,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
     "type": "quest",
     "name": "Elemental Workshop IV",
     "miniquest": false,
@@ -39604,6 +39690,71 @@
         "name": "thieving",
         "page": "/w/Thieving",
         "level": 10,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "combat",
+    "name": "Combat",
+    "level": 61,
+    "id": "combat:Combat_level:61",
+    "depth": 9,
+    "maxLevel": 43,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 1,
+    "indirectDependents": 12,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Dishonour among Thieves",
+    "miniquest": false,
+    "id": "quest:Dishonour_among_Thieves",
+    "depth": 8,
+    "maxLevel": 43,
+    "page": "https://runescape.wiki/w/Dishonour_among_Thieves",
+    "directDependents": 4,
+    "indirectDependents": 11,
+    "quests": [
+      {
+        "name": "Hazeel Cult",
+        "page": "/w/Hazeel_Cult",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Missing, Presumed Death",
+        "page": "/w/Missing,_Presumed_Death",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Golem",
+        "page": "/w/The_Golem",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 30,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "thieving",
+        "page": "/w/Thieving",
+        "level": 30,
         "boostable": false
       }
     ],
@@ -45292,100 +45443,6 @@
   },
   {
     "type": "quest",
-    "name": "Desperate Measures",
-    "miniquest": false,
-    "id": "quest:Desperate_Measures",
-    "depth": 15,
-    "maxLevel": 50,
-    "page": "https://runescape.wiki/w/Desperate_Measures",
-    "directDependents": 11,
-    "indirectDependents": 18,
-    "quests": [
-      {
-        "name": "Desperate Times",
-        "page": "/w/Desperate_Times",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Needle Skips",
-        "page": "/w/The_Needle_Skips",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "You Are It",
-        "page": "/w/You_Are_It",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "archaeology",
-        "page": "/w/Archaeology",
-        "level": 50,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Desperate Creatures",
-    "miniquest": false,
-    "id": "quest:Desperate_Creatures",
-    "depth": 14,
-    "maxLevel": 50,
-    "page": "https://runescape.wiki/w/Desperate_Creatures",
-    "directDependents": 6,
-    "indirectDependents": 15,
-    "quests": [
-      {
-        "name": "Desperate Measures",
-        "page": "/w/Desperate_Measures",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Desperate Times",
-        "page": "/w/Desperate_Times",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Needle Skips",
-        "page": "/w/The_Needle_Skips",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "You Are It",
-        "page": "/w/You_Are_It",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "quest",
     "name": "Cold War",
     "miniquest": false,
     "id": "quest:Cold_War",
@@ -46005,42 +46062,6 @@
       }
     ],
     "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Remotely Possible",
-    "id": "achievement:Remotely_Possible",
-    "depth": 1,
-    "maxLevel": 50,
-    "page": "https://runescape.wiki/w/Remotely_Possible",
-    "directDependents": 1,
-    "indirectDependents": 1,
-    "quests": [
-      {
-        "name": "Desperate Measures",
-        "page": "/w/Desperate_Measures",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "farming",
-        "level": 42,
-        "type": "skill",
-        "page": "/w/Farming",
-        "boostable": false
-      },
-      {
-        "name": "mining",
-        "level": 40,
-        "type": "skill",
-        "page": "/w/Mining",
-        "boostable": false
-      }
-    ],
     "achievements": []
   },
   {
@@ -50322,197 +50343,6 @@
     "achievements": []
   },
   {
-    "type": "quest",
-    "name": "Legends' Quest",
-    "miniquest": false,
-    "id": "quest:Legends%27_Quest",
-    "depth": 14,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/Legends%27_Quest",
-    "directDependents": 15,
-    "indirectDependents": 84,
-    "quests": [
-      {
-        "name": "Heroes' Quest",
-        "page": "/w/Heroes%27_Quest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Shield of Arrav",
-        "page": "/w/Shield_of_Arrav",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Dragon Slayer",
-        "page": "/w/Dragon_Slayer",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Druidic Ritual",
-        "page": "/w/Druidic_Ritual",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Lost City",
-        "page": "/w/Lost_City",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Merlin's Crystal",
-        "page": "/w/Merlin%27s_Crystal",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Family Crest",
-        "page": "/w/Family_Crest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Underground Pass",
-        "page": "/w/Underground_Pass",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Biohazard",
-        "page": "/w/Biohazard",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Plague City",
-        "page": "/w/Plague_City",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Waterfall Quest",
-        "page": "/w/Waterfall_Quest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Shilo Village",
-        "page": "/w/Shilo_Village",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Jungle Potion",
-        "page": "/w/Jungle_Potion",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "crafting",
-        "page": "/w/Crafting",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "herblore",
-        "page": "/w/Herblore",
-        "level": 45,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "magic",
-        "page": "/w/Magic",
-        "level": 56,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "mining",
-        "page": "/w/Mining",
-        "level": 52,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "prayer",
-        "page": "/w/Prayer",
-        "level": 42,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "smithing",
-        "page": "/w/Smithing",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "strength",
-        "page": "/w/Strength",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "thieving",
-        "page": "/w/Thieving",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "woodcutting",
-        "page": "/w/Woodcutting",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "prayer",
-        "page": "/w/Prayer",
-        "level": 43,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "ranged",
-        "page": "/w/Ranged",
-        "level": 50,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
     "type": "achievement",
     "name": "Collectors Assemble III",
     "id": "achievement:Collectors_Assemble_III",
@@ -50531,27 +50361,6 @@
         "boostable": false
       }
     ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "A Palm For Each Finger",
-    "id": "achievement:A_Palm_For_Each_Finger",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/A_Palm_For_Each_Finger",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
     "achievements": []
   },
   {
@@ -50577,106 +50386,6 @@
   },
   {
     "type": "achievement",
-    "name": "Brace Yourself",
-    "id": "achievement:Brace_Yourself",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/Brace_Yourself",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Deadwing",
-    "id": "achievement:Deadwing",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/Deadwing",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "I Sleep All Night and I Work All Day",
-    "id": "achievement:I_Sleep_All_Night_and_I_Work_All_Day",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/I_Sleep_All_Night_and_I_Work_All_Day",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "woodcutting",
-        "level": 50,
-        "type": "skill",
-        "page": "/w/Woodcutting",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "I'm a Lumberjack and I'm Okay",
-    "id": "achievement:I%27m_a_Lumberjack_and_I%27m_Okay",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/I%27m_a_Lumberjack_and_I%27m_Okay",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "woodcutting",
-        "level": 35,
-        "type": "skill",
-        "page": "/w/Woodcutting",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
     "name": "Mass Production",
     "id": "achievement:Mass_Production",
     "depth": 4,
@@ -50694,27 +50403,6 @@
         "boostable": false
       }
     ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Shadow Boxing",
-    "id": "achievement:Shadow_Boxing",
-    "depth": 4,
-    "maxLevel": 56,
-    "page": "https://runescape.wiki/w/Shadow_Boxing",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
     "achievements": []
   },
   {
@@ -51690,6 +51378,120 @@
     ],
     "skills": [],
     "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Morytania Set Tasks - Medium",
+    "id": "achievement:Morytania_Set_Tasks_-_Medium",
+    "depth": 3,
+    "maxLevel": 57,
+    "page": "https://runescape.wiki/w/Morytania_Set_Tasks_-_Medium",
+    "directDependents": 1,
+    "indirectDependents": 3,
+    "quests": [],
+    "skills": [],
+    "achievements": [
+      {
+        "name": "Ad-Myre The Goods",
+        "page": "/w/Ad-Myre_The_Goods",
+        "type": "achievement"
+      },
+      {
+        "name": "Barking Up the Wrong Tree",
+        "page": "/w/Barking_Up_the_Wrong_Tree",
+        "type": "achievement"
+      },
+      {
+        "name": "Brain Bending",
+        "page": "/w/Brain_Bending",
+        "type": "achievement"
+      },
+      {
+        "name": "Charter A Course",
+        "page": "/w/Charter_A_Course",
+        "type": "achievement"
+      },
+      {
+        "name": "Don't Stop Me If I Start To Ramble",
+        "page": "/w/Don%27t_Stop_Me_If_I_Start_To_Ramble",
+        "type": "achievement"
+      },
+      {
+        "name": "Finding Your Balance",
+        "page": "/w/Finding_Your_Balance",
+        "type": "achievement"
+      },
+      {
+        "name": "Flamtaer Will Get You Everywhere",
+        "page": "/w/Flamtaer_Will_Get_You_Everywhere",
+        "type": "achievement"
+      },
+      {
+        "name": "Fun Guy But Bitter",
+        "page": "/w/Fun_Guy_But_Bitter",
+        "type": "achievement"
+      },
+      {
+        "name": "Gate Spectre-ations",
+        "page": "/w/Gate_Spectre-ations",
+        "type": "achievement"
+      },
+      {
+        "name": "I Wonder How Far It Ghost?",
+        "page": "/w/I_Wonder_How_Far_It_Ghost%3F",
+        "type": "achievement"
+      },
+      {
+        "name": "Izzy Wizzy Let's Get Lizzy",
+        "page": "/w/Izzy_Wizzy_Let%27s_Get_Lizzy",
+        "type": "achievement"
+      },
+      {
+        "name": "Obvious Forgery",
+        "page": "/w/Obvious_Forgery",
+        "type": "achievement"
+      },
+      {
+        "name": "Plenty Mort Where That Came From",
+        "page": "/w/Plenty_Mort_Where_That_Came_From",
+        "type": "achievement"
+      },
+      {
+        "name": "Polterheist",
+        "page": "/w/Polterheist",
+        "type": "achievement"
+      },
+      {
+        "name": "Ready? Trek!",
+        "page": "/w/Ready%3F_Trek!",
+        "type": "achievement"
+      },
+      {
+        "name": "The Beer Inn-spectre",
+        "page": "/w/The_Beer_Inn-spectre",
+        "type": "achievement"
+      },
+      {
+        "name": "The Higher, The Badder",
+        "page": "/w/The_Higher,_The_Badder",
+        "type": "achievement"
+      },
+      {
+        "name": "The Yeast They Can Do",
+        "page": "/w/The_Yeast_They_Can_Do",
+        "type": "achievement"
+      },
+      {
+        "name": "Travelling On The Slime Trail",
+        "page": "/w/Travelling_On_The_Slime_Trail",
+        "type": "achievement"
+      },
+      {
+        "name": "Who You Gonna Ring?",
+        "page": "/w/Who_You_Gonna_Ring%3F",
+        "type": "achievement"
+      }
+    ]
   },
   {
     "type": "skill",
@@ -53362,6 +53164,120 @@
         "name": "thieving",
         "page": "/w/Thieving",
         "level": 46,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "As a First Resort",
+    "miniquest": false,
+    "id": "quest:As_a_First_Resort",
+    "depth": 11,
+    "maxLevel": 59,
+    "page": "https://runescape.wiki/w/As_a_First_Resort",
+    "directDependents": 8,
+    "indirectDependents": 58,
+    "quests": [
+      {
+        "name": "Zogre Flesh Eaters",
+        "page": "/w/Zogre_Flesh_Eaters",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Big Chompy Bird Hunting",
+        "page": "/w/Big_Chompy_Bird_Hunting",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Jungle Potion",
+        "page": "/w/Jungle_Potion",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Haunted Mine",
+        "page": "/w/Haunted_Mine",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Lost Tribe",
+        "page": "/w/The_Lost_Tribe",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Dragon Slayer",
+        "page": "/w/Dragon_Slayer",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Tai Bwo Wannai Trio",
+        "page": "/w/Tai_Bwo_Wannai_Trio",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "firemaking",
+        "page": "/w/Firemaking",
+        "level": 51,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "hunter",
+        "page": "/w/Hunter",
+        "level": 48,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "woodcutting",
+        "page": "/w/Woodcutting",
+        "level": 58,
+        "boostable": false
+      },
+      {
+        "name": "attack",
+        "type": "skill",
+        "page": "/w/Attack",
+        "level": 99,
+        "boostable": false
+      },
+      {
+        "name": "strength",
+        "type": "skill",
+        "page": "/w/Attack",
+        "level": 99,
+        "boostable": false
+      },
+      {
+        "name": "attack",
+        "type": "skill",
+        "page": "/w/Attack",
+        "level": 65,
+        "boostable": false
+      },
+      {
+        "name": "strength",
+        "type": "skill",
+        "page": "/w/Strength",
+        "level": 65,
         "boostable": false
       }
     ],
@@ -55322,6 +55238,20 @@
         "boostable": false
       }
     ],
+    "achievements": []
+  },
+  {
+    "type": "combat",
+    "name": "Combat",
+    "level": 85,
+    "id": "combat:Combat_level:85",
+    "depth": 9,
+    "maxLevel": 60,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 1,
+    "indirectDependents": 24,
+    "quests": [],
+    "skills": [],
     "achievements": []
   },
   {
@@ -60263,179 +60193,6 @@
   },
   {
     "type": "achievement",
-    "name": "Karamja Set Tasks - Hard",
-    "id": "achievement:Karamja_Set_Tasks_-_Hard",
-    "depth": 3,
-    "maxLevel": 65,
-    "page": "https://runescape.wiki/w/Karamja_Set_Tasks_-_Hard",
-    "directDependents": 1,
-    "indirectDependents": 3,
-    "quests": [],
-    "skills": [],
-    "achievements": [
-      {
-        "name": "A Palm For Each Finger",
-        "page": "/w/A_Palm_For_Each_Finger",
-        "type": "achievement"
-      },
-      {
-        "name": "At One With Nature",
-        "page": "/w/At_One_With_Nature",
-        "type": "achievement"
-      },
-      {
-        "name": "Can Opener",
-        "page": "/w/Can_Opener",
-        "type": "achievement"
-      },
-      {
-        "name": "Deadwing",
-        "page": "/w/Deadwing",
-        "type": "achievement"
-      },
-      {
-        "name": "Drop It Like It's Hot",
-        "page": "/w/Drop_It_Like_It%27s_Hot",
-        "type": "achievement"
-      },
-      {
-        "name": "Flawless Victory",
-        "page": "/w/Flawless_Victory",
-        "type": "achievement"
-      },
-      {
-        "name": "I'd Be Kharazi to Eat This",
-        "page": "/w/I%27d_Be_Kharazi_to_Eat_This",
-        "type": "achievement"
-      },
-      {
-        "name": "Play Dead, Doggy",
-        "page": "/w/Play_Dead,_Doggy",
-        "type": "achievement"
-      },
-      {
-        "name": "Quick As a Shot",
-        "page": "/w/Quick_As_a_Shot",
-        "type": "achievement"
-      },
-      {
-        "name": "Yes, My Master",
-        "page": "/w/Yes,_My_Master",
-        "type": "achievement"
-      }
-    ]
-  },
-  {
-    "type": "achievement",
-    "name": "Karamja Set Tasks - Medium",
-    "id": "achievement:Karamja_Set_Tasks_-_Medium",
-    "depth": 3,
-    "maxLevel": 65,
-    "page": "https://runescape.wiki/w/Karamja_Set_Tasks_-_Medium",
-    "directDependents": 1,
-    "indirectDependents": 3,
-    "quests": [],
-    "skills": [],
-    "achievements": [
-      {
-        "name": "Arachnophagia",
-        "page": "/w/Arachnophagia",
-        "type": "achievement"
-      },
-      {
-        "name": "Back Cran-door",
-        "page": "/w/Back_Cran-door",
-        "type": "achievement"
-      },
-      {
-        "name": "Dungeons and Dragons",
-        "page": "/w/Dungeons_and_Dragons",
-        "type": "achievement"
-      },
-      {
-        "name": "Falling With Style",
-        "page": "/w/Falling_With_Style",
-        "type": "achievement"
-      },
-      {
-        "name": "Horseless Carriage",
-        "page": "/w/Horseless_Carriage",
-        "type": "achievement"
-      },
-      {
-        "name": "Hunters of the Horned Graahk",
-        "page": "/w/Hunters_of_the_Horned_Graahk",
-        "type": "achievement"
-      },
-      {
-        "name": "I Sleep All Night and I Work All Day",
-        "page": "/w/I_Sleep_All_Night_and_I_Work_All_Day",
-        "type": "achievement"
-      },
-      {
-        "name": "I'm a Lumberjack and I'm Okay",
-        "page": "/w/I%27m_a_Lumberjack_and_I%27m_Okay",
-        "type": "achievement"
-      },
-      {
-        "name": "Just the Ticket",
-        "page": "/w/Just_the_Ticket",
-        "type": "achievement"
-      },
-      {
-        "name": "Points of No Return",
-        "page": "/w/Points_of_No_Return",
-        "type": "achievement"
-      },
-      {
-        "name": "Romancing the Stone",
-        "page": "/w/Romancing_the_Stone",
-        "type": "achievement"
-      },
-      {
-        "name": "Scourge of Scurvy",
-        "page": "/w/Scourge_of_Scurvy",
-        "type": "achievement"
-      },
-      {
-        "name": "Shipping Out From the Shipyard",
-        "page": "/w/Shipping_Out_From_the_Shipyard",
-        "type": "achievement"
-      },
-      {
-        "name": "Stairway to Haven",
-        "page": "/w/Stairway_to_Haven",
-        "type": "achievement"
-      },
-      {
-        "name": "Thank You, Madam",
-        "page": "/w/Thank_You,_Madam",
-        "type": "achievement"
-      },
-      {
-        "name": "That's Not a Knife...",
-        "page": "/w/That%27s_Not_a_Knife...",
-        "type": "achievement"
-      },
-      {
-        "name": "The Roots of All Evil",
-        "page": "/w/The_Roots_of_All_Evil",
-        "type": "achievement"
-      },
-      {
-        "name": "They Like Me! They Really Like Me!",
-        "page": "/w/They_Like_Me!_They_Really_Like_Me!",
-        "type": "achievement"
-      },
-      {
-        "name": "To Catch a Karambwan",
-        "page": "/w/To_Catch_a_Karambwan",
-        "type": "achievement"
-      }
-    ]
-  },
-  {
-    "type": "achievement",
     "name": "Heal, Quickly",
     "id": "achievement:Heal,_Quickly",
     "depth": 2,
@@ -62012,6 +61769,114 @@
     "achievements": []
   },
   {
+    "type": "combat",
+    "name": "Combat",
+    "level": 95,
+    "id": "combat:Combat_level:95",
+    "depth": 16,
+    "maxLevel": 67,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 1,
+    "indirectDependents": 19,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Desperate Measures",
+    "miniquest": false,
+    "id": "quest:Desperate_Measures",
+    "depth": 15,
+    "maxLevel": 67,
+    "page": "https://runescape.wiki/w/Desperate_Measures",
+    "directDependents": 11,
+    "indirectDependents": 18,
+    "quests": [
+      {
+        "name": "Desperate Times",
+        "page": "/w/Desperate_Times",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Needle Skips",
+        "page": "/w/The_Needle_Skips",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "You Are It",
+        "page": "/w/You_Are_It",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "archaeology",
+        "page": "/w/Archaeology",
+        "level": 50,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Desperate Creatures",
+    "miniquest": false,
+    "id": "quest:Desperate_Creatures",
+    "depth": 14,
+    "maxLevel": 67,
+    "page": "https://runescape.wiki/w/Desperate_Creatures",
+    "directDependents": 6,
+    "indirectDependents": 15,
+    "quests": [
+      {
+        "name": "Desperate Measures",
+        "page": "/w/Desperate_Measures",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Desperate Times",
+        "page": "/w/Desperate_Times",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Needle Skips",
+        "page": "/w/The_Needle_Skips",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "You Are It",
+        "page": "/w/You_Are_It",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
     "type": "achievement",
     "name": "Doyouthinkhesaurus",
     "id": "achievement:Doyouthinkhesaurus",
@@ -62308,6 +62173,42 @@
         "level": 67,
         "type": "skill",
         "page": "/w/Archaeology",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Remotely Possible",
+    "id": "achievement:Remotely_Possible",
+    "depth": 1,
+    "maxLevel": 67,
+    "page": "https://runescape.wiki/w/Remotely_Possible",
+    "directDependents": 1,
+    "indirectDependents": 1,
+    "quests": [
+      {
+        "name": "Desperate Measures",
+        "page": "/w/Desperate_Measures",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "farming",
+        "level": 42,
+        "type": "skill",
+        "page": "/w/Farming",
+        "boostable": false
+      },
+      {
+        "name": "mining",
+        "level": 40,
+        "type": "skill",
+        "page": "/w/Mining",
         "boostable": false
       }
     ],
@@ -65578,6 +65479,211 @@
     "achievements": []
   },
   {
+    "type": "combat",
+    "name": "Combat",
+    "level": 100,
+    "id": "combat:Combat_level:100",
+    "depth": 16,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 7,
+    "indirectDependents": 107,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Legends' Quest",
+    "miniquest": false,
+    "id": "quest:Legends%27_Quest",
+    "depth": 14,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Legends%27_Quest",
+    "directDependents": 15,
+    "indirectDependents": 84,
+    "quests": [
+      {
+        "name": "Heroes' Quest",
+        "page": "/w/Heroes%27_Quest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Shield of Arrav",
+        "page": "/w/Shield_of_Arrav",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Dragon Slayer",
+        "page": "/w/Dragon_Slayer",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Druidic Ritual",
+        "page": "/w/Druidic_Ritual",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Lost City",
+        "page": "/w/Lost_City",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Merlin's Crystal",
+        "page": "/w/Merlin%27s_Crystal",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Family Crest",
+        "page": "/w/Family_Crest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Underground Pass",
+        "page": "/w/Underground_Pass",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Biohazard",
+        "page": "/w/Biohazard",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Plague City",
+        "page": "/w/Plague_City",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Waterfall Quest",
+        "page": "/w/Waterfall_Quest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Shilo Village",
+        "page": "/w/Shilo_Village",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Jungle Potion",
+        "page": "/w/Jungle_Potion",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "crafting",
+        "page": "/w/Crafting",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "herblore",
+        "page": "/w/Herblore",
+        "level": 45,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "magic",
+        "page": "/w/Magic",
+        "level": 56,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "mining",
+        "page": "/w/Mining",
+        "level": 52,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "prayer",
+        "page": "/w/Prayer",
+        "level": 42,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "smithing",
+        "page": "/w/Smithing",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "strength",
+        "page": "/w/Strength",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "thieving",
+        "page": "/w/Thieving",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "woodcutting",
+        "page": "/w/Woodcutting",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "prayer",
+        "page": "/w/Prayer",
+        "level": 43,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "ranged",
+        "page": "/w/Ranged",
+        "level": 50,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
     "type": "quest",
     "name": "Grim Tales",
     "miniquest": false,
@@ -65637,6 +65743,127 @@
   },
   {
     "type": "achievement",
+    "name": "A Palm For Each Finger",
+    "id": "achievement:A_Palm_For_Each_Finger",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/A_Palm_For_Each_Finger",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Brace Yourself",
+    "id": "achievement:Brace_Yourself",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Brace_Yourself",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Deadwing",
+    "id": "achievement:Deadwing",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Deadwing",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "I Sleep All Night and I Work All Day",
+    "id": "achievement:I_Sleep_All_Night_and_I_Work_All_Day",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/I_Sleep_All_Night_and_I_Work_All_Day",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "woodcutting",
+        "level": 50,
+        "type": "skill",
+        "page": "/w/Woodcutting",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "I'm a Lumberjack and I'm Okay",
+    "id": "achievement:I%27m_a_Lumberjack_and_I%27m_Okay",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/I%27m_a_Lumberjack_and_I%27m_Okay",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "woodcutting",
+        "level": 35,
+        "type": "skill",
+        "page": "/w/Woodcutting",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
     "name": "Occult Classic",
     "id": "achievement:Occult_Classic",
     "depth": 4,
@@ -65655,6 +65882,200 @@
       }
     ],
     "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Shadow Boxing",
+    "id": "achievement:Shadow_Boxing",
+    "depth": 4,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Shadow_Boxing",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Karamja Set Tasks - Hard",
+    "id": "achievement:Karamja_Set_Tasks_-_Hard",
+    "depth": 3,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Karamja_Set_Tasks_-_Hard",
+    "directDependents": 1,
+    "indirectDependents": 3,
+    "quests": [],
+    "skills": [],
+    "achievements": [
+      {
+        "name": "A Palm For Each Finger",
+        "page": "/w/A_Palm_For_Each_Finger",
+        "type": "achievement"
+      },
+      {
+        "name": "At One With Nature",
+        "page": "/w/At_One_With_Nature",
+        "type": "achievement"
+      },
+      {
+        "name": "Can Opener",
+        "page": "/w/Can_Opener",
+        "type": "achievement"
+      },
+      {
+        "name": "Deadwing",
+        "page": "/w/Deadwing",
+        "type": "achievement"
+      },
+      {
+        "name": "Drop It Like It's Hot",
+        "page": "/w/Drop_It_Like_It%27s_Hot",
+        "type": "achievement"
+      },
+      {
+        "name": "Flawless Victory",
+        "page": "/w/Flawless_Victory",
+        "type": "achievement"
+      },
+      {
+        "name": "I'd Be Kharazi to Eat This",
+        "page": "/w/I%27d_Be_Kharazi_to_Eat_This",
+        "type": "achievement"
+      },
+      {
+        "name": "Play Dead, Doggy",
+        "page": "/w/Play_Dead,_Doggy",
+        "type": "achievement"
+      },
+      {
+        "name": "Quick As a Shot",
+        "page": "/w/Quick_As_a_Shot",
+        "type": "achievement"
+      },
+      {
+        "name": "Yes, My Master",
+        "page": "/w/Yes,_My_Master",
+        "type": "achievement"
+      }
+    ]
+  },
+  {
+    "type": "achievement",
+    "name": "Karamja Set Tasks - Medium",
+    "id": "achievement:Karamja_Set_Tasks_-_Medium",
+    "depth": 3,
+    "maxLevel": 71,
+    "page": "https://runescape.wiki/w/Karamja_Set_Tasks_-_Medium",
+    "directDependents": 1,
+    "indirectDependents": 3,
+    "quests": [],
+    "skills": [],
+    "achievements": [
+      {
+        "name": "Arachnophagia",
+        "page": "/w/Arachnophagia",
+        "type": "achievement"
+      },
+      {
+        "name": "Back Cran-door",
+        "page": "/w/Back_Cran-door",
+        "type": "achievement"
+      },
+      {
+        "name": "Dungeons and Dragons",
+        "page": "/w/Dungeons_and_Dragons",
+        "type": "achievement"
+      },
+      {
+        "name": "Falling With Style",
+        "page": "/w/Falling_With_Style",
+        "type": "achievement"
+      },
+      {
+        "name": "Horseless Carriage",
+        "page": "/w/Horseless_Carriage",
+        "type": "achievement"
+      },
+      {
+        "name": "Hunters of the Horned Graahk",
+        "page": "/w/Hunters_of_the_Horned_Graahk",
+        "type": "achievement"
+      },
+      {
+        "name": "I Sleep All Night and I Work All Day",
+        "page": "/w/I_Sleep_All_Night_and_I_Work_All_Day",
+        "type": "achievement"
+      },
+      {
+        "name": "I'm a Lumberjack and I'm Okay",
+        "page": "/w/I%27m_a_Lumberjack_and_I%27m_Okay",
+        "type": "achievement"
+      },
+      {
+        "name": "Just the Ticket",
+        "page": "/w/Just_the_Ticket",
+        "type": "achievement"
+      },
+      {
+        "name": "Points of No Return",
+        "page": "/w/Points_of_No_Return",
+        "type": "achievement"
+      },
+      {
+        "name": "Romancing the Stone",
+        "page": "/w/Romancing_the_Stone",
+        "type": "achievement"
+      },
+      {
+        "name": "Scourge of Scurvy",
+        "page": "/w/Scourge_of_Scurvy",
+        "type": "achievement"
+      },
+      {
+        "name": "Shipping Out From the Shipyard",
+        "page": "/w/Shipping_Out_From_the_Shipyard",
+        "type": "achievement"
+      },
+      {
+        "name": "Stairway to Haven",
+        "page": "/w/Stairway_to_Haven",
+        "type": "achievement"
+      },
+      {
+        "name": "Thank You, Madam",
+        "page": "/w/Thank_You,_Madam",
+        "type": "achievement"
+      },
+      {
+        "name": "That's Not a Knife...",
+        "page": "/w/That%27s_Not_a_Knife...",
+        "type": "achievement"
+      },
+      {
+        "name": "The Roots of All Evil",
+        "page": "/w/The_Roots_of_All_Evil",
+        "type": "achievement"
+      },
+      {
+        "name": "They Like Me! They Really Like Me!",
+        "page": "/w/They_Like_Me!_They_Really_Like_Me!",
+        "type": "achievement"
+      },
+      {
+        "name": "To Catch a Karambwan",
+        "page": "/w/To_Catch_a_Karambwan",
+        "type": "achievement"
+      }
+    ]
   },
   {
     "type": "achievement",
@@ -70884,6 +71305,141 @@
   },
   {
     "type": "quest",
+    "name": "Desert Treasure",
+    "miniquest": false,
+    "id": "quest:Desert_Treasure",
+    "depth": 10,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Desert_Treasure",
+    "directDependents": 15,
+    "indirectDependents": 50,
+    "quests": [
+      {
+        "name": "The Dig Site",
+        "page": "/w/The_Dig_Site",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Tourist Trap",
+        "page": "/w/The_Tourist_Trap",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Temple of Ikov",
+        "page": "/w/Temple_of_Ikov",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Priest in Peril",
+        "page": "/w/Priest_in_Peril",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Waterfall Quest",
+        "page": "/w/Waterfall_Quest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Troll Stronghold",
+        "page": "/w/Troll_Stronghold",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Death Plateau",
+        "page": "/w/Death_Plateau",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "In Search of the Myreque",
+        "page": "/w/In_Search_of_the_Myreque",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      },
+      {
+        "name": "Eadgar's Ruse",
+        "page": "/w/Eadgar%27s_Ruse",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      },
+      {
+        "name": "As a First Resort",
+        "page": "/w/As_a_First_Resort",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "firemaking",
+        "page": "/w/Firemaking",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "magic",
+        "page": "/w/Magic",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "slayer",
+        "page": "/w/Slayer",
+        "level": 10,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "thieving",
+        "page": "/w/Thieving",
+        "level": 53,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "woodcutting",
+        "page": "/w/Woodcutting",
+        "level": 75,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 47,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "mining",
+        "page": "/w/Mining",
+        "level": 50,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
     "name": "Eye of Het I",
     "miniquest": false,
     "id": "quest:Eye_of_Het_I",
@@ -71297,6 +71853,302 @@
   },
   {
     "type": "quest",
+    "name": "Do No Evil",
+    "miniquest": false,
+    "id": "quest:Do_No_Evil",
+    "depth": 8,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Do_No_Evil",
+    "directDependents": 7,
+    "indirectDependents": 19,
+    "quests": [
+      {
+        "name": "Animal Magnetism",
+        "page": "/w/Animal_Magnetism",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Restless Ghost",
+        "page": "/w/The_Restless_Ghost",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Ernest the Chicken",
+        "page": "/w/Ernest_the_Chicken",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Priest in Peril",
+        "page": "/w/Priest_in_Peril",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Shadow of the Storm",
+        "page": "/w/Shadow_of_the_Storm",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Demon Slayer",
+        "page": "/w/Demon_Slayer",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Golem",
+        "page": "/w/The_Golem",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Dig Site",
+        "page": "/w/The_Dig_Site",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Tourist Trap",
+        "page": "/w/The_Tourist_Trap",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Temple of Ikov",
+        "page": "/w/Temple_of_Ikov",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Waterfall Quest",
+        "page": "/w/Waterfall_Quest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Troll Stronghold",
+        "page": "/w/Troll_Stronghold",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Death Plateau",
+        "page": "/w/Death_Plateau",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Smoking Kills",
+        "page": "/w/Smoking_Kills",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Icthlarin's Little Helper",
+        "page": "/w/Icthlarin%27s_Little_Helper",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Gertrude's Cat",
+        "page": "/w/Gertrude%27s_Cat",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Diamond in the Rough",
+        "page": "/w/Diamond_in_the_Rough",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Stolen Hearts",
+        "page": "/w/Stolen_Hearts",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Missing My Mummy",
+        "page": "/w/Missing_My_Mummy",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Dealing with Scabaras",
+        "page": "/w/Dealing_with_Scabaras",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Feud",
+        "page": "/w/The_Feud",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Contact!",
+        "page": "/w/Contact!",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Zogre Flesh Eaters",
+        "page": "/w/Zogre_Flesh_Eaters",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Big Chompy Bird Hunting",
+        "page": "/w/Big_Chompy_Bird_Hunting",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Jungle Potion",
+        "page": "/w/Jungle_Potion",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Cook's Assistant",
+        "page": "/w/Cook%27s_Assistant",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Monkey Madness",
+        "page": "/w/Monkey_Madness",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Grand Tree",
+        "page": "/w/The_Grand_Tree",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Tree Gnome Village",
+        "page": "/w/Tree_Gnome_Village",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Garden of Tranquillity",
+        "page": "/w/Garden_of_Tranquillity",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Creature of Fenkenstrain",
+        "page": "/w/Creature_of_Fenkenstrain",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Crocodile Tears",
+        "page": "/w/Crocodile_Tears",
+        "type": "quest",
+        "miniquest": false,
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "construction",
+        "page": "/w/Construction",
+        "level": 64,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "crafting",
+        "page": "/w/Crafting",
+        "level": 68,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "magic",
+        "page": "/w/Magic",
+        "level": 70,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "ranged",
+        "page": "/w/Ranged",
+        "level": 50,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "thieving",
+        "page": "/w/Thieving",
+        "level": 70,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "combat",
+    "name": "Combat",
+    "level": 105,
+    "id": "combat:Combat_level:105",
+    "depth": 8,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 1,
+    "indirectDependents": 9,
+    "quests": [],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "quest",
     "name": "While Guthix Sleeps",
     "miniquest": false,
     "id": "quest:While_Guthix_Sleeps",
@@ -71428,6 +72280,91 @@
         "boostable": false
       }
     ],
+    "achievements": []
+  },
+  {
+    "type": "quest",
+    "name": "Our Man in the North",
+    "miniquest": false,
+    "id": "quest:Our_Man_in_the_North",
+    "depth": 7,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Our_Man_in_the_North",
+    "directDependents": 3,
+    "indirectDependents": 12,
+    "quests": [
+      {
+        "name": "Do No Evil",
+        "page": "/w/Do_No_Evil",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Animal Magnetism",
+        "page": "/w/Animal_Magnetism",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Shadow of the Storm",
+        "page": "/w/Shadow_of_the_Storm",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Smoking Kills",
+        "page": "/w/Smoking_Kills",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Missing My Mummy",
+        "page": "/w/Missing_My_Mummy",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Dealing with Scabaras",
+        "page": "/w/Dealing_with_Scabaras",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Crocodile Tears",
+        "page": "/w/Crocodile_Tears",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Jack of Spades",
+        "page": "/w/The_Jack_of_Spades",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Spirits of the Elid",
+        "page": "/w/Spirits_of_the_Elid",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [],
     "achievements": []
   },
   {
@@ -71608,6 +72545,176 @@
     "achievements": []
   },
   {
+    "type": "quest",
+    "name": "Recipe for Disaster",
+    "miniquest": false,
+    "id": "quest:Recipe_for_Disaster",
+    "depth": 6,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Recipe_for_Disaster",
+    "directDependents": 1,
+    "indirectDependents": 6,
+    "quests": [
+      {
+        "name": "Cook's Assistant",
+        "page": "/w/Cook%27s_Assistant",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Big Chompy Bird Hunting",
+        "page": "/w/Big_Chompy_Bird_Hunting",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Biohazard",
+        "page": "/w/Biohazard",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Demon Slayer",
+        "page": "/w/Demon_Slayer",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Fishing Contest",
+        "page": "/w/Fishing_Contest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Gertrude's Cat",
+        "page": "/w/Gertrude%27s_Cat",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Goblin Diplomacy",
+        "page": "/w/Goblin_Diplomacy",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Horror from the Deep",
+        "page": "/w/Horror_from_the_Deep",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Legends' Quest",
+        "page": "/w/Legends%27_Quest",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Lost City",
+        "page": "/w/Lost_City",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Monkey Madness",
+        "page": "/w/Monkey_Madness",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Murder Mystery",
+        "page": "/w/Murder_Mystery",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Nature Spirit",
+        "page": "/w/Nature_Spirit",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Priest in Peril",
+        "page": "/w/Priest_in_Peril",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "The Restless Ghost",
+        "page": "/w/The_Restless_Ghost",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Shadow of the Storm",
+        "page": "/w/Shadow_of_the_Storm",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      },
+      {
+        "name": "Witch's House",
+        "page": "/w/Witch%27s_House",
+        "type": "quest",
+        "miniquest": false,
+        "required": true
+      }
+    ],
+    "skills": [
+      {
+        "type": "skill",
+        "name": "cooking",
+        "page": "/w/Cooking",
+        "level": 10,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "agility",
+        "page": "/w/Agility",
+        "level": 48,
+        "boostable": false
+      },
+      {
+        "type": "skill",
+        "name": "cooking",
+        "page": "/w/Cooking",
+        "level": 70,
+        "boostable": true
+      },
+      {
+        "type": "skill",
+        "name": "firemaking",
+        "page": "/w/Firemaking",
+        "level": 20,
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
     "type": "achievement",
     "name": "A Clean Slate",
     "id": "achievement:A_Clean_Slate",
@@ -71719,6 +72826,41 @@
         "boostable": false
       }
     ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "A, B, Cithara",
+    "id": "achievement:A,_B,_Cithara",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/A,_B,_Cithara",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "One Piercing Note",
+        "page": "/w/One_Piercing_Note",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      },
+      {
+        "name": "The Restless Ghost",
+        "page": "/w/The_Restless_Ghost",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
     "achievements": []
   },
   {
@@ -71865,6 +73007,78 @@
   },
   {
     "type": "achievement",
+    "name": "Cadarn Tootin'",
+    "id": "achievement:Cadarn_Tootin%27",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Cadarn_Tootin%27",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Plague's End",
+        "page": "/w/Plague%27s_End",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "magic",
+        "level": 50,
+        "type": "skill",
+        "page": "/w/Magic",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Casting Shadows",
+    "id": "achievement:Casting_Shadows",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Casting_Shadows",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Mourning's End Part II",
+        "page": "/w/Mourning%27s_End_Part_II",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      },
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "magic",
+        "level": 52,
+        "type": "skill",
+        "page": "/w/Magic",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
     "name": "Disco Impling",
     "id": "achievement:Disco_Impling",
     "depth": 4,
@@ -71984,6 +73198,42 @@
   },
   {
     "type": "achievement",
+    "name": "Huge Success",
+    "id": "achievement:Huge_Success",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Huge_Success",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "construction",
+        "level": 50,
+        "type": "skill",
+        "page": "/w/Construction",
+        "boostable": false
+      },
+      {
+        "name": "magic",
+        "level": 66,
+        "type": "skill",
+        "page": "/w/Magic",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
     "name": "I Swear I Heard It Scream",
     "id": "achievement:I_Swear_I_Heard_It_Scream",
     "depth": 4,
@@ -72012,6 +73262,35 @@
   },
   {
     "type": "achievement",
+    "name": "Ice-Cold Killer",
+    "id": "achievement:Ice-Cold_Killer",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Ice-Cold_Killer",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "magic",
+        "level": 70,
+        "type": "skill",
+        "page": "/w/Magic",
+        "boostable": false
+      }
+    ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
     "name": "Light Transit",
     "id": "achievement:Light_Transit",
     "depth": 4,
@@ -72023,6 +73302,27 @@
       {
         "name": "Within the Light",
         "page": "/w/Within_the_Light",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Living on the Edge",
+    "id": "achievement:Living_on_the_Edge",
+    "depth": 4,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Living_on_the_Edge",
+    "directDependents": 1,
+    "indirectDependents": 4,
+    "quests": [
+      {
+        "name": "Desert Treasure",
+        "page": "/w/Desert_Treasure",
         "required": true,
         "type": "quest",
         "miniquest": false
@@ -72283,6 +73583,101 @@
   },
   {
     "type": "achievement",
+    "name": "Our Man in the North (achievement)",
+    "id": "achievement:Our_Man_in_the_North_(achievement)",
+    "depth": 3,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Our_Man_in_the_North_(achievement)",
+    "directDependents": 1,
+    "indirectDependents": 3,
+    "quests": [
+      {
+        "name": "Our Man in the North",
+        "page": "/w/Our_Man_in_the_North",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Tirannwn Set Tasks - Easy",
+    "id": "achievement:Tirannwn_Set_Tasks_-_Easy",
+    "depth": 3,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Tirannwn_Set_Tasks_-_Easy",
+    "directDependents": 1,
+    "indirectDependents": 3,
+    "quests": [],
+    "skills": [],
+    "achievements": [
+      {
+        "name": "Arandar-bout Way",
+        "page": "/w/Arandar-bout_Way",
+        "type": "achievement"
+      },
+      {
+        "name": "Blowing Your Own Trumpet",
+        "page": "/w/Blowing_Your_Own_Trumpet",
+        "type": "achievement"
+      },
+      {
+        "name": "Casting Shadows",
+        "page": "/w/Casting_Shadows",
+        "type": "achievement"
+      },
+      {
+        "name": "Driven, Underground",
+        "page": "/w/Driven,_Underground",
+        "type": "achievement"
+      },
+      {
+        "name": "Fairy Liquid",
+        "page": "/w/Fairy_Liquid",
+        "type": "achievement"
+      },
+      {
+        "name": "Iban You from Hurting Me!",
+        "page": "/w/Iban_You_from_Hurting_Me!",
+        "type": "achievement"
+      },
+      {
+        "name": "Leaf Me Alone",
+        "page": "/w/Leaf_Me_Alone",
+        "type": "achievement"
+      },
+      {
+        "name": "Lime Ordeal",
+        "page": "/w/Lime_Ordeal",
+        "type": "achievement"
+      },
+      {
+        "name": "Sick and Twisted",
+        "page": "/w/Sick_and_Twisted",
+        "type": "achievement"
+      },
+      {
+        "name": "Stand Still, Eluned!",
+        "page": "/w/Stand_Still,_Eluned!",
+        "type": "achievement"
+      },
+      {
+        "name": "The Motherlode",
+        "page": "/w/The_Motherlode",
+        "type": "achievement"
+      },
+      {
+        "name": "Tyrassed to Impress",
+        "page": "/w/Tyrassed_to_Impress",
+        "type": "achievement"
+      }
+    ]
+  },
+  {
+    "type": "achievement",
     "name": "Famous",
     "id": "achievement:Famous",
     "depth": 2,
@@ -72456,6 +73851,27 @@
         "boostable": false
       }
     ],
+    "achievements": []
+  },
+  {
+    "type": "achievement",
+    "name": "Ice Ice Chimpy",
+    "id": "achievement:Ice_Ice_Chimpy",
+    "depth": 1,
+    "maxLevel": 75,
+    "page": "https://runescape.wiki/w/Ice_Ice_Chimpy",
+    "directDependents": 1,
+    "indirectDependents": 1,
+    "quests": [
+      {
+        "name": "Do No Evil",
+        "page": "/w/Do_No_Evil",
+        "required": true,
+        "type": "quest",
+        "miniquest": false
+      }
+    ],
+    "skills": [],
     "achievements": []
   },
   {
@@ -73273,588 +74689,6 @@
   },
   {
     "type": "quest",
-    "name": "Haunted Mine",
-    "miniquest": false,
-    "id": "quest:Haunted_Mine",
-    "depth": 12,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Haunted_Mine",
-    "directDependents": 4,
-    "indirectDependents": 62,
-    "quests": [
-      {
-        "name": "Priest in Peril",
-        "page": "/w/Priest_in_Peril",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Branches of Darkmeyer",
-        "page": "/w/The_Branches_of_Darkmeyer",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      },
-      {
-        "name": "The Darkness of Hallowvale",
-        "page": "/w/The_Darkness_of_Hallowvale",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 15,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "crafting",
-        "page": "/w/Crafting",
-        "level": 35,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "As a First Resort",
-    "miniquest": false,
-    "id": "quest:As_a_First_Resort",
-    "depth": 11,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/As_a_First_Resort",
-    "directDependents": 8,
-    "indirectDependents": 58,
-    "quests": [
-      {
-        "name": "Zogre Flesh Eaters",
-        "page": "/w/Zogre_Flesh_Eaters",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Big Chompy Bird Hunting",
-        "page": "/w/Big_Chompy_Bird_Hunting",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Jungle Potion",
-        "page": "/w/Jungle_Potion",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Haunted Mine",
-        "page": "/w/Haunted_Mine",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Lost Tribe",
-        "page": "/w/The_Lost_Tribe",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Dragon Slayer",
-        "page": "/w/Dragon_Slayer",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Tai Bwo Wannai Trio",
-        "page": "/w/Tai_Bwo_Wannai_Trio",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "firemaking",
-        "page": "/w/Firemaking",
-        "level": 51,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "hunter",
-        "page": "/w/Hunter",
-        "level": 48,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "woodcutting",
-        "page": "/w/Woodcutting",
-        "level": 58,
-        "boostable": false
-      },
-      {
-        "name": "attack",
-        "type": "skill",
-        "page": "/w/Attack",
-        "level": 99,
-        "boostable": false
-      },
-      {
-        "name": "strength",
-        "type": "skill",
-        "page": "/w/Attack",
-        "level": 99,
-        "boostable": false
-      },
-      {
-        "name": "attack",
-        "type": "skill",
-        "page": "/w/Attack",
-        "level": 65,
-        "boostable": false
-      },
-      {
-        "name": "strength",
-        "type": "skill",
-        "page": "/w/Strength",
-        "level": 65,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Desert Treasure",
-    "miniquest": false,
-    "id": "quest:Desert_Treasure",
-    "depth": 10,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Desert_Treasure",
-    "directDependents": 15,
-    "indirectDependents": 50,
-    "quests": [
-      {
-        "name": "The Dig Site",
-        "page": "/w/The_Dig_Site",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Tourist Trap",
-        "page": "/w/The_Tourist_Trap",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Temple of Ikov",
-        "page": "/w/Temple_of_Ikov",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Priest in Peril",
-        "page": "/w/Priest_in_Peril",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Waterfall Quest",
-        "page": "/w/Waterfall_Quest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Troll Stronghold",
-        "page": "/w/Troll_Stronghold",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Death Plateau",
-        "page": "/w/Death_Plateau",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "In Search of the Myreque",
-        "page": "/w/In_Search_of_the_Myreque",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      },
-      {
-        "name": "Eadgar's Ruse",
-        "page": "/w/Eadgar%27s_Ruse",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      },
-      {
-        "name": "As a First Resort",
-        "page": "/w/As_a_First_Resort",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "firemaking",
-        "page": "/w/Firemaking",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "magic",
-        "page": "/w/Magic",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "slayer",
-        "page": "/w/Slayer",
-        "level": 10,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "thieving",
-        "page": "/w/Thieving",
-        "level": 53,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "woodcutting",
-        "page": "/w/Woodcutting",
-        "level": 75,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 47,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "mining",
-        "page": "/w/Mining",
-        "level": 50,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Do No Evil",
-    "miniquest": false,
-    "id": "quest:Do_No_Evil",
-    "depth": 8,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Do_No_Evil",
-    "directDependents": 7,
-    "indirectDependents": 19,
-    "quests": [
-      {
-        "name": "Animal Magnetism",
-        "page": "/w/Animal_Magnetism",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Restless Ghost",
-        "page": "/w/The_Restless_Ghost",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Ernest the Chicken",
-        "page": "/w/Ernest_the_Chicken",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Priest in Peril",
-        "page": "/w/Priest_in_Peril",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Shadow of the Storm",
-        "page": "/w/Shadow_of_the_Storm",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Demon Slayer",
-        "page": "/w/Demon_Slayer",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Golem",
-        "page": "/w/The_Golem",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Dig Site",
-        "page": "/w/The_Dig_Site",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Tourist Trap",
-        "page": "/w/The_Tourist_Trap",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Temple of Ikov",
-        "page": "/w/Temple_of_Ikov",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Waterfall Quest",
-        "page": "/w/Waterfall_Quest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Troll Stronghold",
-        "page": "/w/Troll_Stronghold",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Death Plateau",
-        "page": "/w/Death_Plateau",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Smoking Kills",
-        "page": "/w/Smoking_Kills",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Icthlarin's Little Helper",
-        "page": "/w/Icthlarin%27s_Little_Helper",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Gertrude's Cat",
-        "page": "/w/Gertrude%27s_Cat",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Diamond in the Rough",
-        "page": "/w/Diamond_in_the_Rough",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Stolen Hearts",
-        "page": "/w/Stolen_Hearts",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Missing My Mummy",
-        "page": "/w/Missing_My_Mummy",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Dealing with Scabaras",
-        "page": "/w/Dealing_with_Scabaras",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Feud",
-        "page": "/w/The_Feud",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Contact!",
-        "page": "/w/Contact!",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Zogre Flesh Eaters",
-        "page": "/w/Zogre_Flesh_Eaters",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Big Chompy Bird Hunting",
-        "page": "/w/Big_Chompy_Bird_Hunting",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Jungle Potion",
-        "page": "/w/Jungle_Potion",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Cook's Assistant",
-        "page": "/w/Cook%27s_Assistant",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Monkey Madness",
-        "page": "/w/Monkey_Madness",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Grand Tree",
-        "page": "/w/The_Grand_Tree",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Tree Gnome Village",
-        "page": "/w/Tree_Gnome_Village",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Garden of Tranquillity",
-        "page": "/w/Garden_of_Tranquillity",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Creature of Fenkenstrain",
-        "page": "/w/Creature_of_Fenkenstrain",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Crocodile Tears",
-        "page": "/w/Crocodile_Tears",
-        "type": "quest",
-        "miniquest": false,
-        "required": false
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "construction",
-        "page": "/w/Construction",
-        "level": 64,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "crafting",
-        "page": "/w/Crafting",
-        "level": 68,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "magic",
-        "page": "/w/Magic",
-        "level": 70,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "ranged",
-        "page": "/w/Ranged",
-        "level": 50,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "thieving",
-        "page": "/w/Thieving",
-        "level": 70,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
     "name": "Nomad's Requiem",
     "miniquest": false,
     "id": "quest:Nomad%27s_Requiem",
@@ -74008,91 +74842,6 @@
         "boostable": false
       }
     ],
-    "achievements": []
-  },
-  {
-    "type": "quest",
-    "name": "Our Man in the North",
-    "miniquest": false,
-    "id": "quest:Our_Man_in_the_North",
-    "depth": 7,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Our_Man_in_the_North",
-    "directDependents": 3,
-    "indirectDependents": 12,
-    "quests": [
-      {
-        "name": "Do No Evil",
-        "page": "/w/Do_No_Evil",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Animal Magnetism",
-        "page": "/w/Animal_Magnetism",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Shadow of the Storm",
-        "page": "/w/Shadow_of_the_Storm",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Smoking Kills",
-        "page": "/w/Smoking_Kills",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Missing My Mummy",
-        "page": "/w/Missing_My_Mummy",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Dealing with Scabaras",
-        "page": "/w/Dealing_with_Scabaras",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Crocodile Tears",
-        "page": "/w/Crocodile_Tears",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Jack of Spades",
-        "page": "/w/The_Jack_of_Spades",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Spirits of the Elid",
-        "page": "/w/Spirits_of_the_Elid",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [],
     "achievements": []
   },
   {
@@ -74275,211 +75024,6 @@
     "achievements": []
   },
   {
-    "type": "quest",
-    "name": "Recipe for Disaster",
-    "miniquest": false,
-    "id": "quest:Recipe_for_Disaster",
-    "depth": 6,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Recipe_for_Disaster",
-    "directDependents": 1,
-    "indirectDependents": 6,
-    "quests": [
-      {
-        "name": "Cook's Assistant",
-        "page": "/w/Cook%27s_Assistant",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Big Chompy Bird Hunting",
-        "page": "/w/Big_Chompy_Bird_Hunting",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Biohazard",
-        "page": "/w/Biohazard",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Demon Slayer",
-        "page": "/w/Demon_Slayer",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Fishing Contest",
-        "page": "/w/Fishing_Contest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Gertrude's Cat",
-        "page": "/w/Gertrude%27s_Cat",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Goblin Diplomacy",
-        "page": "/w/Goblin_Diplomacy",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Horror from the Deep",
-        "page": "/w/Horror_from_the_Deep",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Legends' Quest",
-        "page": "/w/Legends%27_Quest",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Lost City",
-        "page": "/w/Lost_City",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Monkey Madness",
-        "page": "/w/Monkey_Madness",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Murder Mystery",
-        "page": "/w/Murder_Mystery",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Nature Spirit",
-        "page": "/w/Nature_Spirit",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Priest in Peril",
-        "page": "/w/Priest_in_Peril",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "The Restless Ghost",
-        "page": "/w/The_Restless_Ghost",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Shadow of the Storm",
-        "page": "/w/Shadow_of_the_Storm",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      },
-      {
-        "name": "Witch's House",
-        "page": "/w/Witch%27s_House",
-        "type": "quest",
-        "miniquest": false,
-        "required": true
-      }
-    ],
-    "skills": [
-      {
-        "type": "skill",
-        "name": "cooking",
-        "page": "/w/Cooking",
-        "level": 10,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "agility",
-        "page": "/w/Agility",
-        "level": 48,
-        "boostable": false
-      },
-      {
-        "type": "skill",
-        "name": "cooking",
-        "page": "/w/Cooking",
-        "level": 70,
-        "boostable": true
-      },
-      {
-        "type": "skill",
-        "name": "firemaking",
-        "page": "/w/Firemaking",
-        "level": 20,
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "A, B, Cithara",
-    "id": "achievement:A,_B,_Cithara",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/A,_B,_Cithara",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "One Piercing Note",
-        "page": "/w/One_Piercing_Note",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      },
-      {
-        "name": "The Restless Ghost",
-        "page": "/w/The_Restless_Ghost",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
     "type": "achievement",
     "name": "Alcrabholic",
     "id": "achievement:Alcrabholic",
@@ -74503,107 +75047,6 @@
         "level": 50,
         "type": "skill",
         "page": "/w/Dungeoneering",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Cadarn Tootin'",
-    "id": "achievement:Cadarn_Tootin%27",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Cadarn_Tootin%27",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Plague's End",
-        "page": "/w/Plague%27s_End",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "magic",
-        "level": 50,
-        "type": "skill",
-        "page": "/w/Magic",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Casting Shadows",
-    "id": "achievement:Casting_Shadows",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Casting_Shadows",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Mourning's End Part II",
-        "page": "/w/Mourning%27s_End_Part_II",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      },
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "magic",
-        "level": 52,
-        "type": "skill",
-        "page": "/w/Magic",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Detarnation",
-    "id": "achievement:Detarnation",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Detarnation",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Haunted Mine",
-        "page": "/w/Haunted_Mine",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "slayer",
-        "level": 40,
-        "type": "skill",
-        "page": "/w/Slayer",
         "boostable": false
       }
     ],
@@ -74653,92 +75096,6 @@
   },
   {
     "type": "achievement",
-    "name": "Huge Success",
-    "id": "achievement:Huge_Success",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Huge_Success",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "construction",
-        "level": 50,
-        "type": "skill",
-        "page": "/w/Construction",
-        "boostable": false
-      },
-      {
-        "name": "magic",
-        "level": 66,
-        "type": "skill",
-        "page": "/w/Magic",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Ice-Cold Killer",
-    "id": "achievement:Ice-Cold_Killer",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Ice-Cold_Killer",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "magic",
-        "level": 70,
-        "type": "skill",
-        "page": "/w/Magic",
-        "boostable": false
-      }
-    ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Living on the Edge",
-    "id": "achievement:Living_on_the_Edge",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Living_on_the_Edge",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Desert Treasure",
-        "page": "/w/Desert_Treasure",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
     "name": "Nomadness",
     "id": "achievement:Nomadness",
     "depth": 4,
@@ -74777,35 +75134,6 @@
       }
     ],
     "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Polterheist",
-    "id": "achievement:Polterheist",
-    "depth": 4,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Polterheist",
-    "directDependents": 1,
-    "indirectDependents": 4,
-    "quests": [
-      {
-        "name": "Haunted Mine",
-        "page": "/w/Haunted_Mine",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [
-      {
-        "name": "mining",
-        "level": 30,
-        "type": "skill",
-        "page": "/w/Mining",
-        "boostable": false
-      }
-    ],
     "achievements": []
   },
   {
@@ -75199,215 +75527,6 @@
   },
   {
     "type": "achievement",
-    "name": "Morytania Set Tasks - Medium",
-    "id": "achievement:Morytania_Set_Tasks_-_Medium",
-    "depth": 3,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Morytania_Set_Tasks_-_Medium",
-    "directDependents": 1,
-    "indirectDependents": 3,
-    "quests": [],
-    "skills": [],
-    "achievements": [
-      {
-        "name": "Ad-Myre The Goods",
-        "page": "/w/Ad-Myre_The_Goods",
-        "type": "achievement"
-      },
-      {
-        "name": "Barking Up the Wrong Tree",
-        "page": "/w/Barking_Up_the_Wrong_Tree",
-        "type": "achievement"
-      },
-      {
-        "name": "Brain Bending",
-        "page": "/w/Brain_Bending",
-        "type": "achievement"
-      },
-      {
-        "name": "Charter A Course",
-        "page": "/w/Charter_A_Course",
-        "type": "achievement"
-      },
-      {
-        "name": "Don't Stop Me If I Start To Ramble",
-        "page": "/w/Don%27t_Stop_Me_If_I_Start_To_Ramble",
-        "type": "achievement"
-      },
-      {
-        "name": "Finding Your Balance",
-        "page": "/w/Finding_Your_Balance",
-        "type": "achievement"
-      },
-      {
-        "name": "Flamtaer Will Get You Everywhere",
-        "page": "/w/Flamtaer_Will_Get_You_Everywhere",
-        "type": "achievement"
-      },
-      {
-        "name": "Fun Guy But Bitter",
-        "page": "/w/Fun_Guy_But_Bitter",
-        "type": "achievement"
-      },
-      {
-        "name": "Gate Spectre-ations",
-        "page": "/w/Gate_Spectre-ations",
-        "type": "achievement"
-      },
-      {
-        "name": "I Wonder How Far It Ghost?",
-        "page": "/w/I_Wonder_How_Far_It_Ghost%3F",
-        "type": "achievement"
-      },
-      {
-        "name": "Izzy Wizzy Let's Get Lizzy",
-        "page": "/w/Izzy_Wizzy_Let%27s_Get_Lizzy",
-        "type": "achievement"
-      },
-      {
-        "name": "Obvious Forgery",
-        "page": "/w/Obvious_Forgery",
-        "type": "achievement"
-      },
-      {
-        "name": "Plenty Mort Where That Came From",
-        "page": "/w/Plenty_Mort_Where_That_Came_From",
-        "type": "achievement"
-      },
-      {
-        "name": "Polterheist",
-        "page": "/w/Polterheist",
-        "type": "achievement"
-      },
-      {
-        "name": "Ready? Trek!",
-        "page": "/w/Ready%3F_Trek!",
-        "type": "achievement"
-      },
-      {
-        "name": "The Beer Inn-spectre",
-        "page": "/w/The_Beer_Inn-spectre",
-        "type": "achievement"
-      },
-      {
-        "name": "The Higher, The Badder",
-        "page": "/w/The_Higher,_The_Badder",
-        "type": "achievement"
-      },
-      {
-        "name": "The Yeast They Can Do",
-        "page": "/w/The_Yeast_They_Can_Do",
-        "type": "achievement"
-      },
-      {
-        "name": "Travelling On The Slime Trail",
-        "page": "/w/Travelling_On_The_Slime_Trail",
-        "type": "achievement"
-      },
-      {
-        "name": "Who You Gonna Ring?",
-        "page": "/w/Who_You_Gonna_Ring%3F",
-        "type": "achievement"
-      }
-    ]
-  },
-  {
-    "type": "achievement",
-    "name": "Our Man in the North (achievement)",
-    "id": "achievement:Our_Man_in_the_North_(achievement)",
-    "depth": 3,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Our_Man_in_the_North_(achievement)",
-    "directDependents": 1,
-    "indirectDependents": 3,
-    "quests": [
-      {
-        "name": "Our Man in the North",
-        "page": "/w/Our_Man_in_the_North",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Tirannwn Set Tasks - Easy",
-    "id": "achievement:Tirannwn_Set_Tasks_-_Easy",
-    "depth": 3,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Tirannwn_Set_Tasks_-_Easy",
-    "directDependents": 1,
-    "indirectDependents": 3,
-    "quests": [],
-    "skills": [],
-    "achievements": [
-      {
-        "name": "Arandar-bout Way",
-        "page": "/w/Arandar-bout_Way",
-        "type": "achievement"
-      },
-      {
-        "name": "Blowing Your Own Trumpet",
-        "page": "/w/Blowing_Your_Own_Trumpet",
-        "type": "achievement"
-      },
-      {
-        "name": "Casting Shadows",
-        "page": "/w/Casting_Shadows",
-        "type": "achievement"
-      },
-      {
-        "name": "Driven, Underground",
-        "page": "/w/Driven,_Underground",
-        "type": "achievement"
-      },
-      {
-        "name": "Fairy Liquid",
-        "page": "/w/Fairy_Liquid",
-        "type": "achievement"
-      },
-      {
-        "name": "Iban You from Hurting Me!",
-        "page": "/w/Iban_You_from_Hurting_Me!",
-        "type": "achievement"
-      },
-      {
-        "name": "Leaf Me Alone",
-        "page": "/w/Leaf_Me_Alone",
-        "type": "achievement"
-      },
-      {
-        "name": "Lime Ordeal",
-        "page": "/w/Lime_Ordeal",
-        "type": "achievement"
-      },
-      {
-        "name": "Sick and Twisted",
-        "page": "/w/Sick_and_Twisted",
-        "type": "achievement"
-      },
-      {
-        "name": "Stand Still, Eluned!",
-        "page": "/w/Stand_Still,_Eluned!",
-        "type": "achievement"
-      },
-      {
-        "name": "The Motherlode",
-        "page": "/w/The_Motherlode",
-        "type": "achievement"
-      },
-      {
-        "name": "Tyrassed to Impress",
-        "page": "/w/Tyrassed_to_Impress",
-        "type": "achievement"
-      }
-    ]
-  },
-  {
-    "type": "achievement",
     "name": "EEEEAGLE!",
     "id": "achievement:EEEEAGLE!",
     "depth": 1,
@@ -75447,27 +75566,6 @@
         "boostable": false
       }
     ],
-    "achievements": []
-  },
-  {
-    "type": "achievement",
-    "name": "Ice Ice Chimpy",
-    "id": "achievement:Ice_Ice_Chimpy",
-    "depth": 1,
-    "maxLevel": 76,
-    "page": "https://runescape.wiki/w/Ice_Ice_Chimpy",
-    "directDependents": 1,
-    "indirectDependents": 1,
-    "quests": [
-      {
-        "name": "Do No Evil",
-        "page": "/w/Do_No_Evil",
-        "required": true,
-        "type": "quest",
-        "miniquest": false
-      }
-    ],
-    "skills": [],
     "achievements": []
   },
   {
@@ -77645,6 +77743,20 @@
         "boostable": false
       }
     ],
+    "achievements": []
+  },
+  {
+    "type": "combat",
+    "name": "Combat",
+    "level": 110,
+    "id": "combat:Combat_level:110",
+    "depth": 8,
+    "maxLevel": 78,
+    "page": "https://runescape.wiki/w/Combat_level",
+    "directDependents": 4,
+    "indirectDependents": 18,
+    "quests": [],
+    "skills": [],
     "achievements": []
   },
   {

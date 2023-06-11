@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import {getRequirements} from './compreqs';
+import {getRequirements} from './requirements';
 import {getProfileWithQuests} from './rsapi';
 import {writeFileSync} from 'fs';
 
