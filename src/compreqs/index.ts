@@ -5,7 +5,6 @@ import {
   getCompletionistCapeAchievementsWithRequirements,
 } from './achievements';
 import {QuestRequirement, getQuestsAndQuestNames} from './quests';
-import {writeFileSync} from 'fs';
 import {WIKI_URL_BUILDER} from '../rswiki';
 
 /**
@@ -210,7 +209,3 @@ function findMaxDepth(
       findMaxDepth(dep, getRequirement, depth + 1, new Set(seen))
     );
 }
-
-getRequirements().then(reqs =>
-  writeFileSync('./requirements.json', JSON.stringify(reqs, null, 2))
-);

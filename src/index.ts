@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import {getRequirements} from './compreqs';
 import {getProfileWithQuests} from './rsapi';
+import {writeFileSync} from 'fs';
 
 const app = express();
 
@@ -21,15 +22,24 @@ app.get('/:user', async (req, res) => {
   }
 });
 
+let response: ReturnType<typeof getRequirements> | undefined;
 app.get('/', async (_, res) => {
-  const response = await getRequirements().catch(console.error);
   if (!response) {
+    response = getRequirements();
+  }
+  const r = await response;
+  if (!r) {
     res.status(400).send('Nothing interesting happens.');
   } else {
-    res.send(response);
+    res.send(r);
   }
 });
 
 app.listen(process.env.PORT || 2898, () => {
   console.log('Welcome to RuneScape.');
+});
+
+getRequirements().then(reqs => {
+  response = Promise.resolve(reqs);
+  writeFileSync('./requirements.json', JSON.stringify(reqs, null, 2));
 });
