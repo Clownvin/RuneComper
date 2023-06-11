@@ -34,8 +34,14 @@ export class AndOrMap<T> {
     return this.#values.length;
   }
 
-  add(...values: AndOrElement<T>[]) {
-    this.#values.push(...values);
+  add(...values: (AndOrElement<T> | AndOrMap<T>)[]) {
+    for (const value of values) {
+      if (value instanceof AndOrMap) {
+        this.#values.push(...value.#values);
+      } else {
+        this.#values.push(value);
+      }
+    }
   }
 
   *[Symbol.iterator](): Generator<T, void, unknown> {
