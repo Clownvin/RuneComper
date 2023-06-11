@@ -228,7 +228,7 @@ async function getQuestWithRequirements(
                 }
                 if (
                   text === quest.name ||
-                  requirement.find(quest => quest.name === text)
+                  requirement.find(quest => quest.name === text, true)
                 ) {
                   return undefined;
                 }
@@ -258,10 +258,12 @@ async function getQuestWithRequirements(
         } else if (or) {
           or.or.add(...(Array.isArray(req) ? req : [req]));
           console.log('Adding or', JSON.stringify(or, null, 2));
-          requirement.add(or);
+          requirement[required ? 'required' : 'recommended'].add(or);
           or = undefined;
         } else {
-          requirement.add(...(Array.isArray(req) ? req : [req]));
+          requirement[required ? 'required' : 'recommended'].add(
+            ...(Array.isArray(req) ? req : [req])
+          );
         }
 
         return undefined;

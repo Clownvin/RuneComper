@@ -20,7 +20,7 @@ export class SkillRequirement extends Requirement<'skill'> implements ISkill {
     name,
     level,
     page = getSkillPage(name),
-    requirements = [
+    required = [
       {
         name,
         level: level - 1,
@@ -35,7 +35,7 @@ export class SkillRequirement extends Requirement<'skill'> implements ISkill {
     level: number;
     page?: string;
   }) {
-    super({...rest, type: 'skill', name, page, requirements});
+    super({...rest, type: 'skill', name, page, required});
     this.name = name;
     this.level = level;
     this.id = getRequirementID(this);
@@ -47,14 +47,14 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
   for (const skill of SKILLS) {
     const {page, maxLevel} = await getSkillInfo(skill);
     reqs.push(
-      new SkillRequirement({name: skill, level: 1, page, requirements: []})
+      new SkillRequirement({name: skill, level: 1, page, required: []})
     );
     for (let level = 2; level <= maxLevel; level++) {
       const req = new SkillRequirement({name: skill, level, page});
 
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;
-        req.add(
+        req.required.add(
           ...skills.map(name => ({
             name,
             level,

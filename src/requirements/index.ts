@@ -8,6 +8,8 @@ import {QuestRequirement, getQuestsAndQuestNames} from './quests';
 import {WIKI_URL_BUILDER} from '../rswiki';
 import {CombatRequirement} from './combat';
 import {avgLevelForCombatLvl} from '../model/runescape';
+import {omit} from 'lodash';
+// import {AndOrMap} from '../util/andOrMap';
 
 /**
  * TODOs:
@@ -21,9 +23,13 @@ type Requirement =
 
 type MappedRequirement = Requirement & {
   depth: number;
+  depthRecommended: number;
   maxLevel: number;
+  maxLevelRecommended: number;
   directDependents: Set<RequirementID>;
-  indirectDependents: Set<RequirementID>;
+  directDependentsRecommended: Set<RequirementID>;
+  // indirectDependents: Set<RequirementID>;
+  // indirectDependentsRecommended: Set<RequirementID>;
 };
 
 type GetRequirement = (
@@ -34,9 +40,13 @@ function convertToMapped(
   req: Requirement,
   options: Omit<MappedRequirement, keyof Requirement> = {
     depth: -Infinity,
+    depthRecommended: -Infinity,
     maxLevel: 0,
+    maxLevelRecommended: 0,
     directDependents: new Set(),
-    indirectDependents: new Set(),
+    directDependentsRecommended: new Set(),
+    // indirectDependents: new Set(),
+    // indirectDependentsRecommended: new Set(),
   }
 ): MappedRequirement {
   return Object.assign(req, options);
@@ -56,7 +66,7 @@ export async function getRequirements() {
 
   //TODO: Currently adding all quests to Quest Cape,
   //should be adding to MQC and True Trim, etc
-  questCape.add(...quests.map(q => ({...q, required: true})));
+  questCape.addRequired(...quests.map(q => ({...q, required: true})));
 
   const trimmed = convertToMapped(t);
   const skills = await getSkillRequirements();
@@ -87,7 +97,7 @@ export async function getRequirements() {
   findMaxDepth(trimmed, getReq);
   console.timeEnd('depth');
   console.time('maxLevel');
-  findMaxLevel(trimmed, getReq);
+  findMaxLevels(trimmed, getReq);
   console.timeEnd('maxLevel');
   console.time('depCount');
   findDependentCounts(trimmed, getReq);
@@ -96,34 +106,27 @@ export async function getRequirements() {
   reqsById.set(trimmed.id, trimmed);
 
   const sorted = Array.from(reqsById)
-    .map(
-      ([
-        ,
-        {
-          quests,
-          skills,
-          achievements,
-          directDependents,
-          indirectDependents,
-          page,
-          ...req
-        },
-      ]) => ({
-        ...req,
-        page: WIKI_URL_BUILDER.build(page),
-        directDependents: directDependents.size,
-        indirectDependents: indirectDependents.size,
-        quests,
-        skills,
-        achievements,
-      })
-    )
+    .map(([, req]) => ({
+      ...omit(
+        req,
+        'required',
+        'recommended',
+        'depthRecommended',
+        'directDependentsRecommended'
+      ),
+      page: WIKI_URL_BUILDER.build(req.page),
+      directDependents: req.directDependents.size,
+      // indirectDependents: req.indirectDependents.size,
+      quests: req.getQuests(true),
+      skills: req.getSkills(true),
+      achievements: req.getAchievements(true),
+    }))
     .sort(
       (a, b) =>
         a.maxLevel - b.maxLevel ||
         b.depth - a.depth ||
         b.directDependents - a.directDependents ||
-        b.indirectDependents - a.indirectDependents ||
+        // b.indirectDependents - a.indirectDependents ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
@@ -160,34 +163,48 @@ function typePriority(type: Requirement['type']) {
   }
 }
 
-function findMaxLevel(
+function findMaxLevels(
   req: MappedRequirement,
   getRequirement: GetRequirement,
   seen = new Set<RequirementID>()
 ) {
   if (seen.has(req.id)) {
-    return req.maxLevel;
+    return req;
   }
 
   seen.add(req.id);
 
-  req.maxLevel = req.map(getRequirement).reduce(
-    dep =>
-      findMaxLevel(
-        dep,
-        getRequirement,
-        //NOTE: May want to new Set(seen)
-        seen
-      ),
-    {and: Math.max, or: Math.min},
-    req.type === 'skill'
-      ? req.level
-      : req.type === 'combat'
-      ? avgLevelForCombatLvl(req.level)
-      : 0
+  function helper(reqs: typeof req['required'], recommended: boolean) {
+    return reqs.map(getRequirement).reduce(
+      dep => {
+        const levels = findMaxLevels(
+          dep,
+          getRequirement,
+          //NOTE: May want to new Set(seen)
+          seen
+        );
+        if (recommended) {
+          return levels.maxLevelRecommended;
+        } else {
+          return levels.maxLevel;
+        }
+      },
+      {and: Math.max, or: Math.min},
+      req.type === 'skill'
+        ? req.level
+        : req.type === 'combat'
+        ? avgLevelForCombatLvl(req.level)
+        : 0
+    );
+  }
+
+  req.maxLevel = helper(req.required, false);
+  req.maxLevelRecommended = Math.max(
+    req.maxLevel,
+    helper(req.recommended, true)
   );
 
-  return req.maxLevel;
+  return req;
 }
 
 // TODO: Slow! Spends a lot of time adding to sets, I think
@@ -201,11 +218,21 @@ function findDependentCounts(
   }
   seen.add(req.id);
 
-  req.map(getRequirement).forEach(dep => {
-    dep.directDependents.add(req.id);
-    seen.forEach(id => dep.indirectDependents.add(id));
-    findDependentCounts(dep, getRequirement, new Set(seen));
-  });
+  function helper(reqs: typeof req['required'], recommended: boolean) {
+    reqs.map(getRequirement).forEach(dep => {
+      if (recommended) {
+        dep.directDependentsRecommended.add(req.id);
+        // seen.forEach(id => dep.indirectDependentsRecommended.add(id));
+      } else {
+        dep.directDependents.add(req.id);
+        // seen.forEach(id => dep.indirectDependents.add(id));
+      }
+      findDependentCounts(dep, getRequirement, new Set(seen));
+    });
+  }
+
+  helper(req.required, false);
+  helper(req.recommended, true);
 }
 
 function findMaxDepth(
@@ -224,7 +251,7 @@ function findMaxDepth(
   seen.add(req.id);
 
   return req
-    .map(getRequirement)
+    .map(req => getRequirement(req))
     .forEach(dep =>
       findMaxDepth(dep, getRequirement, depth + 1, new Set(seen))
     );

@@ -59,7 +59,7 @@ export async function getCompletionistCapeAchievementsWithRequirements(
           return;
         }
         reqsWithoutReqs.push(requirement);
-      });
+      }, true);
     });
   } while (reqsWithoutReqs.length > 0);
 
@@ -69,7 +69,7 @@ export async function getCompletionistCapeAchievementsWithRequirements(
     trimmed: new AchievementRequirement({
       name: trimmed.name,
       page: trimmed.page,
-      requirements: reqsWithReqs
+      required: reqsWithReqs
         .filter(r => required.has(r.name))
         .map(({name, page}) => ({
           name,
@@ -204,15 +204,14 @@ async function getAchievementWithNormalRequirements(
               const page = (a.attr('href') || '').split('#')[0];
 
               if (questNames.has(name as string)) {
-                requirement.add({
+                requirement.addRequired({
                   name,
                   page,
                   type: 'quest',
-                  required: true,
                   miniquest: miniquestNames.has(name),
                 });
               } else {
-                requirement.add({
+                requirement.addRequired({
                   name,
                   page,
                   type: 'achievement',
@@ -232,7 +231,7 @@ async function getAchievementWithNormalRequirements(
       if (!isSkill(skill)) {
         return;
       }
-      requirement.add({
+      requirement.addRequired({
         name: skill,
         level: parseInt(level) || 1,
         type: 'skill',
@@ -246,10 +245,9 @@ async function getAchievementWithNormalRequirements(
         return;
       }
       if (questNames.has(name)) {
-        requirement.add({
+        requirement.addRequired({
           name,
           page,
-          required: true,
           type: 'quest',
           miniquest: miniquestNames.has(name),
         });
@@ -257,7 +255,7 @@ async function getAchievementWithNormalRequirements(
         if (name.includes('Peril')) {
           console.log('Achieve name?', name);
         }
-        requirement.add({
+        requirement.addRequired({
           name,
           page,
           type: 'achievement',
