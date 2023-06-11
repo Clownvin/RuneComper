@@ -1,6 +1,11 @@
 import {isSkill} from '../model/runescape';
 import {getSkillPage, loadWikiPage} from '../rswiki';
-import {IAchievement, Requirement, getRequirementID} from './requirement';
+import {
+  IAchievement,
+  IRequirement,
+  Requirement,
+  getRequirementID,
+} from './requirement';
 
 export class AchievementRequirement
   extends Requirement<'achievement'>
@@ -46,7 +51,10 @@ export async function getCompletionistCapeAchievementsWithRequirements(
       requirement.forEach(requirement => {
         if (
           reqsWithReqs.find(existing => existing.page === requirement.page) ||
-          reqsWithoutReqs.find(existing => existing.page === requirement.page)
+          reqsWithoutReqs.find(
+            existing => existing.page === requirement.page
+          ) ||
+          questNames.has(requirement.name)
         ) {
           return;
         }
@@ -55,15 +63,19 @@ export async function getCompletionistCapeAchievementsWithRequirements(
     });
   } while (reqsWithoutReqs.length > 0);
 
+  const required = new Set(achievements.map(a => a.name));
+
   return {
     trimmed: new AchievementRequirement({
       name: trimmed.name,
       page: trimmed.page,
-      requirements: reqsWithReqs.map(({name, page}) => ({
-        name,
-        page,
-        type: 'achievement',
-      })),
+      requirements: reqsWithReqs
+        .filter(r => required.has(r.name))
+        .map(({name, page}) => ({
+          name,
+          page,
+          type: 'achievement',
+        })),
     }),
     achievements: reqsWithReqs,
   };
@@ -74,7 +86,7 @@ const TRIMMED_PAGE = '/w/Trimmed_Completionist_Cape_(achievement)';
 async function getCompletionistCapeAchievements() {
   const $ = await loadWikiPage(TRIMMED_PAGE);
 
-  const achievements: {name: string; page: string}[] = [];
+  const achievements: IRequirement[] = [];
 
   const achievementRows = $('html body div#bodyContent table.wikitable tbody');
   achievementRows.find('tr').each((_, e) => {
@@ -89,6 +101,7 @@ async function getCompletionistCapeAchievements() {
     achievements.push({
       name: name,
       page: link,
+      type: 'achievement',
     });
   });
 
@@ -104,14 +117,11 @@ async function getCompletionistCapeAchievements() {
 }
 
 async function getAchievementWithRequirements(
-  achievement: {
-    name: string;
-    page: string;
-  },
+  requirement: IRequirement,
   questNames: Set<string>,
   miniquestNames: Set<string>
 ): Promise<AchievementRequirement> {
-  switch (achievement.name) {
+  switch (requirement.name) {
     //Achievements marked as no requirements
     // case 'Big Chinchompa':
     // case 'Stay Safe':
@@ -132,7 +142,7 @@ async function getAchievementWithRequirements(
     //   };
     default:
       return getAchievementWithNormalRequirements(
-        achievement,
+        requirement,
         questNames,
         miniquestNames
       );
@@ -243,6 +253,9 @@ async function getAchievementWithNormalRequirements(
           miniquest: miniquestNames.has(name),
         });
       } else if (!nonAchievs.has(name)) {
+        if (name.includes('Peril')) {
+          console.log('Achieve name?', name);
+        }
         requirement.add({
           name,
           page,
