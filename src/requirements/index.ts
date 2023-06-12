@@ -125,9 +125,10 @@ export async function getRequirements() {
     .sort(
       (a, b) =>
         a.maxLevel - b.maxLevel ||
-        b.depth - a.depth ||
         b.directDependents - a.directDependents ||
         b.indirectDependents - a.indirectDependents ||
+        a.maxLevelRecommended - b.maxLevelRecommended ||
+        b.depth - a.depth ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );

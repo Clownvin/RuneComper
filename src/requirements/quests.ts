@@ -2,6 +2,7 @@ import {getSkillPage, loadWikiPage} from '../rswiki';
 import {
   IQuest,
   IRequirements,
+  ISKillBoostable,
   Requirement,
   RequirementID,
   getRequirementID,
@@ -74,7 +75,7 @@ export async function getMiniquests() {
 
   const quests: IQuest[] = [];
 
-  const questRows = $('html body div#bodyContent table[width="100%"] tbody');
+  const questRows = $('html body div#bodyContent table tbody');
   questRows.find('tr').each((_, e) => {
     const a = $(e).find('td a');
     const name = a.attr('title');
@@ -114,14 +115,30 @@ async function getQuestWithRequirements(
 
   const $ = await loadWikiPage(quest.page);
   $('table.questdetails tbody')
-    .find('tr')
+    .children('tr')
     .each((_, e) => {
       const row = $(e);
-      const header = row.find('th.questdetails-header').text();
-      if (header !== 'Requirements' && header !== 'Recommended') {
+      const header = row.children('th.questdetails-header');
+      const headerText = header.text();
+
+      if (
+        headerText !== 'Requirements' &&
+        headerText !== 'Recommended' &&
+        headerText !== 'Follows events' &&
+        headerText !== 'Full completion'
+      ) {
         return;
       }
-      const required = header === 'Requirements';
+
+      // if (
+      //   quest.name === 'The World Wakes' ||
+      //   quest.name === 'Ritual of the Mahjarrat'
+      // ) {
+      //   console.log('Doing', quest.name);
+      //   console.log(headerText);
+      // }
+
+      const required = headerText === 'Requirements';
       const rows = row
         .find('ul li')
         .toArray()
@@ -145,8 +162,6 @@ async function getQuestWithRequirements(
               )
             ) {
               const [combat] = text.split(/\s+/g);
-              console.log('Matches that combat text things');
-              console.log(text);
               return new CombatRequirement(Number.parseFloat(combat));
             }
             // if (quest.name === 'As a First Resort') {
@@ -195,11 +210,42 @@ async function getQuestWithRequirements(
                 };
               }
               if (/\d+\s+\w+\s+((and)|(or))\s+\d+\s+\w+/.test(text)) {
-                const [lvlA, skillA, diff, levelB, skillB] = text
+                const [lvlA, skillA, diff, lvlB, skillB] = text
                   .trim()
                   .replace(/\s+/g, ' ')
                   .split(' ');
-                console.log(lvlA, skillA, diff, levelB, skillB);
+                // console.log('FOUND SKILLS:', lvlA, skillA, diff, lvlB, skillB);
+                if (
+                  isSkill(skillA) &&
+                  isSkill(skillB) &&
+                  (diff === 'and' || diff === 'or')
+                ) {
+                  return {
+                    [diff as 'and']: new AndOrMap<IRequirements>(
+                      <ISKillBoostable>{
+                        name: skillA,
+                        type: 'skill',
+                        page: getSkillPage(skillA),
+                        level: Number.parseFloat(lvlA),
+                        boostable: false,
+                      },
+                      <ISKillBoostable>{
+                        name: skillB,
+                        type: 'skill',
+                        page: getSkillPage(skillB),
+                        level: Number.parseFloat(lvlB),
+                        boostable: false,
+                      }
+                    ),
+                  };
+                } else {
+                  console.log('is', skillA, 'skill?', isSkill(skillA));
+                  console.log('is', skillB, 'skill?', isSkill(skillB));
+                  console.log('diff:', diff);
+                }
+              }
+              if (/\d+\s+\w+\s+or\s+more/.test(text)) {
+                console.log('Or more:', text);
               }
               console.log(quest.page, 'HAS AND/OR');
               console.log(text);
@@ -223,7 +269,13 @@ async function getQuestWithRequirements(
               .map(a => {
                 const text = $(a).text();
                 const page = $(a).attr('href');
+                // if (quest.name === 'Ritual of the Mahjarrat') {
+                //   console.log(text);
+                // }
                 if (!page || !questNames.has(text)) {
+                  // if (quest.name === 'Ritual of the Mahjarrat') {
+                  //   console.log('Not including', text);
+                  // }
                   return undefined;
                 }
                 if (
