@@ -28,8 +28,8 @@ type MappedRequirement = Requirement & {
   maxLevelRecommended: number;
   directDependents: Set<RequirementID>;
   directDependentsRecommended: Set<RequirementID>;
-  // indirectDependents: Set<RequirementID>;
-  // indirectDependentsRecommended: Set<RequirementID>;
+  indirectDependents: Set<RequirementID>;
+  indirectDependentsRecommended: Set<RequirementID>;
 };
 
 type GetRequirement = (
@@ -45,8 +45,8 @@ function convertToMapped(
     maxLevelRecommended: 0,
     directDependents: new Set(),
     directDependentsRecommended: new Set(),
-    // indirectDependents: new Set(),
-    // indirectDependentsRecommended: new Set(),
+    indirectDependents: new Set(),
+    indirectDependentsRecommended: new Set(),
   }
 ): MappedRequirement {
   return Object.assign(req, options);
@@ -112,11 +112,12 @@ export async function getRequirements() {
         'required',
         'recommended',
         'depthRecommended',
-        'directDependentsRecommended'
+        'directDependentsRecommended',
+        'indirectDependentsRecommended'
       ),
       page: WIKI_URL_BUILDER.build(req.page),
       directDependents: req.directDependents.size,
-      // indirectDependents: req.indirectDependents.size,
+      indirectDependents: req.indirectDependents.size,
       quests: req.getQuests(true),
       skills: req.getSkills(true),
       achievements: req.getAchievements(true),
@@ -126,7 +127,7 @@ export async function getRequirements() {
         a.maxLevel - b.maxLevel ||
         b.depth - a.depth ||
         b.directDependents - a.directDependents ||
-        // b.indirectDependents - a.indirectDependents ||
+        b.indirectDependents - a.indirectDependents ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
@@ -211,28 +212,40 @@ function findMaxLevels(
 function findDependentCounts(
   req: MappedRequirement,
   getRequirement: GetRequirement,
-  seen = new Set<RequirementID>()
+  seen = new Set<RequirementID>(),
+  depth = 0
 ) {
   if (seen.has(req.id)) {
     return;
   }
   seen.add(req.id);
 
-  function helper(reqs: typeof req['required'], recommended: boolean) {
-    reqs.map(getRequirement).forEach(dep => {
-      if (recommended) {
-        dep.directDependentsRecommended.add(req.id);
-        // seen.forEach(id => dep.indirectDependentsRecommended.add(id));
-      } else {
+  req
+    .map((dep, required) => [getRequirement(dep), required] as const)
+    .forEach(([dep, required]) => {
+      if (required) {
+        if (
+          dep.directDependents.has(req.id) &&
+          Array.from(seen).every(id => dep.indirectDependents.has(id))
+        ) {
+          return;
+        }
         dep.directDependents.add(req.id);
-        // seen.forEach(id => dep.indirectDependents.add(id));
+        seen.forEach(id => dep.indirectDependents.add(id));
+      } else {
+        if (
+          dep.directDependentsRecommended.has(req.id) &&
+          Array.from(seen).every(id =>
+            dep.indirectDependentsRecommended.has(id)
+          )
+        ) {
+          return;
+        }
+        dep.directDependentsRecommended.add(req.id);
+        seen.forEach(id => dep.indirectDependentsRecommended.add(id));
       }
-      findDependentCounts(dep, getRequirement, new Set(seen));
+      findDependentCounts(dep, getRequirement, new Set(seen), depth + 1);
     });
-  }
-
-  helper(req.required, false);
-  helper(req.recommended, true);
 }
 
 function findMaxDepth(
