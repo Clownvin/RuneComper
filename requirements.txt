@@ -2774,8 +2774,8 @@ quest:Wandering_Ga%27al_(miniquest)
 quest:Aftermath
 quest:Birthright_of_the_Dwarves
 quest:Final_Destination_(miniquest)
+achievement:Trimmed_Completionist_Cape_(achievement)
 achievement:Quest_Cape
-achievement:True_trim
 achievement:True_trim
 skill:Agility:84
 skill:Agility:85

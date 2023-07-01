@@ -149,8 +149,6 @@ export async function getRequirements() {
   findDependentCounts(trueTrimmed, getReq);
   console.timeEnd('depCount');
 
-  reqsById.set(trimmed.id, trueTrimmed);
-
   const sorted: (MappedRequirement | MappedSkillRequirement)[] = Array.from(
     reqsById
   )

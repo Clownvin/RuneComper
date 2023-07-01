@@ -81561,6 +81561,397 @@
   },
   {
     "type": "achievement",
+    "name": "Trimmed Completionist",
+    "page": "https://runescape.wiki/w/Trimmed_Completionist_Cape_(achievement)",
+    "id": "achievement:Trimmed_Completionist_Cape_(achievement)",
+    "depth": 1,
+    "maxLevel": 0,
+    "maxLevelRecommended": 0,
+    "directDependents": 1,
+    "indirectDependents": 1,
+    "quests": [],
+    "skills": [],
+    "achievements": [
+      {
+        "name": "A Druid's Sidekick",
+        "page": "/w/A_Druid%27s_Sidekick",
+        "type": "achievement"
+      },
+      {
+        "name": "A Song of Ice and Ire II",
+        "page": "/w/A_Song_of_Ice_and_Ire_II",
+        "type": "achievement"
+      },
+      {
+        "name": "Agile from Head to Toe",
+        "page": "/w/Agile_from_Head_to_Toe",
+        "type": "achievement"
+      },
+      {
+        "name": "All Your Energies",
+        "page": "/w/All_Your_Energies",
+        "type": "achievement"
+      },
+      {
+        "name": "Barbarian Scavenger",
+        "page": "/w/Barbarian_Scavenger",
+        "type": "achievement"
+      },
+      {
+        "name": "Bone to Pick With You",
+        "page": "/w/Bone_to_Pick_With_You",
+        "type": "achievement"
+      },
+      {
+        "name": "Build Them All!",
+        "page": "/w/Build_Them_All!",
+        "type": "achievement"
+      },
+      {
+        "name": "Champions. What Champions?",
+        "page": "/w/Champions._What_Champions%3F",
+        "type": "achievement"
+      },
+      {
+        "name": "Chompy Massacre",
+        "page": "/w/Chompy_Massacre",
+        "type": "achievement"
+      },
+      {
+        "name": "Collectors Assemble",
+        "page": "/w/Collectors_Assemble",
+        "type": "achievement"
+      },
+      {
+        "name": "Completionist Cape (achievement)",
+        "page": "/w/Completionist_Cape_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "Conquered Everyone's Heart",
+        "page": "/w/Conquered_Everyone%27s_Heart",
+        "type": "achievement"
+      },
+      {
+        "name": "Death Effect",
+        "page": "/w/Death_Effect",
+        "type": "achievement"
+      },
+      {
+        "name": "Don't Crush My Memories",
+        "page": "/w/Don%27t_Crush_My_Memories",
+        "type": "achievement"
+      },
+      {
+        "name": "Draught Includer",
+        "page": "/w/Draught_Includer",
+        "type": "achievement"
+      },
+      {
+        "name": "Dream Team",
+        "page": "/w/Dream_Team",
+        "type": "achievement"
+      },
+      {
+        "name": "E-I-E-DI-NO",
+        "page": "/w/E-I-E-DI-NO",
+        "type": "achievement"
+      },
+      {
+        "name": "E-I-E-I-O",
+        "page": "/w/E-I-E-I-O",
+        "type": "achievement"
+      },
+      {
+        "name": "Eastern Explorer",
+        "page": "/w/Eastern_Explorer",
+        "type": "achievement"
+      },
+      {
+        "name": "Ferocious Upgrade",
+        "page": "/w/Ferocious_Upgrade",
+        "type": "achievement"
+      },
+      {
+        "name": "Finish Him!",
+        "page": "/w/Finish_Him!",
+        "type": "achievement"
+      },
+      {
+        "name": "Get Tooled Up",
+        "page": "/w/Get_Tooled_Up",
+        "type": "achievement"
+      },
+      {
+        "name": "Globetrotter (achievement)",
+        "page": "/w/Globetrotter_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "God of the Grind",
+        "page": "/w/God_of_the_Grind",
+        "type": "achievement"
+      },
+      {
+        "name": "Granny's Favourite Farmer",
+        "page": "/w/Granny%27s_Favourite_Farmer",
+        "type": "achievement"
+      },
+      {
+        "name": "Hard as Daemons",
+        "page": "/w/Hard_as_Daemons",
+        "type": "achievement"
+      },
+      {
+        "name": "Jack of the Circus",
+        "page": "/w/Jack_of_the_Circus",
+        "type": "achievement"
+      },
+      {
+        "name": "Jurassic Perk",
+        "page": "/w/Jurassic_Perk",
+        "type": "achievement"
+      },
+      {
+        "name": "Kal'gerion Commander",
+        "page": "/w/Kal%27gerion_Commander",
+        "type": "achievement"
+      },
+      {
+        "name": "Maria, You Gotta See Her",
+        "page": "/w/Maria,_You_Gotta_See_Her",
+        "type": "achievement"
+      },
+      {
+        "name": "Master Angler",
+        "page": "/w/Master_Angler",
+        "type": "achievement"
+      },
+      {
+        "name": "Master Builder",
+        "page": "/w/Master_Builder",
+        "type": "achievement"
+      },
+      {
+        "name": "Master of Assault",
+        "page": "/w/Master_of_Assault",
+        "type": "achievement"
+      },
+      {
+        "name": "Master Otto",
+        "page": "/w/Master_Otto",
+        "type": "achievement"
+      },
+      {
+        "name": "Master Quest Cape (achievement)",
+        "page": "/w/Master_Quest_Cape_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Everlight",
+        "page": "/w/Mastery_-_Everlight",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Infernal Source",
+        "page": "/w/Mastery_-_Infernal_Source",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Kharid-et",
+        "page": "/w/Mastery_-_Kharid-et",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Orthen",
+        "page": "/w/Mastery_-_Orthen",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Senntisten",
+        "page": "/w/Mastery_-_Senntisten",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Stormguard Citadel",
+        "page": "/w/Mastery_-_Stormguard_Citadel",
+        "type": "achievement"
+      },
+      {
+        "name": "Mastery - Warforge",
+        "page": "/w/Mastery_-_Warforge",
+        "type": "achievement"
+      },
+      {
+        "name": "Mazcab Teleport (achievement)",
+        "page": "/w/Mazcab_Teleport_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "Memorialised More Than Once",
+        "page": "/w/Memorialised_More_Than_Once",
+        "type": "achievement"
+      },
+      {
+        "name": "Mitts and Waders - Death Lotus",
+        "page": "/w/Mitts_and_Waders_-_Death_Lotus",
+        "type": "achievement"
+      },
+      {
+        "name": "Mitts and Waders - Seasinger",
+        "page": "/w/Mitts_and_Waders_-_Seasinger",
+        "type": "achievement"
+      },
+      {
+        "name": "Mitts and Waders - Tetsu",
+        "page": "/w/Mitts_and_Waders_-_Tetsu",
+        "type": "achievement"
+      },
+      {
+        "name": "My Goebie Homies",
+        "page": "/w/My_Goebie_Homies",
+        "type": "achievement"
+      },
+      {
+        "name": "Nomad's Mirage",
+        "page": "/w/Nomad%27s_Mirage",
+        "type": "achievement"
+      },
+      {
+        "name": "On a Rune High",
+        "page": "/w/On_a_Rune_High",
+        "type": "achievement"
+      },
+      {
+        "name": "Penguin Adoption Agency",
+        "page": "/w/Penguin_Adoption_Agency",
+        "type": "achievement"
+      },
+      {
+        "name": "Perky Like a Prawn",
+        "page": "/w/Perky_Like_a_Prawn",
+        "type": "achievement"
+      },
+      {
+        "name": "Rank: Master Finix",
+        "page": "/w/Rank:_Master_Finix",
+        "type": "achievement"
+      },
+      {
+        "name": "Reaper Crew",
+        "page": "/w/Reaper_Crew",
+        "type": "achievement"
+      },
+      {
+        "name": "Relic-weary",
+        "page": "/w/Relic-weary",
+        "type": "achievement"
+      },
+      {
+        "name": "Remotely Possible",
+        "page": "/w/Remotely_Possible",
+        "type": "achievement"
+      },
+      {
+        "name": "Reputation - Class Crown",
+        "page": "/w/Reputation_-_Class_Crown",
+        "type": "achievement"
+      },
+      {
+        "name": "Reputation - Lock, Stock and Barrel",
+        "page": "/w/Reputation_-_Lock,_Stock_and_Barrel",
+        "type": "achievement"
+      },
+      {
+        "name": "Reputation - Seagullible",
+        "page": "/w/Reputation_-_Seagullible",
+        "type": "achievement"
+      },
+      {
+        "name": "Reputation - To the Bone",
+        "page": "/w/Reputation_-_To_the_Bone",
+        "type": "achievement"
+      },
+      {
+        "name": "Salty (achievement)",
+        "page": "/w/Salty_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "Sandy (achievement)",
+        "page": "/w/Sandy_(achievement)",
+        "type": "achievement"
+      },
+      {
+        "name": "Scrolling in the Deep",
+        "page": "/w/Scrolling_in_the_Deep",
+        "type": "achievement"
+      },
+      {
+        "name": "Scrolling with Power",
+        "page": "/w/Scrolling_with_Power",
+        "type": "achievement"
+      },
+      {
+        "name": "Shadows Below",
+        "page": "/w/Shadows_Below",
+        "type": "achievement"
+      },
+      {
+        "name": "Sort of Crystally",
+        "page": "/w/Sort_of_Crystally",
+        "type": "achievement"
+      },
+      {
+        "name": "Special Slayer Delivery",
+        "page": "/w/Special_Slayer_Delivery",
+        "type": "achievement"
+      },
+      {
+        "name": "Stone's Throw Away",
+        "page": "/w/Stone%27s_Throw_Away",
+        "type": "achievement"
+      },
+      {
+        "name": "Telos If You're Angry II",
+        "page": "/w/Telos_If_You%27re_Angry_II",
+        "type": "achievement"
+      },
+      {
+        "name": "The Golden Crocodile Hunter",
+        "page": "/w/The_Golden_Crocodile_Hunter",
+        "type": "achievement"
+      },
+      {
+        "name": "The Prodigal Spender",
+        "page": "/w/The_Prodigal_Spender",
+        "type": "achievement"
+      },
+      {
+        "name": "To Be a Master",
+        "page": "/w/To_Be_a_Master",
+        "type": "achievement"
+      },
+      {
+        "name": "War. What Is It Good For?",
+        "page": "/w/War._What_Is_It_Good_For%3F",
+        "type": "achievement"
+      },
+      {
+        "name": "Who Will Be Her Lover?",
+        "page": "/w/Who_Will_Be_Her_Lover%3F",
+        "type": "achievement"
+      },
+      {
+        "name": "Work on Your Artisan II",
+        "page": "/w/Work_on_Your_Artisan_II",
+        "type": "achievement"
+      }
+    ],
+    "priority": 0.995049504950495
+  },
+  {
+    "type": "achievement",
     "name": "Quest Cape",
     "page": "https://runescape.wiki/w/Quest_Cape",
     "id": "achievement:Quest_Cape",
@@ -84391,54 +84782,6 @@
     "skills": [],
     "achievements": [],
     "priority": 1.4455445544554455
-  },
-  {
-    "type": "achievement",
-    "name": "True Trim",
-    "page": "https://runescape.wiki/w/True_trim",
-    "id": "achievement:True_trim",
-    "depth": 0,
-    "maxLevel": 91,
-    "maxLevelRecommended": 91,
-    "directDependents": 0,
-    "indirectDependents": 0,
-    "quests": [],
-    "skills": [],
-    "achievements": [
-      {
-        "type": "achievement",
-        "name": "Quest Cape",
-        "page": "/w/Quest_Cape",
-        "required": {},
-        "recommended": {},
-        "id": "achievement:Quest_Cape",
-        "depth": 1,
-        "depthRecommended": null,
-        "maxLevel": 91,
-        "maxLevelRecommended": 91,
-        "directDependents": {},
-        "directDependentsRecommended": {},
-        "indirectDependents": {},
-        "indirectDependentsRecommended": {}
-      },
-      {
-        "type": "achievement",
-        "name": "Trimmed Completionist",
-        "page": "/w/Trimmed_Completionist_Cape_(achievement)",
-        "required": {},
-        "recommended": {},
-        "id": "achievement:Trimmed_Completionist_Cape_(achievement)",
-        "depth": 1,
-        "depthRecommended": null,
-        "maxLevel": 0,
-        "maxLevelRecommended": 0,
-        "directDependents": {},
-        "directDependentsRecommended": {},
-        "indirectDependents": {},
-        "indirectDependentsRecommended": {}
-      }
-    ],
-    "priority": 0.4504950495049505
   },
   {
     "type": "achievement",
