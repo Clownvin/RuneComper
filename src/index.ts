@@ -39,7 +39,8 @@ app.listen(process.env.PORT || 2898, () => {
   console.log('Welcome to RuneScape.');
 });
 
-getRequirements().then(reqs => {
-  response = Promise.resolve(reqs);
+response = getRequirements();
+response.then(reqs => {
   writeFileSync('./requirements.json', JSON.stringify(reqs, null, 2));
+  writeFileSync('./requirements.txt', reqs.map(req => req.id).join('\n'));
 });
