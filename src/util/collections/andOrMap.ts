@@ -1,5 +1,5 @@
 import {clone} from 'lodash';
-import {isNonNullish} from './helpers';
+import {isNonNullish} from '../helpers';
 
 export type AndOrElement<T> = T | {or: AndOrMap<T>} | {and: AndOrMap<T>};
 
