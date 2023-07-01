@@ -14,8 +14,13 @@ export class CombatRequirement
   readonly page = '/w/Combat_level';
   readonly id: RequirementID;
 
-  constructor(readonly level: number) {
-    super({name: 'Combat', page: '/w/Combat_level', type: 'combat'});
+  constructor(image: string, readonly level: number) {
+    super({
+      name: 'Combat',
+      page: '/w/Combat_level',
+      icon: image,
+      type: 'combat',
+    });
     this.id = getRequirementID(this);
   }
 }

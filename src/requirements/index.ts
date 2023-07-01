@@ -21,6 +21,7 @@ import {
 } from '../model/runescape';
 import {omit} from 'lodash';
 import {DefaultMap} from '../util/collections/defaultMap';
+import {getImageFromPage} from '../rswiki/util';
 // import {AndOrMap} from '../util/andOrMap';
 
 /**
@@ -88,7 +89,10 @@ function convertToMapped(
 }
 
 export async function getRequirements() {
-  const {quests, questNames, miniquestNames} = await getQuestsAndQuestNames();
+  const combatLevelIcon = await getImageFromPage('/w/Combat');
+  const {quests, questNames, miniquestNames} = await getQuestsAndQuestNames(
+    combatLevelIcon
+  );
   const {trimmed, achievements} =
     await getCompletionistCapeAchievementsWithRequirements(
       questNames,
@@ -98,6 +102,7 @@ export async function getRequirements() {
   const questCape = new AchievementRequirement({
     name: 'Quest Cape',
     page: '/w/Quest_Cape',
+    icon: '',
     required: quests.map(q => ({...q, required: true})),
   });
 
@@ -105,6 +110,7 @@ export async function getRequirements() {
     new AchievementRequirement({
       name: 'True Trim',
       page: '/w/True_trim',
+      icon: '',
       required: [questCape, trimmed],
     })
   );
@@ -130,7 +136,9 @@ export async function getRequirements() {
         let requirement: TraversedRequirement;
         reqsById.set(
           reqId,
-          (requirement = convertToMapped(new CombatRequirement(req.level)))
+          (requirement = convertToMapped(
+            new CombatRequirement(combatLevelIcon, req.level)
+          ))
         );
         return requirement;
       }

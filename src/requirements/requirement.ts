@@ -71,6 +71,7 @@ export abstract class Requirement<T extends Type = Type>
   abstract readonly id: RequirementID;
   readonly type: T;
   readonly name: string;
+  readonly icon: string;
   readonly page: string;
 
   readonly required: AndOrMap<IRequirements>;
@@ -80,18 +81,21 @@ export abstract class Requirement<T extends Type = Type>
     type,
     name,
     page,
+    icon,
     required = [],
     recommended = [],
   }: {
     type: T;
     name: string;
     page: string;
+    icon: string;
     required?: Readonly<AndOrElement<IRequirements>[]>;
     recommended?: Readonly<AndOrElement<IRequirements>[]>;
   }) {
     this.type = type;
     this.name = name;
     this.page = page;
+    this.icon = icon;
     this.required = new AndOrMap(...required);
     this.recommended = new AndOrMap(...recommended);
   }

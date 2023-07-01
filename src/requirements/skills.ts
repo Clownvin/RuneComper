@@ -1,5 +1,6 @@
 import {SKILLS, Skill} from '../model/runescape';
 import {SkillPage, getSkillPage, loadWikiPage} from '../rswiki';
+import {getImageFromPage} from '../rswiki/util';
 import {
   ISkill,
   Requirement,
@@ -45,12 +46,18 @@ export class SkillRequirement extends Requirement<'skill'> implements ISkill {
 export async function getSkillRequirements(): Promise<SkillRequirement[]> {
   const reqs = [] as SkillRequirement[];
   for (const skill of SKILLS) {
-    const {page, maxLevel} = await getSkillInfo(skill);
+    const {page, image, maxLevel} = await getSkillInfo(skill);
     reqs.push(
-      new SkillRequirement({name: skill, level: 1, page, required: []})
+      new SkillRequirement({
+        name: skill,
+        level: 1,
+        page,
+        icon: image,
+        required: [],
+      })
     );
     for (let level = 2; level <= maxLevel; level++) {
-      const req = new SkillRequirement({name: skill, level, page});
+      const req = new SkillRequirement({name: skill, level, page, icon: image});
 
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;
@@ -73,10 +80,14 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
 
 async function getSkillInfo(skill: Skill) {
   const page = getSkillPage(skill);
-  const maxLevel = await getMaxLevel(page);
+  const [maxLevel, image] = await Promise.all([
+    getMaxLevel(page),
+    getImageFromPage(page),
+  ]);
 
   return {
     page,
+    image,
     maxLevel,
   };
 }

@@ -69,6 +69,7 @@ export async function getCompletionistCapeAchievementsWithRequirements(
     trimmed: new AchievementRequirement({
       name: trimmed.name,
       page: trimmed.page,
+      icon: '',
       required: reqsWithReqs
         .filter(r => required.has(r.name))
         .map(({name, page}) => ({
@@ -166,7 +167,7 @@ async function getAchievementWithNormalRequirements(
   const element = $('#infobox-achievement td.qc-active');
   const html = element.html();
 
-  const requirement = new AchievementRequirement({name, page});
+  const requirement = new AchievementRequirement({name, page, icon: ''});
 
   if (html === null) {
     return requirement;

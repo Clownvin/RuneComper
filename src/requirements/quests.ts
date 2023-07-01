@@ -11,6 +11,7 @@ import {Skill, isSkill} from '../model/runescape';
 import {AndOrMap} from '../util/collections/andOrMap';
 import {CombatRequirement} from './combat';
 import {isNonNullish} from '../util';
+import {getImageFromPage} from '../rswiki/util';
 
 export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   readonly miniquest: boolean;
@@ -28,7 +29,7 @@ export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   }
 }
 
-export async function getQuestsAndQuestNames() {
+export async function getQuestsAndQuestNames(combatLevelIcon: string) {
   const rawQuests = [...(await getQuests()), ...(await getMiniquests())];
   const questNames = new Set(rawQuests.map(q => q.name));
   const miniquestNames = new Set(
@@ -37,7 +38,11 @@ export async function getQuestsAndQuestNames() {
   return {
     questNames,
     miniquestNames,
-    quests: await getQuestsWithRequirements(rawQuests, questNames),
+    quests: await getQuestsWithRequirements(
+      rawQuests,
+      questNames,
+      combatLevelIcon
+    ),
   };
 }
 
@@ -98,22 +103,28 @@ export async function getMiniquests() {
 
 async function getQuestsWithRequirements(
   quests: IQuest[],
-  questNames: Set<string>
+  questNames: Set<string>,
+  combatLevelIcon: string
 ) {
   const withRequirements: QuestRequirement[] = [];
   for (const quest of quests) {
-    withRequirements.push(await getQuestWithRequirements(quest, questNames));
+    withRequirements.push(
+      await getQuestWithRequirements(quest, questNames, combatLevelIcon)
+    );
   }
   return withRequirements;
 }
 
 async function getQuestWithRequirements(
   quest: IQuest,
-  questNames: Set<string>
+  questNames: Set<string>,
+  combatLevelIcon: string
 ): Promise<QuestRequirement> {
-  const requirement = new QuestRequirement(quest);
-
   const $ = await loadWikiPage(quest.page);
+  const requirement = new QuestRequirement({
+    ...quest,
+    icon: await getImageFromPage($),
+  });
   $('table.questdetails tbody')
     .children('tr')
     .each((_, e) => {
@@ -162,7 +173,10 @@ async function getQuestWithRequirements(
               )
             ) {
               const [combat] = text.split(/\s+/g);
-              return new CombatRequirement(Number.parseFloat(combat));
+              return new CombatRequirement(
+                combatLevelIcon,
+                Number.parseFloat(combat)
+              );
             }
             // if (quest.name === 'As a First Resort') {
             //   console.log(text);
