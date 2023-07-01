@@ -173,7 +173,7 @@ export async function getRequirements() {
         a.name.localeCompare(b.name)
     );
 
-  combineSkillRanges(sorted);
+  // combineSkillRanges(sorted);
 
   const seen = new Set<RequirementID>();
 
