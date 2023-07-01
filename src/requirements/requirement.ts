@@ -1,5 +1,5 @@
 import {Skill} from '../model/runescape';
-import {AndOrElement, AndOrMap} from '../util/andOrMap';
+import {AndOrElement, AndOrMap} from '../util/collections/andOrMap';
 
 export type Type = 'quest' | 'skill' | 'achievement' | 'combat';
 
@@ -168,7 +168,7 @@ export abstract class Requirement<T extends Type = Type>
     );
   }
 
-  getSkills(recommended = true): ISkill[] {
+  getSkills(recommended = true): ISKillBoostable[] {
     return this.filterByType(isSkill, recommended);
   }
 

@@ -1,4 +1,11 @@
-import {RequirementID, getRequirementID} from './requirement';
+import {
+  IAchievement,
+  IQuest,
+  ISKillBoostable,
+  RequirementID,
+  Type,
+  getRequirementID,
+} from './requirement';
 import {SkillRequirement, getSkillRequirements} from './skills';
 import {
   AchievementRequirement,
@@ -7,8 +14,13 @@ import {
 import {QuestRequirement, getQuestsAndQuestNames} from './quests';
 import {WIKI_URL_BUILDER} from '../rswiki';
 import {CombatRequirement} from './combat';
-import {avgLevelForCombatLvl} from '../model/runescape';
+import {
+  Skill,
+  avgLevelForCombatLvl,
+  isSkill as isSkillName,
+} from '../model/runescape';
 import {omit} from 'lodash';
+import {DefaultMap} from '../util/collections/defaultMap';
 // import {AndOrMap} from '../util/andOrMap';
 
 /**
@@ -21,7 +33,7 @@ type Requirement =
   | AchievementRequirement
   | CombatRequirement;
 
-type MappedRequirement = Requirement & {
+type TraversedRequirement = Requirement & {
   depth: number;
   depthRecommended: number;
   maxLevel: number;
@@ -32,13 +44,36 @@ type MappedRequirement = Requirement & {
   indirectDependentsRecommended: Set<RequirementID>;
 };
 
+type MappedRequirement = Omit<
+  TraversedRequirement,
+  | 'required'
+  | 'recommended'
+  | 'depthRecommended'
+  | 'directDependents'
+  | 'indirectDependents'
+  | 'directDependentsRecommended'
+  | 'indirectDependentsRecommended'
+> & {
+  page: string;
+  directDependents: number;
+  indirectDependents: number;
+  quests: IQuest[];
+  skills: ISKillBoostable[];
+  achievements: IAchievement[];
+};
+
+type MappedSkillRequirement = Omit<MappedRequirement, 'type'> & {
+  type: 'skill';
+  level: number;
+};
+
 type GetRequirement = (
   req: Parameters<typeof getRequirementID>[0]
-) => MappedRequirement;
+) => TraversedRequirement;
 
 function convertToMapped(
   req: Requirement,
-  options: Omit<MappedRequirement, keyof Requirement> = {
+  options: Omit<TraversedRequirement, keyof Requirement> = {
     depth: -Infinity,
     depthRecommended: -Infinity,
     maxLevel: 0,
@@ -48,7 +83,7 @@ function convertToMapped(
     indirectDependents: new Set(),
     indirectDependentsRecommended: new Set(),
   }
-): MappedRequirement {
+): TraversedRequirement {
   return Object.assign(req, options);
 }
 
@@ -71,7 +106,7 @@ export async function getRequirements() {
   const trimmed = convertToMapped(t);
   const skills = await getSkillRequirements();
 
-  const reqsById = new Map<RequirementID, MappedRequirement>();
+  const reqsById = new Map<RequirementID, TraversedRequirement>();
   for (const req of [...skills, ...quests, ...achievements]) {
     reqsById.set(req.id, convertToMapped(req));
   }
@@ -81,7 +116,7 @@ export async function getRequirements() {
     const requirement = reqsById.get(reqId);
     if (!requirement) {
       if (req.type === 'combat') {
-        let requirement: MappedRequirement;
+        let requirement: TraversedRequirement;
         reqsById.set(
           reqId,
           (requirement = convertToMapped(new CombatRequirement(req.level)))
@@ -105,13 +140,17 @@ export async function getRequirements() {
 
   reqsById.set(trimmed.id, trimmed);
 
-  const sorted = Array.from(reqsById)
+  const sorted: (MappedRequirement | MappedSkillRequirement)[] = Array.from(
+    reqsById
+  )
     .map(([, req]) => ({
       ...omit(
         req,
         'required',
         'recommended',
         'depthRecommended',
+        'directDependents',
+        'indirectDependents',
         'directDependentsRecommended',
         'indirectDependentsRecommended'
       ),
@@ -122,16 +161,19 @@ export async function getRequirements() {
       skills: req.getSkills(true),
       achievements: req.getAchievements(true),
     }))
+    .map(req => ({...req, priority: priorityA(req)}))
     .sort(
       (a, b) =>
-        a.maxLevel - b.maxLevel ||
-        b.directDependents - a.directDependents ||
-        b.indirectDependents - a.indirectDependents ||
-        a.maxLevelRecommended - b.maxLevelRecommended ||
         b.depth - a.depth ||
+        a.maxLevel - b.maxLevel ||
+        a.maxLevelRecommended - b.maxLevelRecommended ||
+        b.indirectDependents - a.indirectDependents ||
+        b.directDependents - a.directDependents ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
+
+  combineSkillRanges(sorted);
 
   const seen = new Set<RequirementID>();
 
@@ -152,6 +194,153 @@ export async function getRequirements() {
   return sorted;
 }
 
+type SkillRanges = DefaultMap<Skill, SkillAndIndex[]>;
+
+type SkillAndIndex = [req: MappedSkillRequirement, index: number];
+
+type Requirements = (MappedRequirement | MappedSkillRequirement)[];
+
+function combineSkillRanges(requirements: Requirements) {
+  const skillRanges: SkillRanges = new DefaultMap(() => []);
+
+  for (let i = 0; i < requirements.length; i++) {
+    const req = requirements[i];
+    if (req.type === 'skill' && isSkillName(req.name) && 'level' in req) {
+      req.level;
+      skillRanges.get(req.name).push([req, i]);
+      continue;
+    }
+    const {skills: reqSkills} = req;
+    if (!reqSkills.length) {
+      continue;
+    }
+    const prevR = requirements.length;
+    const prevI = i;
+    i -= combineSkillRangesBeforeRequirement(
+      skillRanges,
+      reqSkills,
+      requirements
+    );
+    console.log(prevR - requirements.length, prevI - i);
+  }
+
+  for (const [, range] of skillRanges) {
+    if (!range.length) {
+      continue;
+    }
+    const [lastSkill] = range[range.length - 1];
+    mergeRangeAndSpliceRequirements(
+      lastSkill,
+      range,
+      skillRanges,
+      requirements,
+      range.length - 1
+    );
+  }
+}
+
+function combineSkillRangesBeforeRequirement(
+  skillRanges: SkillRanges,
+  reqSkills: ISKillBoostable[],
+  requirements: Requirements
+) {
+  let totalRemoved = 0;
+  for (const reqSkill of reqSkills) {
+    const skillRange = skillRanges.get(reqSkill.name);
+    if (!skillRange.length) {
+      continue;
+    }
+    const {level: reqLevel} = reqSkill;
+    for (let i = 0; i < skillRange.length; i++) {
+      const [skill] = skillRange[i];
+      const {level: skillLevel} = skill;
+      if (skillLevel > reqLevel) {
+        break;
+      }
+      if (skillLevel < reqLevel) {
+        continue;
+      }
+      mergeRangeAndSpliceRequirements(
+        skill,
+        skillRange,
+        skillRanges,
+        requirements,
+        i
+      );
+      totalRemoved += i;
+      break;
+    }
+  }
+  return totalRemoved;
+}
+
+function mergeRangeAndSpliceRequirements(
+  skillReq: MappedSkillRequirement,
+  range: SkillAndIndex[],
+  skillRanges: SkillRanges,
+  requirements: Requirements,
+  skillReqIndex: number
+) {
+  // Update the ending skill requirement with start/end info
+  Object.assign(range[0][0], {
+    id: skillReq.id,
+    level: skillReq.level,
+    startLevel: range[0][0].level,
+    endLevel: skillReq.level,
+  });
+  const indexes = new DefaultMap<Skill, number>(() => 0);
+  // Until we reach the end skill's index (the index of "skill")
+  for (let i = 1; i <= skillReqIndex; i++) {
+    const [_, index] = range[i];
+    // Remove the current index, since we're merging it
+    requirements.splice(index, 1);
+    // Then, for each of the skill ranges we're tracking...
+    for (const [skill, range] of skillRanges) {
+      // Starting where we left off with each skill, or at 0
+      for (let i = indexes.get(skill); i < range.length; i++) {
+        const [otherSkill, otherIndex] = range[i];
+        // If this other skill is before what we removed
+        if (otherIndex <= index) {
+          // Increment our start for next time, continue
+          indexes.set(skill, i + 1);
+          continue;
+        }
+        // Otherwise, decrement the index (since we just removed)
+        range[i] = [otherSkill, otherIndex - 1];
+      }
+    }
+  }
+  // Remove the skills we just merged into a range from the skillRanges
+  range.splice(0, skillReqIndex + 1);
+}
+
+function calcWeight(weights: [val: number, weight: number][]) {
+  const totalWeight = weights.reduce((total, [, weight]) => total + weight, 0);
+  return weights.reduce(
+    (total, [val, weight]) => total + val * (weight / totalWeight),
+    0
+  );
+}
+
+function priorityA(req: {
+  depth: number;
+  indirectDependents: number;
+  maxLevelRecommended: number;
+  maxLevel: number;
+  directDependents: number;
+  type: Type;
+  name: string;
+}) {
+  return calcWeight([
+    [req.depth, 10000],
+    [req.indirectDependents, 50],
+    [req.maxLevelRecommended, 50],
+    [req.maxLevel, 0],
+    [req.directDependents, 0],
+    [5 - typePriority(req.type), 0],
+  ]);
+}
+
 function typePriority(type: Requirement['type']) {
   switch (type) {
     case 'quest':
@@ -166,7 +355,7 @@ function typePriority(type: Requirement['type']) {
 }
 
 function findMaxLevels(
-  req: MappedRequirement,
+  req: TraversedRequirement,
   getRequirement: GetRequirement,
   seen = new Set<RequirementID>()
 ) {
@@ -176,7 +365,7 @@ function findMaxLevels(
 
   seen.add(req.id);
 
-  function helper(reqs: typeof req['required'], recommended: boolean) {
+  function helper(reqs: (typeof req)['required'], recommended: boolean) {
     return reqs.map(getRequirement).reduce(
       dep => {
         const levels = findMaxLevels(
@@ -211,7 +400,7 @@ function findMaxLevels(
 
 // TODO: Slow! Spends a lot of time adding to sets, I think
 function findDependentCounts(
-  req: MappedRequirement,
+  req: TraversedRequirement,
   getRequirement: GetRequirement,
   seen = new Set<RequirementID>(),
   depth = 0
@@ -250,10 +439,10 @@ function findDependentCounts(
 }
 
 function findMaxDepth(
-  req: MappedRequirement,
+  req: TraversedRequirement,
   getRequirement: (
     req: Parameters<typeof getRequirementID>[0]
-  ) => MappedRequirement,
+  ) => TraversedRequirement,
   depth = 0,
   seen = new Set<RequirementID>()
 ): void {

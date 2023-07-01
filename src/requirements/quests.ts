@@ -8,7 +8,7 @@ import {
   getRequirementID,
 } from './requirement';
 import {Skill, isSkill} from '../model/runescape';
-import {AndOrMap} from '../util/andOrMap';
+import {AndOrMap} from '../util/collections/andOrMap';
 import {CombatRequirement} from './combat';
 import {isNonNullish} from '../util';
 
