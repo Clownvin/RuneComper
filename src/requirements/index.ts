@@ -89,25 +89,36 @@ function convertToMapped(
 
 export async function getRequirements() {
   const {quests, questNames, miniquestNames} = await getQuestsAndQuestNames();
-  const {trimmed: t, achievements} =
+  const {trimmed, achievements} =
     await getCompletionistCapeAchievementsWithRequirements(
       questNames,
       miniquestNames
     );
-  const questCape = achievements.find(a => a.name === 'Quest Cape');
-  if (!questCape) {
-    throw new Error('Failed to find Quest Cape requirement');
-  }
 
-  //TODO: Currently adding all quests to Quest Cape,
-  //should be adding to MQC and True Trim, etc
-  questCape.addRequired(...quests.map(q => ({...q, required: true})));
+  const questCape = new AchievementRequirement({
+    name: 'Quest Cape',
+    page: '/w/Quest_Cape',
+    required: quests.map(q => ({...q, required: true})),
+  });
 
-  const trimmed = convertToMapped(t);
+  const trueTrimmed = convertToMapped(
+    new AchievementRequirement({
+      name: 'True Trim',
+      page: '/w/True_trim',
+      required: [questCape, trimmed],
+    })
+  );
   const skills = await getSkillRequirements();
 
   const reqsById = new Map<RequirementID, TraversedRequirement>();
-  for (const req of [...skills, ...quests, ...achievements]) {
+  for (const req of [
+    ...skills,
+    ...quests,
+    ...achievements,
+    questCape,
+    trimmed,
+    trueTrimmed,
+  ]) {
     reqsById.set(req.id, convertToMapped(req));
   }
 
@@ -129,16 +140,16 @@ export async function getRequirements() {
   };
 
   console.time('depth');
-  findMaxDepth(trimmed, getReq);
+  findMaxDepth(trueTrimmed, getReq);
   console.timeEnd('depth');
   console.time('maxLevel');
-  findMaxLevels(trimmed, getReq);
+  findMaxLevels(trueTrimmed, getReq);
   console.timeEnd('maxLevel');
   console.time('depCount');
-  findDependentCounts(trimmed, getReq);
+  findDependentCounts(trueTrimmed, getReq);
   console.timeEnd('depCount');
 
-  reqsById.set(trimmed.id, trimmed);
+  reqsById.set(trimmed.id, trueTrimmed);
 
   const sorted: (MappedRequirement | MappedSkillRequirement)[] = Array.from(
     reqsById
