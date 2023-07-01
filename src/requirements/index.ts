@@ -56,11 +56,12 @@ type MappedRequirement = Omit<
   | 'indirectDependentsRecommended'
 > & {
   page: string;
+  icon: string;
   directDependents: number;
   indirectDependents: number;
-  quests: IQuest[];
-  skills: ISKillBoostable[];
-  achievements: IAchievement[];
+  quests: Array<IQuest & {icon: string}>;
+  skills: Array<ISKillBoostable & {icon: string}>;
+  achievements: Array<IAchievement & {icon: string}>;
 };
 
 type MappedSkillRequirement = Omit<MappedRequirement, 'type'> & {
@@ -172,11 +173,18 @@ export async function getRequirements() {
         'indirectDependentsRecommended'
       ),
       page: WIKI_URL_BUILDER.build(req.page),
+      icon: req.icon,
       directDependents: req.directDependents.size,
       indirectDependents: req.indirectDependents.size,
-      quests: req.getQuests(true),
-      skills: req.getSkills(true),
-      achievements: req.getAchievements(true),
+      quests: req
+        .getQuests(true)
+        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
+      skills: req
+        .getSkills(true)
+        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
+      achievements: req
+        .getAchievements(true)
+        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
     }))
     .map(req => ({...req, priority: priorityA(req)}))
     .sort(
