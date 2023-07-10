@@ -210,12 +210,12 @@ export async function getRequirements() {
     .map(req => ({...req, priority: priorityA(req)}))
     .sort(
       (a, b) =>
+        b.depthRecommended - a.depthRecommended ||
         a.maxLevel - b.maxLevel ||
         b.indirectDependents - a.indirectDependents ||
         b.depth - a.depth ||
         a.maxLevelRecommended - b.maxLevelRecommended ||
         b.directDependents - a.directDependents ||
-        b.depthRecommended - a.depthRecommended ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
@@ -223,6 +223,7 @@ export async function getRequirements() {
   // combineSkillRanges(sorted);
 
   const seen = new Set<RequirementID>();
+  let count = 0;
 
   console.log('REQUIRED:');
 
@@ -236,10 +237,13 @@ export async function getRequirements() {
       .filter(id => !seen.has(id));
     if (prereqsNotSeenYet.length) {
       console.error(`${req.id} occurs before: ${prereqsNotSeenYet.join(', ')}`);
+      count++;
     }
   }
+  console.log('count:', count);
 
   seen.clear();
+  count = 0;
   console.log('RECOMMENDED:');
 
   for (const req of sorted) {
@@ -252,8 +256,11 @@ export async function getRequirements() {
       .filter(id => !seen.has(id));
     if (prereqsNotSeenYet.length) {
       console.error(`${req.id} occurs before: ${prereqsNotSeenYet.join(', ')}`);
+      count++;
     }
   }
+
+  console.log('count:', count);
 
   return sorted;
 }
