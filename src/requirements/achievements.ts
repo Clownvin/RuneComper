@@ -164,7 +164,7 @@ async function getAchievementWithNormalRequirements(
   miniquestNames: Set<string>
 ): Promise<AchievementRequirement> {
   const $ = await loadWikiPage(page);
-  const element = $('#infobox-achievement td.qc-active');
+  const element = $('.infobox-achievement td.qc-active');
   const html = element.html();
 
   const requirement = new AchievementRequirement({name, page, icon: ''});
@@ -176,6 +176,7 @@ async function getAchievementWithNormalRequirements(
   const seeAchievements =
     /See\s(<.*>)?\s?((achievements)|(article)|(requirements))/;
   if (seeAchievements.test(html) || html.includes('See article')) {
+    console.log('Page has "See achievements":', page);
     const achievementRows = $(
       'html body div#bodyContent table.wikitable tbody'
     );

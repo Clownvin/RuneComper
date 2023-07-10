@@ -100,12 +100,15 @@ export async function getRequirements() {
       miniquestNames
     );
 
-  const questCape = new AchievementRequirement({
-    name: 'Quest Cape',
-    page: '/w/Quest_Cape',
-    icon: '',
-    required: quests.map(q => ({...q, required: true})),
-  });
+  const questCape = achievements.find(
+    a => a.name === 'Quest Cape (achievement)'
+  );
+
+  if (!questCape) {
+    throw new Error('Cannot find quest cape achievement');
+  }
+
+  questCape.addRequired(...quests.map(q => ({...q, required: true})));
 
   const trueTrimmed = convertToMapped(
     new AchievementRequirement({
@@ -158,38 +161,54 @@ export async function getRequirements() {
   findDependentCounts(trueTrimmed, getReq);
   console.timeEnd('depCount');
 
-  const sorted: (MappedRequirement | MappedSkillRequirement)[] = Array.from(
-    reqsById
-  )
-    .map(([, req]) => ({
-      ...omit(
-        req,
-        'required',
-        'recommended',
-        'depthRecommended',
-        'directDependents',
-        'indirectDependents',
-        'directDependentsRecommended',
-        'indirectDependentsRecommended'
-      ),
-      page: WIKI_URL_BUILDER.build(req.page),
-      icon: req.icon,
-      directDependents: req.directDependents.size,
-      indirectDependents: req.indirectDependents.size,
-      quests: req
-        .getQuests(true)
-        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
-      skills: req
-        .getSkills(true)
-        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
-      achievements: req
-        .getAchievements(true)
-        .map(q => ({...q, icon: reqsById.get(getRequirementID(q))!.icon})),
-    }))
+  const sorted = Array.from(reqsById)
+    .map(
+      ([, req]) =>
+        ({
+          ...omit(
+            req,
+            'required',
+            'recommended',
+            // 'depthRecommended',
+            'directDependents',
+            'indirectDependents',
+            'directDependentsRecommended',
+            'indirectDependentsRecommended'
+          ),
+          page: WIKI_URL_BUILDER.build(req.page),
+          icon: req.icon,
+          directDependents: req.directDependents.size,
+          indirectDependents: req.indirectDependents.size,
+          quests: Array.from(req.map((r, required) => [r, required] as const))
+            .filter(([r]) => r.type === 'quest')
+            .map(([q, required]) => ({
+              ...q,
+              icon: reqsById.get(getRequirementID(q))!.icon,
+              required,
+            })),
+          skills: Array.from(req.map((r, required) => [r, required] as const))
+            .filter(([r]) => r.type === 'skill')
+            .map(([q, required]) => ({
+              ...q,
+              icon: reqsById.get(getRequirementID(q))!.icon,
+              required,
+            })),
+          achievements: Array.from(
+            req.map((r, required) => [r, required] as const)
+          )
+            .filter(([r]) => r.type === 'achievement')
+            .map(([q, required]) => ({
+              ...q,
+              icon: reqsById.get(getRequirementID(q))!.icon,
+              required,
+            })),
+        } as const)
+    )
     .map(req => ({...req, priority: priorityA(req)}))
     .sort(
       (a, b) =>
         b.depth - a.depth ||
+        b.depthRecommended - a.depthRecommended ||
         a.maxLevel - b.maxLevel ||
         a.maxLevelRecommended - b.maxLevelRecommended ||
         b.indirectDependents - a.indirectDependents ||
@@ -209,6 +228,7 @@ export async function getRequirements() {
       ...req.achievements,
       ...req.quests,
     ]
+      .filter(r => r.required)
       .map(getRequirementID)
       .filter(id => !seen.has(id));
     if (prereqsNotSeenYet.length) {
@@ -469,18 +489,31 @@ function findMaxDepth(
     req: Parameters<typeof getRequirementID>[0]
   ) => TraversedRequirement,
   depth = 0,
-  seen = new Set<RequirementID>()
+  seen = new Set<RequirementID>(),
+  recommended = false
 ): void {
-  if (seen.has(req.id) || req.depth >= depth) {
+  const reqDepth = recommended ? req.depthRecommended : req.depth;
+  if (seen.has(req.id) || reqDepth >= depth) {
     return;
   }
 
-  req.depth = depth;
+  if (recommended) {
+    req.depthRecommended = depth;
+  } else {
+    req.depth = depth;
+    req.depthRecommended = Math.max(req.depthRecommended, req.depth);
+  }
   seen.add(req.id);
 
   return req
-    .map(req => getRequirement(req))
-    .forEach(dep =>
-      findMaxDepth(dep, getRequirement, depth + 1, new Set(seen))
+    .map((req, required) => [getRequirement(req), required] as const)
+    .forEach(([dep, required]) =>
+      findMaxDepth(
+        dep,
+        getRequirement,
+        depth + 1,
+        new Set(seen),
+        recommended || !required
+      )
     );
 }

@@ -9,6 +9,7 @@
 - Add MQC requirements: <https://runescape.wiki/w/Master_quest_cape#Requirements>
 - Add "True trim" requirements
 - Handle "OR" requirements properly during requirement building (ex. As a First Resort and the Warriors Guild requirements)
+  - Partially complete, added AndOrMap, need to verify correctly utilizing
 - Add ability to determine unknown requirement types via wiki lookup
 
 ## Ideas
