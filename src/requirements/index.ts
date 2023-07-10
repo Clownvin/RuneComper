@@ -211,11 +211,11 @@ export async function getRequirements() {
     .sort(
       (a, b) =>
         b.depthRecommended - a.depthRecommended ||
-        a.maxLevel - b.maxLevel ||
-        b.indirectDependents - a.indirectDependents ||
-        b.depth - a.depth ||
         a.maxLevelRecommended - b.maxLevelRecommended ||
+        b.indirectDependents - a.indirectDependents ||
         b.directDependents - a.directDependents ||
+        a.maxLevel - b.maxLevel ||
+        b.depth - a.depth ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
