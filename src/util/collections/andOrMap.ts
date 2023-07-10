@@ -34,6 +34,16 @@ export class AndOrMap<T> {
     return this.#values.length;
   }
 
+  // toJSON() {
+  //   console.log('Calling to JSON?');
+  //   return this.toString();
+  // }
+
+  // toString() {
+  //   console.log('Calling toString?');
+  //   return JSON.stringify(this.#values, null, 2);
+  // }
+
   add(...values: (AndOrElement<T> | AndOrMap<T>)[]) {
     for (const value of values) {
       if (value instanceof AndOrMap) {

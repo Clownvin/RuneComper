@@ -14,3 +14,24 @@ export class DefaultMap<K, T> extends Map<K, T> {
     return val;
   }
 }
+
+export class CounterMap<K> extends Map<K, number> {
+  constructor(initial?: ConstructorParameters<typeof Map<K, number>>[0]) {
+    super(initial);
+  }
+
+  override get(key: K): number {
+    const value = super.get(key);
+
+    if (value === undefined) {
+      return 0;
+    } else {
+      return value;
+    }
+  }
+
+  add(key: K, count = 1): this {
+    this.set(key, this.get(key) + count);
+    return this;
+  }
+}

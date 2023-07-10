@@ -161,6 +161,9 @@ export async function getRequirements() {
   findDependentCounts(trueTrimmed, getReq);
   console.timeEnd('depCount');
 
+  // console.log(reqsById.get('quest:As_a_First_Resort')?.required.toString());
+  // console.log(reqsById.get('quest:As_a_First_Resort')?.recommended.toString());
+
   const sorted = Array.from(reqsById)
     .map(
       ([, req]) =>
@@ -207,12 +210,12 @@ export async function getRequirements() {
     .map(req => ({...req, priority: priorityA(req)}))
     .sort(
       (a, b) =>
-        b.depth - a.depth ||
-        b.depthRecommended - a.depthRecommended ||
         a.maxLevel - b.maxLevel ||
-        a.maxLevelRecommended - b.maxLevelRecommended ||
         b.indirectDependents - a.indirectDependents ||
+        b.depth - a.depth ||
+        a.maxLevelRecommended - b.maxLevelRecommended ||
         b.directDependents - a.directDependents ||
+        b.depthRecommended - a.depthRecommended ||
         typePriority(a.type) - typePriority(b.type) ||
         a.name.localeCompare(b.name)
     );
@@ -221,14 +224,30 @@ export async function getRequirements() {
 
   const seen = new Set<RequirementID>();
 
+  console.log('REQUIRED:');
+
   for (const req of sorted) {
     seen.add(req.id);
-    const prereqsNotSeenYet = [
-      ...req.skills,
-      ...req.achievements,
-      ...req.quests,
-    ]
-      .filter(r => r.required)
+    const reqs = [...req.skills, ...req.achievements, ...req.quests].filter(
+      r => r.required
+    );
+    const prereqsNotSeenYet = reqs
+      .map(getRequirementID)
+      .filter(id => !seen.has(id));
+    if (prereqsNotSeenYet.length) {
+      console.error(`${req.id} occurs before: ${prereqsNotSeenYet.join(', ')}`);
+    }
+  }
+
+  seen.clear();
+  console.log('RECOMMENDED:');
+
+  for (const req of sorted) {
+    seen.add(req.id);
+    const reqs = [...req.skills, ...req.achievements, ...req.quests].filter(
+      r => !r.required
+    );
+    const prereqsNotSeenYet = reqs
       .map(getRequirementID)
       .filter(id => !seen.has(id));
     if (prereqsNotSeenYet.length) {
