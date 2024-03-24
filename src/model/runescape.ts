@@ -27,6 +27,7 @@ export enum Skill {
   DIVINATION = 'divination',
   INVENTION = 'invention',
   ARCHAEOLOGY = 'archaeology',
+  NECROMANCY = 'necromancy',
 }
 
 //Ordered by RuneScape ID
@@ -59,6 +60,7 @@ export const SKILLS = Object.freeze([
   Skill.DIVINATION,
   Skill.INVENTION,
   Skill.ARCHAEOLOGY,
+  Skill.NECROMANCY,
 ] as const);
 
 export const SKILL_SET = Object.freeze(new Set(SKILLS));
