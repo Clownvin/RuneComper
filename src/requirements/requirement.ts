@@ -1,3 +1,4 @@
+import {Moment} from 'moment';
 import {Skill} from '../model/runescape';
 import {AndOrElement, AndOrMap} from '../util/collections/andOrMap';
 
@@ -73,6 +74,7 @@ export abstract class Requirement<T extends Type = Type>
   readonly name: string;
   readonly icon: string;
   readonly page: string;
+  readonly released: Moment;
 
   readonly required: AndOrMap<IRequirements>;
   readonly recommended: AndOrMap<IRequirements>;
@@ -82,6 +84,7 @@ export abstract class Requirement<T extends Type = Type>
     name,
     page,
     icon,
+    released,
     required = [],
     recommended = [],
   }: {
@@ -89,6 +92,7 @@ export abstract class Requirement<T extends Type = Type>
     name: string;
     page: string;
     icon: string;
+    released: Moment;
     required?: Readonly<AndOrElement<IRequirements>[]>;
     recommended?: Readonly<AndOrElement<IRequirements>[]>;
   }) {
@@ -96,6 +100,7 @@ export abstract class Requirement<T extends Type = Type>
     this.name = name;
     this.page = page;
     this.icon = icon;
+    this.released = released;
     this.required = new AndOrMap(...required);
     this.recommended = new AndOrMap(...recommended);
   }

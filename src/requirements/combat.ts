@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   ICombatLevel,
   Requirement,
@@ -20,6 +21,7 @@ export class CombatRequirement
       page: '/w/Combat_level',
       icon: image,
       type: 'combat',
+      released: moment(),
     });
     this.id = getRequirementID(this);
   }

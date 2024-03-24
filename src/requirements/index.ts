@@ -22,6 +22,7 @@ import {
 import {omit} from 'lodash';
 import {DefaultMap} from '../util/collections/defaultMap';
 import {getImageFromPage} from '../rswiki/util';
+import moment from 'moment';
 // import {AndOrMap} from '../util/andOrMap';
 
 /**
@@ -115,6 +116,7 @@ export async function getRequirements() {
       name: 'True Trim',
       page: '/w/True_trim',
       icon: '',
+      released: moment(),
       required: [questCape, trimmed],
     })
   );
@@ -217,6 +219,7 @@ export async function getRequirements() {
         a.maxLevel - b.maxLevel ||
         b.depth - a.depth ||
         typePriority(a.type) - typePriority(b.type) ||
+        a.released.diff(b.released) ||
         a.name.localeCompare(b.name)
     );
 

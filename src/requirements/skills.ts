@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {SKILLS, Skill} from '../model/runescape';
 import {SkillPage, getSkillPage, loadWikiPage} from '../rswiki';
 import {getImageFromPage} from '../rswiki/util';
@@ -54,10 +55,17 @@ export async function getSkillRequirements(): Promise<SkillRequirement[]> {
         page,
         icon: image,
         required: [],
+        released: moment(),
       })
     );
     for (let level = 2; level <= maxLevel; level++) {
-      const req = new SkillRequirement({name: skill, level, page, icon: image});
+      const req = new SkillRequirement({
+        name: skill,
+        level,
+        page,
+        icon: image,
+        released: moment(),
+      });
 
       if (level === 2 && SKILL_REQS[skill]) {
         const [level, ...skills] = SKILL_REQS[skill]!;

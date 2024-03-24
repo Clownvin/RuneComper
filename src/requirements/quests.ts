@@ -12,6 +12,7 @@ import {AndOrMap} from '../util/collections/andOrMap';
 import {CombatRequirement} from './combat';
 import {isNonNullish} from '../util';
 import {getImageFromPage} from '../rswiki/util';
+import moment from 'moment';
 
 export class QuestRequirement extends Requirement<'quest'> implements IQuest {
   readonly miniquest: boolean;
@@ -121,9 +122,20 @@ async function getQuestWithRequirements(
   combatLevelIcon: string
 ): Promise<QuestRequirement> {
   const $ = await loadWikiPage(quest.page);
+
+  let release = (
+    $('[data-attr-param="release"]').text() ||
+    $('th:contains("Release date")').next().text()
+  ).replace(/\(+.*/g, '');
+  if (release === '') {
+    console.log(quest.name, 'has no release?');
+    release = moment().format();
+  }
+
   const requirement = new QuestRequirement({
     ...quest,
     icon: await getImageFromPage($),
+    released: moment(release),
   });
   $('table.questdetails tbody')
     .children('tr')

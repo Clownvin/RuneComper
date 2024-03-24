@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {isSkill} from '../model/runescape';
 import {getSkillPage, loadWikiPage} from '../rswiki';
 import {
@@ -70,6 +71,7 @@ export async function getCompletionistCapeAchievementsWithRequirements(
       name: trimmed.name,
       page: trimmed.page,
       icon: '',
+      released: moment(),
       required: reqsWithReqs
         .filter(r => required.has(r.name))
         .map(({name, page}) => ({
@@ -165,9 +167,24 @@ async function getAchievementWithNormalRequirements(
 ): Promise<AchievementRequirement> {
   const $ = await loadWikiPage(page);
   const element = $('.infobox-achievement td.qc-active');
+
+  let release = (
+    $('[data-attr-param="release"]').text() ||
+    $('th:contains("Release date")').next().text()
+  ).replace(/\(+.*/g, '');
+  if (release === '') {
+    console.log(name, 'has no release?');
+    release = moment().format();
+  }
+
   const html = element.html();
 
-  const requirement = new AchievementRequirement({name, page, icon: ''});
+  const requirement = new AchievementRequirement({
+    name,
+    page,
+    icon: '',
+    released: moment(release),
+  });
 
   if (html === null) {
     return requirement;
