@@ -126,10 +126,29 @@ async function getQuestWithRequirements(
   let release = (
     $('[data-attr-param="release"]').text() ||
     $('th:contains("Release date")').next().text()
-  ).replace(/\(+.*/g, '');
-  if (release === '') {
-    console.log(quest.name, 'has no release?');
+  )
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!release) {
+    console.warn(quest.name, 'has no release?');
     release = moment().format();
+  } else {
+    // console.log(release.split(' ').slice(0, 3));
+    release = release
+      .split(' ')
+      .slice(0, 3)
+      .map(s => s.replace(/\s|\n/g, ''))
+      .join(' ');
+  }
+
+  // console.log('Creating from', `"${release}"`);
+  const releaseMoment = moment(release);
+
+  if (!releaseMoment.isValid()) {
+    throw new Error(
+      `Here with "${quest.name}" "${release}" ${releaseMoment} "${release}"`
+    );
   }
 
   const requirement = new QuestRequirement({

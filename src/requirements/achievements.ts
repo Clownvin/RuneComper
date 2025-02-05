@@ -55,7 +55,8 @@ export async function getCompletionistCapeAchievementsWithRequirements(
           reqsWithoutReqs.find(
             existing => existing.page === requirement.page
           ) ||
-          questNames.has(requirement.name)
+          questNames.has(requirement.name) ||
+          isSkill(requirement.name.toLowerCase())
         ) {
           return;
         }
@@ -152,7 +153,26 @@ async function getAchievementWithRequirements(
   }
 }
 
-const nonAchievs = new Set(['Lunar Spellbook']);
+const nonAchievs = new Set([
+  'Lunar Spellbook',
+  'Combat level',
+  'Ancient Cavern',
+  'Baxtorian Falls',
+  'TzekHaar',
+  'Command Skeleton Warrior',
+  'Conjure Putrid Zombie',
+  'RuneScore',
+  'Reputation (Menaphos)',
+  'List of music tracks',
+  'List of miniquests by release date',
+  'Quest Cape',
+  'Dungeoneering token',
+  'Forge War',
+  'Fairy Rings',
+  'Tears of Guthix',
+  'Inferno Adze',
+  'Champions guild',
+]);
 
 async function getAchievementWithNormalRequirements(
   {
@@ -171,20 +191,39 @@ async function getAchievementWithNormalRequirements(
   let release = (
     $('[data-attr-param="release"]').text() ||
     $('th:contains("Release date")').next().text()
-  ).replace(/\(+.*/g, '');
-  if (release === '') {
-    console.log(name, 'has no release?');
+  )
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!release) {
+    console.warn(name, 'has no release?');
     release = moment().format();
+  } else {
+    // console.log(release.split(' ').slice(0, 3));
+    release = release
+      .split(' ')
+      .slice(0, 3)
+      .map(s => s.replace(/\s|\n/g, ''))
+      .join(' ');
   }
 
-  const html = element.html();
+  // console.log('Creating from', `"${release}"`);
+  const releaseMoment = moment(release);
+
+  if (!releaseMoment.isValid()) {
+    throw new Error(
+      `Here with "${name}" "${release}" ${releaseMoment} "${release}"`
+    );
+  }
 
   const requirement = new AchievementRequirement({
     name,
     page,
     icon: '',
-    released: moment(release),
+    released: releaseMoment,
   });
+
+  const html = element.html();
 
   if (html === null) {
     return requirement;
@@ -258,10 +297,18 @@ async function getAchievementWithNormalRequirements(
         boostable: html.includes('[b]'),
       });
     } else {
-      const name = ele.find('a').attr('title');
-      const page = (ele.find('a').attr('href') || '').split('#')[0];
+      let name = ele.find('a').attr('title');
+      let page = (ele.find('a').attr('href') || '').split('#')[0];
       if (!name) {
         return;
+      }
+      if (isSkill(name.toLowerCase())) {
+        console.warn('Potentially unexpected skill req?:', name);
+        return;
+      }
+      if (name.includes('(Archaeology achievement)')) {
+        name = name.replace('(Archaeology achievement)', '').trim();
+        page = page.replace('_(Archaeology_achievement)', '').trim();
       }
       if (questNames.has(name)) {
         requirement.addRequired({
@@ -271,8 +318,8 @@ async function getAchievementWithNormalRequirements(
           miniquest: miniquestNames.has(name),
         });
       } else if (!nonAchievs.has(name)) {
-        if (name.includes('Peril')) {
-          console.log('Achieve name?', name);
+        if (name === 'Fishing') {
+          throw new Error('Right here, mlord');
         }
         requirement.addRequired({
           name,

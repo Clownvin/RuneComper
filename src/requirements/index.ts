@@ -212,6 +212,13 @@ export async function getRequirements() {
     .map(req => ({...req, priority: priorityA(req)}))
     .sort(
       (a, b) =>
+        (a.type === 'achievement' &&
+          b.type === 'achievement' &&
+          (b.depthRecommended - a.depthRecommended ||
+            // b.indirectDependents - a.indirectDependents ||
+
+            // b.directDependents - a.directDependents ||
+            a.maxLevel - b.maxLevel)) ||
         b.depthRecommended - a.depthRecommended ||
         a.maxLevelRecommended - b.maxLevelRecommended ||
         b.indirectDependents - a.indirectDependents ||
@@ -219,7 +226,7 @@ export async function getRequirements() {
         a.maxLevel - b.maxLevel ||
         b.depth - a.depth ||
         typePriority(a.type) - typePriority(b.type) ||
-        a.released.diff(b.released) ||
+        a.released.diff(b.released, 'days') ||
         a.name.localeCompare(b.name)
     );
 
@@ -513,7 +520,7 @@ function findDependentCounts(
 }
 
 function findMaxDepth(
-  req: TraversedRequirement,
+  parentReq: TraversedRequirement,
   getRequirement: (
     req: Parameters<typeof getRequirementID>[0]
   ) => TraversedRequirement,
@@ -521,28 +528,61 @@ function findMaxDepth(
   seen = new Set<RequirementID>(),
   recommended = false
 ): void {
-  const reqDepth = recommended ? req.depthRecommended : req.depth;
-  if (seen.has(req.id) || reqDepth >= depth) {
+  const reqDepth = recommended ? parentReq.depthRecommended : parentReq.depth;
+  if (seen.has(parentReq.id) || reqDepth >= depth) {
     return;
   }
 
   if (recommended) {
-    req.depthRecommended = depth;
+    parentReq.depthRecommended = depth;
   } else {
-    req.depth = depth;
-    req.depthRecommended = Math.max(req.depthRecommended, req.depth);
+    parentReq.depth = depth;
+    parentReq.depthRecommended = Math.max(
+      parentReq.depthRecommended,
+      parentReq.depth
+    );
   }
-  seen.add(req.id);
+  seen.add(parentReq.id);
 
-  return req
-    .map((req, required) => [getRequirement(req), required] as const)
-    .forEach(([dep, required]) =>
-      findMaxDepth(
-        dep,
-        getRequirement,
-        depth + 1,
-        new Set(seen),
-        recommended || !required
+  return parentReq
+    .map(
+      (childReq, required) =>
+        [
+          labelBlock(() => getRequirement(childReq), parentReq.name),
+          required,
+        ] as const
+    )
+    .forEach(([childReq, required]) =>
+      labelBlock(
+        () =>
+          findMaxDepth(
+            childReq,
+            getRequirement,
+            depth + 1,
+            new Set(seen),
+            recommended || !required
+          ),
+        parentReq.name
       )
     );
+}
+
+function labelBlock<T>(fn: () => T, label: string) {
+  return errorBlock(
+    fn,
+    err => new Error(`${label}: ${err}`.replace('Error: ', ''))
+  );
+}
+
+function errorBlock<T>(fn: () => T, wrapErr: (err: Error) => Error | string) {
+  try {
+    return fn();
+  } catch (err) {
+    if (err instanceof Error) {
+      const wrapped = wrapErr(err);
+      throw typeof wrapped === 'string' ? new Error(wrapped) : wrapped;
+    } else {
+      throw wrapErr(new Error(`Unknown Error: ${err}`));
+    }
+  }
 }

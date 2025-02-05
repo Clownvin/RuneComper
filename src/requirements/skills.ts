@@ -102,11 +102,16 @@ async function getSkillInfo(skill: Skill) {
 
 async function getMaxLevel(page: SkillPage) {
   const $ = await loadWikiPage(`${page}/Level_up_table`);
-  const levelupRows = $('html body div#bodyContent table.level-up-table tr th')
+  const rows = $(
+    'html body div#bodyContent table.level-up-table tr td[style="font-weight:bold"]'
+  )
     .toArray()
-    .map(e => $(e).text());
+    .map(e => $(e).text()).length;
 
-  const MIN_ROWS_120 = 124; // Extra 4 due to table headers
+  const MIN_ROWS_110 = 112;
+  const MIN_ROWS_120 = 121;
 
-  return levelupRows.length >= MIN_ROWS_120 ? 120 : 99;
+  console.log(`Page ${page} has ${rows} level up rows`);
+
+  return rows >= MIN_ROWS_120 ? 120 : rows >= MIN_ROWS_110 ? 110 : 99;
 }
